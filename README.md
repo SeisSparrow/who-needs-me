@@ -123,6 +123,25 @@ Two programs, one folder between them. A **capture loop** reads the text of each
 and writes it to a folder. The **board** reads that folder and serves the page. The board
 never connects to anything; add or remove capture loops and it follows.
 
+```mermaid
+flowchart LR
+  subgraph MON["Monitored machines: only tmux is needed"]
+    S1["tmux session<br/>agent CLI"]
+    S2["tmux session<br/>agent CLI"]
+  end
+  subgraph TOOL["Machine running who-needs-me"]
+    C["capture loop<br/>read-only"]
+    F[("captures/ folder")]
+    B["board<br/>rules, decision model, policy"]
+  end
+  S1 -- "pane text" --> C
+  S2 -- "pane text" --> C
+  C -- "one file per session per round" --> F
+  F --> B
+  B -- "http://127.0.0.1:8765" --> W["browser"]
+  B -. "last message only, masked" .-> G["Gemini Decisions API"]
+```
+
 **Requirements**
 
 - On the machine that runs the tool: [uv](https://docs.astral.sh/uv/), and a Gemini API key
@@ -149,12 +168,42 @@ One capture loop per machine, all writing to the same `captures` folder:
 uv run python -m who_needs_me.capture --ssh user@my-vm --out captures --every 5
 ```
 
+```mermaid
+flowchart LR
+  subgraph VM["remote VM"]
+    A["tmux: infra"]
+    A2["tmux: books"]
+  end
+  subgraph L["your computer"]
+    C["capture --ssh user@my-vm"]
+    F[("captures/")]
+    BD["board"]
+  end
+  A -- "ssh, read-only" --> C
+  A2 -- "ssh, read-only" --> C
+  C --> F --> BD
+```
+
 **3. Monitor this computer (local tmux)**
 
 Same command without `--ssh`:
 
 ```bash
 uv run python -m who_needs_me.capture --out captures --every 5
+```
+
+```mermaid
+flowchart LR
+  subgraph L["your computer"]
+    A["tmux: docs"]
+    A2["tmux: tests"]
+    C["capture, no --ssh"]
+    F[("captures/")]
+    BD["board"]
+  end
+  A --> C
+  A2 --> C
+  C --> F --> BD
 ```
 
 **4. Monitor another machine**
@@ -164,6 +213,31 @@ restart; the new sessions appear on the next refresh.
 
 ```bash
 uv run python -m who_needs_me.capture --ssh user@second-vm --out captures --every 5
+```
+
+```mermaid
+flowchart LR
+  subgraph V1["VM 1"]
+    A1["tmux sessions"]
+  end
+  subgraph V2["VM 2"]
+    A2["tmux sessions"]
+  end
+  subgraph L["your computer"]
+    A3["local tmux sessions"]
+    C1["capture --ssh user@vm1"]
+    C2["capture --ssh user@vm2"]
+    C3["capture, local"]
+    F[("captures/ shared by all")]
+    BD["one board"]
+  end
+  A1 -- "ssh" --> C1
+  A2 -- "ssh" --> C2
+  A3 --> C3
+  C1 --> F
+  C2 --> F
+  C3 --> F
+  F --> BD
 ```
 
 **5. Monitor a new session**
@@ -178,6 +252,23 @@ claude                       # or any agent CLI
 
 A session that is **not** inside tmux cannot be read.
 
+```mermaid
+sequenceDiagram
+  participant U as You
+  participant T as tmux on the monitored machine
+  participant C as capture loop
+  participant B as board
+  U->>T: tmux new -s api-refactor, then start the agent
+  loop every round
+    C->>T: tmux list-panes -a
+    T-->>C: session list, now with api-refactor
+    C->>T: tmux capture-pane for each session
+    T-->>C: pane text
+    C->>B: new file in captures/
+  end
+  B-->>U: a new row appears, no restart
+```
+
 **6. Monitor sessions that already exist**
 
 - Already running inside tmux: start the capture loop for that machine (step 2 or 3). Every
@@ -186,6 +277,15 @@ A session that is **not** inside tmux cannot be read.
   it inside tmux (for Claude Code: `tmux new -s name`, then `claude -c` to continue the
   last conversation).
 - Only some sessions: repeat `--session`, e.g. `--session infra --session books`.
+
+```mermaid
+flowchart TD
+  Q{"Is the session inside tmux?"}
+  Q -- "yes" --> Y["Start the capture loop for that machine.<br/>It is picked up on the first round."]
+  Q -- "no" --> N["It cannot be read."]
+  N --> R["Restart it inside tmux:<br/>tmux new -s name, then claude -c"]
+  R --> Y
+```
 
 **Running it in the background**
 
@@ -206,6 +306,24 @@ them inside a tmux session of their own, ideally on a machine that is always on.
 - Yellow, *to check*: escalated, but not confident. Have a look.
 - A red or yellow row stays until you press Dismiss, even if the session moves on.
 - Each row shows the evidence line from the session and whether a rule or the model decided.
+
+How one screen becomes one row:
+
+```mermaid
+flowchart TD
+  S["one screen of pane text"] --> R{"rules<br/>code, under 1 ms"}
+  R -- "shell prompt" --> D1["dropped to shell"]
+  R -- "spinner, esc to interrupt" --> D2["busy"]
+  R -- "login error or trust prompt" --> D3["needs you: machine, red"]
+  R -- "fresh empty session" --> D4["idle"]
+  R -- "none of these" --> MD["decision model<br/>five typed questions about the last message"]
+  R -- "deploy / delete keyword" --> P
+  MD --> P{"policy"}
+  P -- "deploy, spend, delete or machine: confident" --> RED["needs you, red"]
+  P -- "escalated but not confident" --> YEL["to check, yellow"]
+  P -- "a question for you" --> WAIT["waiting for reply"]
+  P -- "nothing asked" --> IDLE["idle, done"]
+```
 
 **Your own names to mask**
 
