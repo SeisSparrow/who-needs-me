@@ -117,6 +117,122 @@ uv run python -m who_needs_me.eval
 subcommand, `send-keys` included, is refused before a process starts (tested). It never
 types into a session.
 
+## Setup guide: what to monitor
+
+Two programs, one folder between them. A **capture loop** reads the text of each tmux pane
+and writes it to a folder. The **board** reads that folder and serves the page. The board
+never connects to anything; add or remove capture loops and it follows.
+
+**Requirements**
+
+- On the machine that runs the tool: [uv](https://docs.astral.sh/uv/), and a Gemini API key
+  in `GEMINI_API_KEY` (or run the board with `--no-model` for rules only).
+- On every monitored machine: `tmux`. Nothing else is installed there.
+- For a remote machine: `ssh user@host` must work without a password prompt
+  (an SSH key, or Tailscale SSH).
+
+**1. Install and start the board (once)**
+
+```bash
+git clone https://github.com/SeisSparrow/who-needs-me.git && cd who-needs-me
+uv sync
+export GEMINI_API_KEY=...
+uv run python -m who_needs_me.board --captures captures --every 5
+# open http://127.0.0.1:8765
+```
+
+**2. Monitor a remote VM**
+
+One capture loop per machine, all writing to the same `captures` folder:
+
+```bash
+uv run python -m who_needs_me.capture --ssh user@my-vm --out captures --every 5
+```
+
+**3. Monitor this computer (local tmux)**
+
+Same command without `--ssh`:
+
+```bash
+uv run python -m who_needs_me.capture --out captures --every 5
+```
+
+**4. Monitor another machine**
+
+Start one more capture loop pointed at it, into the same folder. The board does not need a
+restart; the new sessions appear on the next refresh.
+
+```bash
+uv run python -m who_needs_me.capture --ssh user@second-vm --out captures --every 5
+```
+
+**5. Monitor a new session**
+
+Nothing to configure. Sessions are discovered from tmux on every round, so a session
+started inside tmux on a machine that already has a capture loop shows up by itself:
+
+```bash
+tmux new -s api-refactor     # on the monitored machine
+claude                       # or any agent CLI
+```
+
+A session that is **not** inside tmux cannot be read.
+
+**6. Monitor sessions that already exist**
+
+- Already running inside tmux: start the capture loop for that machine (step 2 or 3). Every
+  existing tmux session is picked up on the first round.
+- Running in a plain terminal, outside tmux: it cannot be attached after the fact. Restart
+  it inside tmux (for Claude Code: `tmux new -s name`, then `claude -c` to continue the
+  last conversation).
+- Only some sessions: repeat `--session`, e.g. `--session infra --session books`.
+
+**Running it in the background**
+
+When you put a capture loop in the background of an interactive shell, redirect its input,
+or the shell stops the job as soon as `ssh` touches the terminal:
+
+```bash
+uv run python -m who_needs_me.capture --ssh user@my-vm --out captures --every 5 > capture.log 2>&1 < /dev/null &
+```
+
+Both programs stop when their terminal closes or the computer sleeps. To keep them up, run
+them inside a tmux session of their own, ideally on a machine that is always on.
+
+**Reading the board**
+
+- Red, *needs you*: confident that a human must act (deploy, spend, delete, or something on
+  the machine such as a login or a trust prompt).
+- Yellow, *to check*: escalated, but not confident. Have a look.
+- A red or yellow row stays until you press Dismiss, even if the session moves on.
+- Each row shows the evidence line from the session and whether a rule or the model decided.
+
+**Your own names to mask**
+
+Hostnames, usernames, IPs, emails and tokens are masked before anything is sent to the
+model. Add anything specific to you in `.redact.local` (git-ignored), one literal per line,
+optionally `literal<TAB>replacement`.
+
+**Known gaps**
+
+- Capture files do not record the machine. Two sessions with the same name on different
+  machines overwrite each other, and the board does not show which machine a session is on.
+  Until that is fixed, give sessions a machine prefix (`vm2-infra`).
+- Machines are not discovered automatically; each is added once with one capture command.
+- The rules are written for the Claude Code terminal interface.
+- Tested with everything running on a laptop. Running the tool on the VM itself is the
+  intended always-on setup and is not tested yet.
+
+**Troubleshooting**
+
+| Symptom | Cause and fix |
+|---|---|
+| Board is empty | No capture loop is writing to the folder the board reads. Check `--out` and `--captures` match. |
+| A session is missing | It is not inside tmux, or it is on a machine with no capture loop. |
+| Board stops updating after a few rounds | The capture loop was backgrounded without `< /dev/null` and the shell stopped it (`jobs` shows "Stopped"). |
+| `ssh` asks for a password | Set up an SSH key or Tailscale SSH for that host first. |
+| Every row is decided by rule | `GEMINI_API_KEY` is not set, or the board was started with `--no-model`. |
+
 ## Data and privacy
 
 - `data/screens/`: redacted captures. Internal IPs, hostnames, emails, tokens, usernames
