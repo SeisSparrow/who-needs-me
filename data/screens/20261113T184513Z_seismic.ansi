@@ -1,0 +1,35 @@
+
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m Now measuring the layout. I'm serving the worktree's [38;5;153mweb/[39m
+  statically on port 8598 (no model loading, much lighter than
+  [38;5;153mmake serve[39m) and running [38;5;153mscreens_frac.js[39m against the picking
+  page:
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m Notes re-embed started at 18:42. I'll only screenshot the one
+  page so the run stays short:
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m Exit code 0: the page doesn't scroll sideways at 1280 or 390 px
+  in either language, and the desktop table no longer scrolls
+  sideways either. Taking a close-up of the table to check it by
+  eye:
+
+[38;5;246m●[39m Checking how shot script takes its base URL[38;5;246m · 6s[39m
+[38;5;246m  ⎿  $ cd /tmp/claude-1000/-home-user-projects-seismic-picker/64c
+[39m     [38;5;246m8c5bd-5e8b-465b-9dcf-db66f8decea4/scratchpad && mkdir -p [39m
+     [38;5;246me1_table && NODE_PATH=e1/node_modules nice -n 19 node [39m
+     [38;5;246mrel_b2/shot_b2.js e1_table http://<ip>:8598 6 2>&1; [39m
+     [38;5;246mecho rc=$?; ls e1_table (5s · 5 lines)[39m
+     [38;5;246m(ctrl+b ctrl+b (twice) to run in background)[39m
+
+[38;5;174m✶[39m [38;5;174mTinkering… [38;5;246m(3m 31s · ↓[39m [38;5;246m14.4k tokens)[39m
+                         [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m─────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m · [38;5;44m1 shell[38;5;246m · esc to interrupt · ↓ to manage[39m

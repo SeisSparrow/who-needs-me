@@ -1,0 +1,36 @@
+claude
+  the comparison cases in e_candidates.py and the
+  tests in test_evaluator.py.
+
+  Ran 3 shell commands
+
+● Two probes don't exercise what they claim:
+  - Subquery probe: PG removed the trivial subquery
+    node.
+  - Operator probe: it hit the cast rule, not the
+    operator rule.
+
+  Fixing both probes:
+
+  Ran 1 shell command
+
+● The planner folds constants and flattens simple
+  subqueries. I'll use the L1 shape (aggregate plus
+  projection) and a column-based operator instead:
+
+  Ran 2 shell commands
+
+● Probes now reach their intended paths, apart from
+  the subquery one, which PG flattens. I'll test the
+  subquery path on L1's own lb.id = r.book_id instead,
+  drop that probe, and tag each probe with its target
+  comparison.
+
+  Running 1 shell command…
+
+✻ Forging… (5m 34s · ↓ 28.9k tokens)
+              ✔ Update installed · /restart to apply
+──────────────────────────────────────────────────────
+❯ 
+──────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to int…

@@ -1,0 +1,36 @@
+claude
+      1 #!/usr/bin/env bash
+      2 # model-serve.sh prep with the T1 tarball (infra plan 2026-11-
+        13 §9.3), FAKE=1: infra's real image-t1-vm.sh packs a small
+      3 # fake venv + compile cache into a fake blob store (a director
+        y; a curl wrapper serves `-K` blob requests from it and passes
+      4 # every other call to the real curl), then model-serve's prep
+        fetches it into gpu-1's stand-in /mnt.
+      5 # Checks: a hit skips the install; each fallback (version, man
+        ifest, part, stream, import) installs as before and leaves no
+      6 # half-unpacked tree; no pin / T1=0 → off; the SAS never shows
+     … +107 lines (~6 KB)
+  ⎿  Allowed by auto mode
+
+  Ran 1 shell command
+
+● The fallback lines are printed correctly. The 5 failures are a bug in the
+  test itself: $1 inside check's eval refers to check's own first argument,
+  not fell_back's. Fixing:
+
+  Ran 1 shell command
+
+● The T1 test is 30/30 and the existing test_model_serve.sh is still 85/85.
+  Running the rest of the gpu/tests suite on the branch:
+
+● Running all gpu/tests shell suites on g1-v2
+  ⎿  $ cd ~/projects/_infra-g1v2 && for t in gpu/tests/test_*.sh; do r=$(bash
+     "$t" 2>&1 | grep -E '[0-9]+ passed|SKIP' | tail -1); echo "$(basename
+     $t): ${r:-?? (rc $?)}"; done
+
+✢ Perambulating… (12m 41s · ↓ 34.2k tokens)
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

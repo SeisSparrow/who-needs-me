@@ -1,0 +1,33 @@
+[project]
+name = "who-needs-me"
+version = "0.1.0"
+description = "Tells you which of your parallel AI coding sessions is waiting on you, and why."
+authors = [{ name = "SeisSparrow" }]
+requires-python = ">=3.12"
+dependencies = [
+    "pyyaml>=6.0.3",
+]
+
+[project.scripts]
+wnm-redact = "who_needs_me.redact:main"
+wnm-label = "who_needs_me.label:main"
+
+[build-system]
+requires = ["uv_build>=0.9.27,<0.10.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+    "ruff>=0.17.5",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

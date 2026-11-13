@@ -1,0 +1,35 @@
+
+[38;5;174m ▐[48;5;16m▛███▛█[39m[49m   [1mClaude Code[0m [38;5;246mv2.1.323[39m
+[38;5;174m▝▜[48;5;16m█████[49m█▀[39m  [38;5;246mHaiku 5.5 · Claude Ultra[39m
+[38;5;174m ▝▝   ▝▝ [39m  [38;5;246m~/stage_tmp[39m
+
+
+[38;5;246m[48;5;237m❯[39m [38;5;231m/clear[39m
+
+[38;5;246m❯ [38;5;231mOutput the following sample report exactly as written, with nothing added:[39m
+  [38;5;231mThe new index is built and verified against the old one. The old index [39m
+  [38;5;231mtables are no longer read by anything. Dropping them frees about 3 GB and [39m
+  [38;5;231mcannot be undone. I will drop them once you confirm.[39m
+
+[38;5;231m[49m●[39m The new index is built and verified against the old one. The old index
+  tables are no longer read by anything. Dropping them frees about 3 GB and
+  cannot be undone. I will drop them once you confirm.
+
+[38;5;246m✻[39m [38;5;246mBrewed for 1s · done 7:44 PM[39m
+
+
+
+
+
+
+
+
+
+
+
+
+
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m❯ 
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle)[39m

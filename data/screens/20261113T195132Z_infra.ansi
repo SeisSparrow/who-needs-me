@@ -1,0 +1,35 @@
+  [38;5;153mwith-lease cpu[39m. Both rows are struck and pushed ([38;5;153mbfcdc8e[39m). The tests
+  started 2.5 minutes before their registered 19:42; nobody else was in that
+  slot, and the row says so. No processes or ports are left over.
+
+  [1mNotes' three requests:[0m
+  - [1m(3) fixed:[0m [38;5;153mfetch[39m now empties the directories prep creates instead of
+    deleting them, because on a GPU VM [38;5;153m/mnt[39m belongs to root and deleting them
+    gave "Permission denied". There's a new test with a non-writable root;
+    57/57 pass. Committed as [38;5;153mgpu/image-t1[39m [38;5;153m747737a[39m, not pushed yet.
+  - [1m(1) and (2)[0m add commits to Notes' own branch [38;5;153mgpu/g1-v2[39m: cherry-pick my T1
+    files, and merge [38;5;153mgpu/x3-gemma-fp16[39m (one commit, [38;5;153m769da07[39m). I suggested
+    Notes run the two git commands in its own worktree, and told it that if
+    it wants me to do it instead, you'd have to approve pushes to [38;5;153mgpu/g1-v2[39m
+    first.
+
+  [1mDecisions for you:[0m
+  - Can I push [38;5;153mc4/gpuctl[39m ([38;5;153m817c561[39m, M1 done) and [38;5;153mgpu/image-t1[39m ([38;5;153m747737a[39m, the
+    Notes (3) fix)? Notes' cherry-pick needs the second one.
+  - Do you want me to commit to [38;5;153mgpu/g1-v2[39m for Notes, or leave it to Notes as
+    I suggested?
+
+  [1mWhat's next:[0m
+  - Quorum C7 is registered for 21:15–21:45.
+  - After its row is struck I'll start L0 S0, merging [38;5;153mwith-lease[39m into
+    [38;5;153mcloud/v1[39m.
+  - GPU sessions wait for a date agreed with Notes. Notes' joint schedule is
+    in [38;5;153m_docs/_plan/notes_infra_t1_joint_sessions_2026-11-13.md[39m. I haven't
+    read it yet; I'll read it next and check it against §9.4.
+
+[38;5;246m✻[39m [38;5;246mCrunched for 9m 50s · done 7:48 PM[39m
+                                     [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m❯ 
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle)[39m

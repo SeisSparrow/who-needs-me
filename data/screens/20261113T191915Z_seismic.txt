@@ -1,0 +1,36 @@
+claude
+
+
+● Checking that removing the worktrees only unlinked the symlinks and the
+  real data directories are intact:
+
+  Ran 1 shell command
+
+● A+B is merged into demo/v2-frac at e7ad517 and pushed; local, origin and
+  the remote all match.
+
+  - What went in: a merge commit of A+B (483d908) on top of E1 (6c6ff47). The
+    two touch different files, so there were no conflicts. I checked the
+    merged tree: src and tests match the A+B branch, and web matches E1.
+  - Not done, as asked: no data was regenerated, data/b2/ wasn't touched, and
+    the live v1 site wasn't restarted. v1 is still at 6757510, the service
+    is active and the site returns 200. I didn't rerun the tests after the
+    merge; I relied on the file comparison above.
+  - Cleanup: I removed the temporary worktrees (e1, vec/base, v1rel) and
+    deleted the local branch demo/v2-frac-e1, which was already merged. Their
+    contents were all committed and pushed. The real data/, .venv and models
+    directories are untouched, and all 259 files under
+    data/b2/measured_heel_H1 are still there. The v2 tree is back on
+    demo/v2-frac.
+  - Record: the merge is noted at the end of
+    seismic_b2_synth_vectorize_plan_2026-11-13.md.
+
+  E1 stays on the approval list until the user approves it personally.
+  Nothing else is in progress, so I'm standing by.
+
+✻ Cooked for 34s · done 7:17 PM
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle)

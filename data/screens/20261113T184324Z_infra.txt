@@ -1,0 +1,43 @@
+claude
+           的 15:50 早 3 min 开跑） | ~~约 8 个 JVM、nice 19~~；结束时 load 0.47 | 没有残留进程、
+           端口已释放（15:51 核过）；线上 8090 health 200；没碰 build/、quorum.service、/run/note
+           s-parse |
+      129 +| Quorum（v3 P2 C7：真 docparse 验收） | `bin/p2-check.sh c7`：回环 Live 集群 KVS 8370
+          + / Flame 9370 + 夹具 <ip>:8089 + 测试 SearchServer 8097，1–2 个 Live job，**经共
+          +享的 `/run/notes-parse/parse.sock`** 解析 5 份夹具 PDF（含 1 份 301 页，应得 `too_many
+          +_pages`），串行、同时最多 1 个；只打本地夹具，不发外网请求 | **11-13 21:15**（用户 11-
+          +13 定的顺序：Notes 重嵌入 → seismic 验收 → p2p V4-6 → infra cargo → Quorum；开跑条件：
+          +infra cargo 那行划掉，或它的结束时刻已过且 1 分钟 load < 1.5；另看 notes-parse 日志最
+          +近 10 min 没有访客上传；顺延就在这里改时刻） | **11-13 21:45** | 约 8 个 JVM、nice 19
+          +，load 约 2–4，内存 ≤ 3 GB；docparse 侧 5 次解析（最大一份几十页，单次 ≤ 300 s 墙钟）
+          +| 读 Showcase KVS 8100（只读）；不碰 build/、8090、quorum.service、notes / notes-parse
+          + 的配置和进程；有访客上传时 Quorum 拿 `parse_busy` 让路；结束马上划掉（Quorum session
+          +2026-11-13 登记） |
+      130  | ~~bookstore v3（评估器改动的冒烟，不计时）~~ | ~~E1–E4、E7、E13–E16，worktree `CIS55
+           00GroupProject-v3-cost`~~ | ~~Notes G2 / p2p 之后~~ | **已结束 11-13 06:24**（04:22–04
+           :26 误开一次，见上次记录；05:24–05:40、05:42–06:24 两段，后一段和 seismic `b2-nosnr` 0
+           5:42–06:22 重叠，load 2–5） | ~~1 个 PG 后端 + node~~ | 判对错的部分通过；计时类的 E13
+           –E15 在负载下判无效（A/A 漂移 > 30 %），挪到 08:45 的独占窗口；没有残留克隆（books 202
+           6-11-13） |
+      131  | ~~bookstore v3 评估（计时，独占）~~ | ~~G1-4 基线（全部 Q 计时 + 计划 + 7 个写脚本的
+           噪声带）+ 评估器自测全量 E1–E16，worktree `CIS5500GroupProject-v3-cost`~~ | ~~11-13 08
+           :45~~ | **已结束 11-13 09:50**（08:45、08:46 两次检查 load 0.05 / 0.02，08:46 开跑，**
+           没有顺延**；基线 08:46–09:09，自测 09:09–09:50）。**这一行本该 09:50 就划掉，因为我的
+           会话被中断，拖到 18:4x 才划，耽误了等它的 session，抱歉** | ~~1 个 PG 后端；load 约 +1
+           ；内存 < 1 GB~~；结束时 1 分钟 load 1.29 | 克隆库 `bookstore_v3_c*` 已全部删除（18:42
+           核对 0 个），没有残留进程；窗口 09:50 起就空了（books 2026-11-13） |
+      132  | ~~Infra（gpuctl C4，Rust）~~ | ~~① rustup 用户级安装（`~/.rustup`、`~/.cargo`，`nice
+            19` + `ionice -c3`）；② `cargo build` / `cargo test`~~ | ~~11-13 04:42~~ | **① 已结束
+            04:43**（rustc 1.100.0 + musl target，用了 886 MB）；**② 撤回**：原来写的「间歇到 M1
+           结束」没有结束时间，heavy_gate 读成一直占用 | ~~① 1 进程~~ | ② 改成**一次编译或测试登
+           记一行**（开始 = 开跑时刻、结束 = 有具体时间），跑完马上划掉；顺序（用户 11-13 定）：b
+           ooks 计时窗口 08:45–10:45 → p2p V4-6（约 50 min）→ infra，**p2p V4-6 那行划掉之前不登
+           记、不编译**（infra 2026-11-13 08:30 改）|
+  ⎿  Allowed by auto mode classifier
+
+· Ideating… (1m 37s · ↓ 2.3k tokens · thinking)
+                                                                ✔ Update installed · /restart to apply
+────────────────────────────────────────────────────────────────────────────────────────────────────────
+❯ 
+────────────────────────────────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

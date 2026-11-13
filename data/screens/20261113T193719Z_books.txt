@@ -1,0 +1,36 @@
+claude
+    use the cost branch as it stands at start time.
+
+  Write-script audit (untimed, rolled back on the dev copy)
+  - S2 has the same flaw. Each round updates the same 50 (reader, book) pairs
+    10 times inside one transaction, so updated_at = now() stops changing
+    after the first update. Its effect runs the other way from A2's:
+    - shelf already has an index (account_id, updated_at DESC), so on the
+      site no shelf change can be HOT. The old S2 made about 60 % of them
+      HOT.
+    - So S2's baseline time per update is too optimistic.
+    - A candidate index on status would show a HOT loss the site doesn't
+      have, overstating its write cost.
+
+    I've written the fix the same way as A2's (each pair once per round, half
+    of them seeded days earlier). With it the HOT share is 0 %, which
+    matches the site. It's on a separate branch, demo/v3-sql-s2 df51acb
+    (pushed), so tomorrow's run isn't affected.
+  - R2, N6, N4, N5 and S4 are fine. R2 and N6 change the indexed column on
+    every update; the other three don't update at all.
+
+  Decision for you: S2 changes the exam, so its baseline and noise band would
+  have to be re-measured.
+  - Yes (my recommendation): I merge the S2 fix into the cost branch before
+    15:00 tomorrow and change the 11-14 re-measure to cover A2 and S2. That
+    adds about a minute and stays inside the window. The 11-15 full run would
+    then include it.
+  - No: S2 stays as it is in both windows and I list it in the R6 page's
+    honest limits.
+
+✻ Worked for 2m 31s · done 7:19 PM · 2 shells still running
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 2 shells · ↓ to manage

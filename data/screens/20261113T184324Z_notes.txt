@@ -1,0 +1,43 @@
+claude
+  The robust, docparse and podcast branches are live and verified; details are in my earlier message and
+  in each runbook's deploy record. The four-branch summary and the GPU two-session plan come after
+  cpu-embed is finished.
+
+✻ Crunched for 22s · done 3:00 PM · 1 shell still running
+
+❯ （用户委托代回）选 2：现在就做线上重嵌入（用户代理批准排在 seismic 和 p2p
+  前面，已通知它们）。开跑前把你那行的开始 / 结束改成具体时刻（约 18:50–19:15 UTC）；重嵌入 → notes.env
+  切换 → 重启 → 公网核对，做完马上划掉那行并汇报。seismic 在等你这行，p2p 在等
+  seismic。共享规则新增（今天生效，infra 会写进 RESOURCES.md）：占用行必须写具体的预计结束时刻；结束时
+  刻一过该行不再算占用，要延长就自己改时刻；“等某行划掉”的条件同时接受“该行结束时刻已过且 1 分钟 load <
+  1.5”。 之后再发四个分支的总结；GPU 两次会话的排期见 infra 计划 9.4，请确认它要你改的那两处脚本。
+
+  Ran 1 shell command
+
+● It's 18:41, load 0.06, 0 jobs, all six sites 200, notes-embed is up. Updating my occupancy row to
+  concrete times:
+
+  Pushed to cloud/v1
+
+● Row is set to 18:45–19:15. State before the re-embed, then start it (step 3):
+
+  Ran 2 shell commands
+
+● The re-embed started at about 18:42, roughly 3 minutes before the 18:45 in my row, so I'll note the
+  real start time when I cross the row out. I'm reading §9.4 of infra's plan while it runs. · summary
+
+  Searched for 1 pattern, ran 3 shell commands
+
+● I've read §9.4. The two script changes it asks of me on gpu/g1-v2 are clear, and I'll list them in the
+  report. I'm waiting for the re-embed to finish before switching backends.
+
+  Ran 1 shell command
+
+● Started at 18:42:17, about 13 minutes to go. I'll continue when it finishes.
+
+✻ Cooked for 56s · done 6:42 PM · 1 shell still running
+                                                                ✔ Update installed · /restart to apply
+────────────────────────────────────────────────────────────────────────────────────────────────────────
+❯ 
+────────────────────────────────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 1 shell · ↓ to manage

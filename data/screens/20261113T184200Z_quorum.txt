@@ -1,0 +1,43 @@
+claude
+  - 跑完 load 0.47。测试实例的进程、端口和测试 socket 的状态文件都清干净了，线上 8090 健康（200）。没碰
+    build/、quorum.service 和共享 docparse（/run/notes-parse）。结果已写进 P2 计划 §七。
+
+  P2-0 调研数（你上次让我报，这里补上）：
+  - 不发请求、只扫现有数据：白名单前缀里能确认的 PDF 链接共 17 个。
+  - 真实调研：三站各 150 个请求，合计正好 450，没超批的预算。找到的 PDF：census 1 个、gov-uk 0 个、nist
+    2 个，共 3 个。
+  - 原因：150 页只走到各站的目录页；PDF 大多在更深的页面上，或在别的主机上（assets.publishing.service.go
+    v.uk、www2.census.gov）。前缀没有放宽。
+  - 结论：离 50 个差很远，P2-8 要加新 seed。候选是
+    jepsen.io、raft.github.io、usenix.org，每个都要你单独批，还要先过 SeedValidator（会发请求）。
+
+  接下来，等你定：
+  1. C7：用真 docparse 验收。这个不用你批，我会登记占用、避开 Notes 有访客上传的时段再跑。
+  2. P2-8：真实站点验收。需要你批一个新 seed，推荐 jepsen.io（之前在 Showcase 里看到 32 个 PDF）。
+  3. P2-9：上线。照你说的，上线前先给你 diff，你批了再上。
+
+✻ Worked for 5m 45s · done 3:52 PM
+
+❯ （用户委托代回）1. C7（真 docparse 验收）：可以做，排在今天这串之后。顺序（UTC）：Notes
+  重嵌入（现在到约 19:10）→ seismic 验收 → p2p V4-6（约到 20:40）→ infra cargo →
+  你。登记时写具体起止时刻。共享规则新增（今天生效，infra 会写进
+  RESOURCES.md）：占用行必须写具体的预计结束时刻；结束时刻一过该行不再算占用，要延长就自己改时刻；“等某
+  行划掉”的条件同时接受“该行结束时刻已过且 1 分钟 load < 1.5”。 2. P2-8 新 seed
+  要用户本人批（会对外发请求），先不动。请把 jepsen.io 的预案写好：请求上限、速率、robots、预计 PDF
+  数、SeedValidator 会发多少请求，等批。3. P2-9 上线：C7 和 P2-8 之后给 diff，用户批。4.
+  两件旧事报一下：P1 修复上线后的验证记录路径；冷启动 sleep 和读超时两份方案现在的状态。
+
+  Searched for 1 pattern, ran 4 shell commands
+
+● 在写 jepsen.io 预案。先查本地已有的数据（不发请求），看 Showcase 里 jepsen.io 的 URL 和 PDF 是什么样。
+
+  Finding Live job pages cap and crawl delay default
+  ⎿  $ sed -n 60,72p src/cis5550/search/live/LiveJobs.java; grep -n 'delayMs\s*='
+     src/cis5550/crawler/Scope.java src/cis5550/search/live/LiveJobs.java | head
+
+✢ Imagining… (1m 3s · ↓ 4.4k tokens · thinking)
+                                                                ✔ Update installed · /restart to apply
+────────────────────────────────────────────────────────────────────────────────────────────────────────
+❯ 
+────────────────────────────────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

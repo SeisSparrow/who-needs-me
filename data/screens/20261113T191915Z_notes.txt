@@ -1,0 +1,36 @@
+claude
+
+  Ran 4 shell commands
+
+● Next I'll make the background probe also check notes-embed on the CPU
+  backend so /api/status stops waiting on a socket, then fix the
+  semantic-search flag, the keyword index label for mismatched models, and
+  reuse of retired embeddings in reembed. · summary
+
+  Ran 2 shell commands
+
+● Next I'm updating reembed.py so a retired version is reused only when its
+  model, vector coverage and order-independent content signature all match
+  the current version. · summary
+
+  Ran 1 shell command
+
+● Now the tests. First, the fixtures that are available:
+
+  Adding status, index_mode and reuse tests; run embedsvc tests · 6s
+  ⎿  $ cd ~/projects/notes-cefix && cat >> tests/test_embedsvc.py <<'EOF'
+     # ------------------------------------------------------------------
+     /api/status 和页面标签（11-13 上线核对漏掉的那一项）
+     @pytest.fixture
+     def api(migrated, tmp_path, monkeypatch):
+     from fastapi.testclient import TestClient
+     from src import gpu
+     monke… (6s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✻ Perambulating… (1m 58s · ↓ 10.2k tokens)
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

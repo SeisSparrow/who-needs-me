@@ -1,0 +1,36 @@
+claude
+  What: If the two never disagree during that day, gates read
+  only
+  lease. The markdown parser stays behind a
+  HEAVY_SOURCE=markdown switch
+  Rollback: Set that switch
+  ────────────────────────────────────────
+  Step: S4
+  What: Archive the whole occupancy section verbatim to
+  _docs/_archive/resources_occupancy_…md. Leave three lines in
+  its place: lease status / lease reserve / journalctl -t  lease
+  Rollback: Paste the section back and switch gates back
+  ────────────────────────────────────────
+  Step: S5
+  What: No script writes RESOURCES.md any more. Find the p2p
+  script that emptied it at 07:53 and remove its write step (p2p
+   does this). I'll list every script in the repos that writes
+  to the file, read-only
+  Rollback: —
+
+  At switch time each session only changes which source its gate
+  reads. Wrapping entry points in with-lease waits for L5, after
+  the one-week pilot.
+
+  Decisions for you:
+  1. The L0 switch steps S0–S5, including merging
+     infra/with-lease into cloud/v1.
+  2. GPU sessions 1 and 2 still wait for tonight's queue and for
+     a date agreed with Notes.
+
+✻ Churned for 3m 56s · done 6:45 PM · 1 shell still running
+                         ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────
+❯ L0 切换步骤 S0–S5 批准，等 Quorum C7 划掉后开始
+─────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 1 shell · ↓ to manage

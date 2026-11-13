@@ -1,0 +1,35 @@
+  menu_g1_profile_params.md §9. Next I'm adding profiles for the
+  --enforce-eager comparison and a --rerank option to eval_embed_ab.py.[38;5;246m [39m
+  [38;5;246m· summary[39m
+
+  [38;5;246mPushed to [1mgpu/g1-v2[0m[38;5;246m, ran [1m2[0m[38;5;246m shell commands [39m
+
+[38;5;231m●[39m Next, [38;5;153meval_embed_ab.py --rerank[39m. It goes on its own small branch off
+  production ([38;5;153m08bbc4b[39m), using the existing [38;5;153mnotes-merge[39m worktree, so the
+  pending-approval fix diff stays as it is:
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m The output key still reads [38;5;153mhybrid_no_rerank[39m even with [38;5;153m--rerank[39m, so I'm
+  renaming it conditionally, then testing the offline and online paths.[38;5;246m [39m
+  [38;5;246m· summary[39m
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m Offline exits with the right message, but only after loading the Qwen model
+  (about a minute wasted). I'm moving the reranker check to before the model
+  load:
+
+[38;5;246m [39m Testing --rerank online against fake vLLM rerank endpoint[38;5;246m · 2s[39m
+[38;5;246m  ⎿  $ S=/tmp/claude-1000/-home-user-projects-notes/04b2026d-3c17-4c73-af0a-b
+[39m     [38;5;246m5d68d2c4f05/scratchpad; cd ~/projects/notes-merge && .venv/bin/python -c
+[39m     [38;5;246m"from src import config; print(config.GPU_API_KEY_VAR, [39m
+     [38;5;246mconfig.GPU_ENDPOINTS['rerank'])"; (.venv/bin/python tools/fake_vllm.py [39m
+     [38;5;246m--port 18765 --api-key test …[39m
+
+[38;5;174m✶[39m [38;5;174mPerambulating… [38;5;246m(20m 4s · ↓[39m [38;5;246m44.5k tokens)[39m
+                                     [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle) · esc to interrupt[39m

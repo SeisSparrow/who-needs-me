@@ -1,0 +1,24 @@
+claude
+  P2-0 调研数（你上次让我报，这里补上）：
+  - 不发请求、只扫现有数据：白名单前缀里能确认的 PDF 链接共 17 个。
+  - 真实调研：三站各 150 个请求，合计正好 450，没超批的预算。找到的 PDF：census
+    1 个、gov-uk 0 个、nist 2 个，共 3 个。
+  - 原因：150 页只走到各站的目录页；PDF 大多在更深的页面上，或在别的主机上（asse
+    ts.publishing.service.gov.uk、www2.census.gov）。前缀没有放宽。
+  - 结论：离 50 个差很远，P2-8 要加新 seed。候选是
+    jepsen.io、raft.github.io、usenix.org，每个都要你单独批，还要先过
+    SeedValidator（会发请求）。
+
+  接下来，等你定：
+  1. C7：用真 docparse 验收。这个不用你批，我会登记占用、避开 Notes
+     有访客上传的时段再跑。
+  2. P2-8：真实站点验收。需要你批一个新 seed，推荐 jepsen.io（之前在 Showcase
+     里看到 32 个 PDF）。
+  3. P2-9：上线。照你说的，上线前先给你 diff，你批了再上。
+
+✻ Worked for 5m 45s · done 3:52 PM
+                                        ✔ Update installed · /restart to apply
+────────────────────────────────────────────────────────────────────────────────
+❯ 
+────────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle)

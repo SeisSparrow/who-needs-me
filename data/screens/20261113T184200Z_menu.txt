@@ -1,0 +1,24 @@
+claude
+      3 # sha256-pinned, cached under ~/.cache/gpu-track-tests): touches
+        only load_weights' last line, idempotent, refuses another
+      4 # version or changed code, stacks with turing-tile16 through s0-v
+        m.sh's comma list, and — with torch, if a Python that has
+      5 # it is given in TORCH_PY — the patched load_weights scales patch
+        _dense by 1/8 in fp16 only and keeps patch_ln2's output.
+      6 #   bash gpu/tests/test_s0_patch_fp16.sh          (TORCH_PY=/path
+     … +120 lines (~8 KB)
+  ⎿  Allowed by auto mode
+
+  Making s0-vm.sh output dir overridable for tests
+  ⎿  $ cd ~/projects/_infra-x3 && sed -i
+     '13s|^OUT=/mnt/s0;|OUT=${S0_OUT:-/mnt/s0}; # S0_OUT: tests only|'
+     gpu/s0/s0-vm.sh && sed -n 13p gpu/s0/s0-vm.sh && sed -i 's|OUT=\$T/vmout
+     VENV=|S0_OUT=$T/vmout VENV=|g; s|^Z=\$T/venv-both; mkvenv "\$Z"
+     0.32.0|Z=$T/venv-both; mkvenv "$Z" 0.32.0; mkdir -p "$T/vmou…
+
+✽ Befuddling… (1m 12s · ↓ 8.5k tokens · thinking)
+                                        ✔ Update installed · /restart to apply
+────────────────────────────────────────────────────────────────────────────────
+❯ 
+────────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

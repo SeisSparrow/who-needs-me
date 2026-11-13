@@ -1,0 +1,36 @@
+claude
+● The gate is free and nothing heavy is running. I'm booking a short row with
+  concrete times (19:21–19:35) for the test run, following the new rule:
+
+  Pushed to cloud/v1, ran 1 shell command
+
+● Full pytest suite passes (407, including the 3 new tests), with the other
+  suites all green too; I'm committing, pushing, and crossing out the row.
+  · summary
+
+  Pushed to demo/cpu-embed-fix, cloud/v1
+
+● Pushed and the row is crossed out. Last piece: how many visitor-notebook
+  blocks the redeploy would need to re-embed (read-only):
+
+  Ran 1 shell command
+
+● All five visitor notebooks expired on 11-03 and 11-04, so the redeploy
+  doesn't need a visitor re-embed step. Writing the redeploy steps into the
+  runbook:
+
+  Read 1 file
+
+● Part 1 and part 2 are done. On to part 3: has infra pushed gpu/image-t1
+  yet?
+
+● Checking whether infra pushed gpu/image-t1
+  ⎿  $ cd ~/projects/_infra && git show
+     origin/gpu/image-t1:gpu/image-t1-vm.sh
+
+✽ Perambulating… (9m 6s · ↓ 18.1k tokens · thinking)
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

@@ -1,0 +1,36 @@
+claude
+  Live commit: 08bbc4b
+  Result: Switch rolled back; code stays live on the
+    GPU backend
+
+  Before each deploy, the merged tree passed the full
+  suite (pytest 377 / 386 / 393 / 404, 0 failures, one
+  known deselect each time). Each runbook has its
+  deploy record.
+
+  GPU plan (infra §9.4). I confirm the two script
+  changes it gives me on gpu/g1-v2:
+  1. Before session 1: model-serve.sh exports the
+     build caches under /mnt/gpu-cache:
+     TRITON_CACHE_DIR, VLLM_CACHE_ROOT and
+     TORCHINDUCTOR_CACHE_DIR. §5 says "two variables"
+     but §9.3 lists three; I'll do three.
+  2. Before session 2: prep tries the tarball first,
+     checking in the §9.3 order, and on any failure
+     cleans up and installs from scratch the current
+     way. It will be tested locally with a fake blob.
+     §9.4 asks for "hit plus four fallbacks", but
+     §9.3's checks give five failure reasons (version,
+     manifest, part, whole stream, import versions),
+     so I'll test all five.
+
+  The joint schedule and command list come next. The
+  SERVES change stays in the same change set and
+  merges only after Menu signs the contract.
+
+✻ Cogitated for 1m 53s · done 6:55 PM
+              ✔ Update installed · /restart to apply
+──────────────────────────────────────────────────────
+❯ 
+──────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle)

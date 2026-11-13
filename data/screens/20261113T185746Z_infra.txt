@@ -1,0 +1,36 @@
+claude
+         +9]{2}&[^ "]*sig=[A-Za-z0-9%+/=]{20,}' "${dirs[@]
+         +}" 2>/dev/null)
+      47 +  [ -n "$found" ] && { printf '%s\n' "$found" |
+         +sed -n 1,5p; echo "scan: a SAS token (above)"; h
+         +its=1; }
+      48    [ "$hits" = 0 ] && echo "scan: clean (${dirs[*
+          ]})"
+      49    return "$hits"
+      50  }
+  ⎿  Allowed by auto mode classifier
+
+● Now the host side: check, sas, readback.
+
+● Write(~/projects/_infra-image/gpu/image-t1.sh)
+  ⎿  Wrote 88 lines to
+     ~/projects/_infra-image/gpu/image-t1.sh
+      1 #!/usr/bin/env bash
+      2 # T1 pre-installed environment, the host side.
+         Read-only except `pin` (writes a file in this rep
+        o).
+      3 # Plan: ~/projects/_docs/_plan/infra_gpu_image_pla
+        n_2026-11-13.md §9. The VM side is image-t1-vm.sh.
+      4 #
+      5 #   image-t1.sh check                  the account
+         and container are still private (exit 1 if not)
+      6 #   image-t1.sh sas r|cw [MINUTES]     a user dele
+     … +83 lines (~4 KB)
+  ⎿  Allowed by auto mode classifier
+
+· Befuddling… (2m 0s · ↓ 12.6k tokens · thinking)
+                         ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ↓ to manage

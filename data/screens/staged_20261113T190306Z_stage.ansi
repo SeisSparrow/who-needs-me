@@ -1,0 +1,35 @@
+[1m[32muser@host[0m:[1m[34m~/stage_tmp[0m$ uptime; df -h / | tail -1
+ 19:03:04 up 4 days,  1:45, 11 users,  load average: 2.12, 2.33,
+1.84
+/dev/root       247G  155G   93G  63% /
+[1m[32muser@host[0m:[1m[34m~/stage_tmp[0m$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

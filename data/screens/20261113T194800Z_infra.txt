@@ -1,0 +1,36 @@
+claude
+
+
+  Ran 3 shell commands
+
+● Now the tests: "no venv left" becomes "empty or absent", and I'll add a
+  section where ROOT isn't writable, like /mnt on the VM.
+
+  Ran 1 shell command
+
+● Request (3) is fixed and passes its 57 tests, and the old rm -rf failure
+  would now be caught. Before I take up requests (1) and (2), I'm checking
+  who owns gpu/x3-gemma-fp16.
+
+  Ran 1 shell command
+
+● gpu/x3-gemma-fp16 is one commit (769da07) on top of gpu/g1-v2's 367c0e3.
+  Both of Notes' first two requests are commits to Notes' own branch. Next
+  I'll reply to Notes.
+  ⎿  “Reply to Notes on T1 asks 1-3” →
+     uds:/run/user/1000/cc-socks/534278.sock
+  ⎿  Allowed by auto mode classifier
+
+  Recording two lessons from the M1 run
+  ⎿  $ f=$(ls ~/projects/_docs/lessons.md 2>/dev/null || find
+     ~/projects/_docs -maxdepth 2 -name lessons.md | head -1); echo $f; tail
+     -3 "$f"; cat >> "$f" <<'EOF'
+     - 2026-11-13 infra gpuctl M1: the contract / integration suites start
+     `target/debug/gpuctl` without building it, and `cargo test` doesn't reb…
+
+✻ Improvising… (9m 17s · ↓ 24.7k tokens · thought for 2s)
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

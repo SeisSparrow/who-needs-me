@@ -1,0 +1,285 @@
+"""Layer-0 rules: one test per rule. Screens are synthetic, modeled on real Claude Code layout."""
+
+from who_needs_me.rules import (
+    content_key,
+    evaluate,
+    last_message,
+    parse,
+    split_dim,
+    stale_minutes,
+)
+
+G = "\x1b[38;5;244m"  # border grey
+R = "\x1b[39m"
+DIM = "\x1b[2m"
+OFF = "\x1b[0m"
+BORDER = f"{G}{'─' * 60}"
+
+
+def claude_screen(body: list[str], box: str = "❯\xa0", status: str = "  ⏵⏵ auto mode on") -> str:
+    return "\n".join([*body, "", BORDER, f"{R}{box}", BORDER, f"{R}{status}", ""])
+
+
+def rules_of(layer0):
+    return {h.rule: h for h in layer0.hits}
+
+
+IDLE_DONE = claude_screen(
+    [
+        "● Bash(pytest -q)",
+        "  ⎿  40 passed",
+        "",
+        "● All 40 tests pass. The parser now handles empty files.",
+        "  Nothing else is pending.",
+        "",
+        "✻ Baked for 3s · done 7:02 PM",
+        "                         ✔ Update installed · /restart to apply",
+    ]
+)
+
+
+def test_idle_screen_has_no_decisive_rule():
+    l0 = evaluate(IDLE_DONE, "claude")
+    assert l0.verdict() is None
+    assert l0.facts["input_box"] is True
+    assert l0.last_message == (
+        "All 40 tests pass. The parser now handles empty files.\nNothing else is pending."
+    )
+    assert l0.evidence_default == "Nothing else is pending."
+
+
+# ---- rule: dropped_to_shell
+
+
+def test_dropped_to_shell_from_pane_command():
+    lines = ["user@host:~/x$ 请继续上一步然后汇报", "请继续上一步然后汇报: command not found"]
+    screen = "\n".join([*lines, "user@host:~/x$"])
+    v = evaluate(screen, "bash").verdict()
+    assert (v.rule, v.state, v.evidence) == (
+        "dropped_to_shell",
+        "dropped_to_shell",
+        "pane_command=bash",
+    )
+    # the receipt wins over a screen that still shows a Claude Code box
+    assert evaluate(IDLE_DONE, "bash").verdict().rule == "dropped_to_shell"
+    assert evaluate(IDLE_DONE, "claude").verdict() is None
+
+
+def test_dropped_to_shell_fallback_without_pane_command():
+    screen = f"{DIM}Resume this session with:{OFF}\n\x1b[1muser@host\x1b[0m:~/x$ \n"
+    assert evaluate(screen, None).verdict().rule == "dropped_to_shell"
+    assert evaluate(IDLE_DONE, None).verdict() is None
+
+
+# ---- rule: busy
+
+
+def test_busy_spinner():
+    screen = claude_screen(["● Bash(make test)", "", "✶ Tinkering… (1m 42s · ↓ 9.2k tokens)"])
+    v = evaluate(screen, "claude").verdict()
+    assert (v.rule, v.state) == ("busy", "busy")
+    assert "Tinkering" in v.evidence
+
+
+def test_busy_esc_to_interrupt_in_status():
+    screen = claude_screen(["● Working"], status="  ⏵⏵ auto mode on · esc to interrupt")
+    assert evaluate(screen, "claude").verdict().rule == "busy"
+
+
+def test_done_line_is_not_busy():
+    assert "busy" not in rules_of(evaluate(IDLE_DONE, "claude"))
+
+
+# ---- rule: ghost text (dim suggestion in the input box)
+
+
+def test_ghost_text_stripped_and_flagged():
+    screen = claude_screen(["● Done."], box=f"❯\xa0{DIM}go ahead and start the T4 VM{OFF}")
+    l0 = evaluate(screen, "claude")
+    assert rules_of(l0)["ghost_text"].evidence == "go ahead and start the T4 VM"
+    assert l0.facts["ghost_text_ignored"] is True
+    assert l0.facts["user_typing"] is False
+    assert l0.verdict() is None  # ghost text never decides anything, nor trips the tripwire
+
+
+def test_typed_text_is_not_ghost():
+    screen = claude_screen(["● Done."], box="❯\xa0go ahead and start the T4 VM")
+    l0 = evaluate(screen, "claude")
+    assert "ghost_text" not in rules_of(l0)
+    assert l0.facts["user_typing"] is True
+
+
+def test_split_dim_handles_256_color_params():
+    assert split_dim(f"a\x1b[38;5;2mb{DIM}c\x1b[22md") == ("abd", "c")
+
+
+# ---- rule: auth / API error (session broke)
+
+
+def test_auth_error():
+    screen = claude_screen(
+        [
+            "● Background command finished (exit code 0)",
+            "",
+            "● Please run /login · API Error: 403 Attention Required! | Cloudflare",
+            "",
+            "✻ Cogitated for 0s · done 9:50 AM",
+        ]
+    )
+    l0 = evaluate(screen, "claude")
+    v = l0.verdict()
+    assert (v.rule, v.state, v.reason) == ("auth_error", "needs_human", "machine")
+    assert v.evidence.startswith("● Please run /login")
+    assert "API Error" in l0.facts["last_error_line"]
+
+
+def test_old_auth_error_scrolled_away_does_not_fire():
+    body = (
+        ["● API Error: 500 Internal"] + [f"  line {i}" for i in range(20)] + ["● Fixed, all good."]
+    )
+    assert "auth_error" not in rules_of(evaluate(claude_screen(body), "claude"))
+
+
+# ---- rule: trust prompt
+
+
+def test_trust_prompt():
+    screen = "\n".join(
+        [
+            "user@host:~/stage_tmp$ claude --model haiku",
+            "─" * 60,
+            " Accessing workspace:",
+            " Quick safety check: Is this a project you created or one you",
+            " trust? (Like your own code, a well-known open source project,",
+            " ❯ No, exit",
+            "   Yes, I trust this folder",
+            " Enter to confirm · Esc to cancel",
+        ]
+    )
+    v = evaluate(screen, "claude").verdict()
+    assert (v.rule, v.state, v.reason) == ("trust_prompt", "needs_human", "machine")
+
+
+# ---- rule: tripwire keywords (last message only)
+
+
+def test_tripwire_per_reason():
+    cases = {
+        "deploy": "Ready to deploy v2 to production. Approve?",
+        "spend": "This needs a $40/month GPU instance. OK to provision?",
+        "delete": "I will rm -rf the old build cache once you confirm.",
+        "machine": "Please log in on the VM so I can continue.",
+    }
+    for reason, text in cases.items():
+        v = evaluate(claude_screen([f"● {text}"]), "claude").verdict()
+        assert (v.rule, v.reason) == ("tripwire", reason), text
+        assert v.evidence == text
+
+
+def test_tripwire_chinese():
+    v = evaluate(claude_screen(["● 代码已就绪，等你批准后上线。"]), "claude").verdict()
+    assert (v.rule, v.reason) == ("tripwire", "deploy")
+
+
+def test_tripwire_ignores_older_messages():
+    body = ["● I will deploy after review.", "", "> thanks", "", "● Tests pass. Nothing pending."]
+    assert "tripwire" not in rules_of(evaluate(claude_screen(body), "claude"))
+
+
+def test_tripwire_only_scans_tail_latest_line_wins():
+    narration = [f"  detail {i}" for i in range(6)]
+    body = ["● Before each deploy the suite passed.", *narration, "  Done, nothing pending."]
+    assert "tripwire" not in rules_of(evaluate(claude_screen(body), "claude"))
+    body = ["● Old branches can be deleted later.", "  Approve the deploy of v2?"]
+    v = evaluate(claude_screen(body), "claude").verdict()
+    assert (v.reason, v.evidence) == ("deploy", "Approve the deploy of v2?")
+
+
+def test_busy_beats_tripwire():
+    body = ["● Deploying now.", "", "✶ Forging… (5s · ↓ 1k tokens)"]
+    assert evaluate(claude_screen(body), "claude").verdict().rule == "busy"
+
+
+# ---- rule: empty session (added after the first evaluation)
+
+WELCOME = [
+    " ▐▛███▜▌   Claude Code v2.1.322",
+    "▝▜█████▛▘  Haiku 5.5 · Claude Ultra",
+    "  ▘▘ ▝▝    ~/stage_tmp",
+]
+
+
+def test_empty_session_is_idle_without_model():
+    from who_needs_me.policy import needs_model
+
+    l0 = evaluate(claude_screen(WELCOME), "claude")
+    v = l0.verdict()
+    assert (v.rule, v.state) == ("empty_session", "idle_done")
+    assert not needs_model(l0)
+    # typed text in the input box does not change it
+    typed = evaluate(claude_screen(WELCOME, box="❯\xa0please deploy"), "claude")
+    assert typed.verdict().rule == "empty_session"
+    # once there is any conversation, the rule no longer applies
+    talked = evaluate(claude_screen([*WELCOME, "", "> hi", "", "● Hello."]), "claude")
+    assert "empty_session" not in rules_of(talked)
+
+
+# ---- rule: stale + background task
+
+
+def test_stale_background():
+    status = "  ⏵⏵ auto mode on · 1 shell · ↓ to manage"
+    screen = claude_screen(["● Waiting for the re-embed job to finish."], status=status)
+    l0 = evaluate(screen, "claude", stale=45)
+    hit = rules_of(l0)["stale_background"]
+    assert hit.state is None and "45 min" in hit.evidence
+    assert l0.facts["background_task"] == "running"
+    assert l0.facts["screen_unchanged"] == "over_30_min"
+    assert "stale_background" not in rules_of(evaluate(screen, "claude", stale=10))
+    no_bg = claude_screen(["● Waiting for the re-embed job to finish."])
+    assert "stale_background" not in rules_of(evaluate(no_bg, "claude", stale=45))
+
+
+def test_stale_minutes_ignores_spinner_timer():
+    a = claude_screen(["● Same text", "✶ Tinkering… (1m 2s · ↓ 1k tokens)"])
+    b = claude_screen(["● Same text", "✶ Tinkering… (3m 9s · ↓ 2k tokens)"])
+    c = claude_screen(["● New text"])
+    assert content_key(a) == content_key(b) != content_key(c)
+    series = [
+        ("20261113T180000Z", content_key(c)),
+        ("20261113T181000Z", content_key(a)),
+        ("20261113T184000Z", content_key(b)),
+    ]
+    assert stale_minutes(series) == 30
+
+
+# ---- last message extraction
+
+
+def test_last_message_stops_at_next_bullet_and_skips_tool_calls():
+    body = parse(
+        claude_screen(
+            [
+                "> please check",
+                "● First I'll look.",
+                "● Read(src/x.py)",
+                "  ⎿  Read 10 lines",
+                "● Found it. Shall I push the fix?",
+                "  It is one line.",
+            ]
+        )
+    ).body
+    assert last_message(body) == "Found it. Shall I push the fix?\nIt is one line."
+
+
+def test_last_message_fallback_and_cap():
+    body = [f"line {i}" for i in range(100)]
+    assert last_message(body, max_lines=3) == "line 97\nline 98\nline 99"
+
+
+def test_rules_can_be_switched_off():
+    from who_needs_me.rules import load_config
+
+    cfg = load_config()
+    off = {**cfg, "rules": {**cfg["rules"], "dropped_to_shell": False}}
+    assert evaluate(IDLE_DONE, "bash", config=off).verdict() is None

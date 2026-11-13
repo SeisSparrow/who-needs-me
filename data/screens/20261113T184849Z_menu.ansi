@@ -1,0 +1,23 @@
+    token 要读的量。草稿里按更正后的写。
+  - [1m跨机 PP[0m：每个 token 只传 20 KiB，占 69.8 ms 里的 0.11%。也如实写了 TP
+    的实测：eager 模式下 TP 更慢，打开 CUDA graph 后 TP 更快。
+  - [1mprefix cache[0m：27B 用新排法命中 60.7%，旧排法 8.8%；9B 命中 92.5%。
+  - [1m草稿档四个候选的表、Gemma 12B 的 fp16 溢出、冷启动构成[0m都写进去了。冷启动约
+    27 分钟，按日志时间戳重排后各段加起来和墙钟时间一致。
+  - [1mT4 带宽 320 GB/s 是唯一取自书外的数字[0m，出处是 NVIDIA
+    的产品简介和产品页。2018 年的 datasheet 写的是 300 GB/s。
+
+  还发现 [38;5;153mmenu_v2_next[39m §7.10.3 的冷启动表把 49 s 的下载重复算了一次。合计 27
+  分钟没错，所以那张表我没改，等你说要改再改。
+
+  Sources:
+  - [94m]8;id=1xdytzo;https://nvidia.com/content/dam/en-zz/Solutions/Data-Center/tesla-t4/t4-tensor-core-product-brief.pdf\NVIDIA T4 product brief[39m]8;;\
+  - [94m]8;id=fjaczw;https://www.nvidia.com/en-eu/data-center/tesla-t4/\NVIDIA T4 product page[39m]8;;\
+  - [94m]8;id=6rn92l;https://nvidia.com/content/dam/en-zz/Solutions/Data-Center/tesla-t4/t4-tensor-core-datasheet.pdf\T4 datasheet (Dec 2018)[39m]8;;\
+
+[38;5;246m✻[39m [38;5;246mWorked for 5m 19s · done 6:47 PM[39m
+                                        [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m────────────────────────────────────────────────────────────────────────────────
+[39m❯ 
+[38;5;244m────────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle)[39m

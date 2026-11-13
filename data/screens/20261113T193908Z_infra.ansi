@@ -1,0 +1,35 @@
+
+  [38;5;246mRead [1m1[0m[38;5;246m file [39m
+
+[38;5;114m●[39m [1mUpdate[0m(]8;id=1ctanys;file:///home/user/projects/_infra-gpuctl/gpuctl/src/runner.rs\~/projects/_infra-gpuctl/gpuctl/src/runner.rs]8;;\)
+[38;5;246m  ⎿  [39mAdded [1m3[0m lines, removed [1m2[0m lines
+     [2m[38;5;231m 268 [0m[38;5;231m         }[39m
+     [2m[38;5;231m 269 [0m[38;5;231m         [38;5;242m// SAFETY: signalling a process group we created (p[39m
+     [2m[38;5;231m     [0m[38;5;231m [38;5;242mrocess_group(0) made pgid == the child's pid).[39m
+     [2m[38;5;231m 270 [0m[38;5;231m         [38;5;197munsafe[38;5;231m { libc::[38;5;148mkillpg[38;5;231m(cur.pgid, libc::SIGTERM) };[39m
+     [38;5;167m[48;5;52m 271 -[38;5;231m        let waited = tokio::time::timeout(Duration::from_se[39m[49m
+     [38;5;167m[48;5;52m     -[38;5;231mcs(10), cur.done.wait_for(|d| *d)).await;                  [39m[49m
+     [38;5;167m[48;5;52m 272 -[38;5;231m        if waited.is_err() {                               [39m[49m
+     [38;5;77m[48;5;22m 271 +[38;5;231m        [38;5;242m// only whether it timed out: the Ref inside would [39m[49m
+     [38;5;77m[48;5;22m     +[38;5;242mkeep `done` borrowed[38;5;231m                                       [39m[49m
+     [38;5;77m[48;5;22m 272 +[38;5;231m        [38;5;81mlet[38;5;231m timed_out = tokio::time::[38;5;148mtimeout[38;5;231m(Duration::[38;5;148mfrom[39m[49m
+     [38;5;77m[48;5;22m     +[38;5;148m_secs[38;5;231m([38;5;141m10[38;5;231m), cur.done.[38;5;148mwait_for[38;5;231m(|d| *d)).[38;5;197mawait[38;5;231m.[38;5;148mis_err[38;5;231m();      [39m[49m
+     [38;5;77m[48;5;22m 273 +[38;5;231m        [38;5;197mif[38;5;231m timed_out {                                     [39m[49m
+     [2m[38;5;231m 274 [0m[38;5;231m             [38;5;197munsafe[38;5;231m { libc::[38;5;148mkillpg[38;5;231m(cur.pgid, libc::SIGKILL) [39m
+     [2m[38;5;231m     [0m[38;5;231m };[39m
+     [2m[38;5;231m 275 [0m[38;5;231m             [38;5;81mlet[38;5;231m _ = cur.done.[38;5;148mwait_for[38;5;231m(|d| *d).[38;5;197mawait[38;5;231m;[39m
+     [2m[38;5;231m 276 [0m[38;5;231m         }[39m
+[38;5;246m  ⎿  Allowed by auto mode classifier[39m
+
+[38;5;246m [39m Rebuilding gpuctl under the lease
+[38;5;246m  ⎿  $ cd ~/projects/_infra-gpuctl/gpuctl && . ~/.cargo/env && uptime && [39m
+     [38;5;246mt0=$(date +%s) && ~/projects/_infra-lease/bin/with-lease cpu --expect [39m
+     [38;5;246m10m --note "infra gpuctl M1 cargo build" -- nice -n 19 cargo build -j2 [39m
+     [38;5;246m2>&1; echo "rc=$? $(( $(date +%s) - t0 )) s"[39m
+
+[38;5;174m✽[39m [38;5;180mImprovising…[38;5;174m [38;5;246m(24s · ↓[39m [38;5;246m950 tokens)[39m
+                                     [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle) · esc to interrupt[39m

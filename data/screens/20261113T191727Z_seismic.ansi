@@ -1,0 +1,35 @@
+    touched.
+  - [1m[38;5;153m_infra[39m:[0m my row only, committed locally as 1e41b81. I didn't push it or
+    touch other sessions' rows.
+  - [1mNotes:[0m the results are in §5 of
+    [38;5;153mseismic_b2_synth_vectorize_plan_2026-11-13.md[39m, and my memory index is
+    updated.
+
+  [1mStill waiting on the user:[0m
+  - E1 (6c6ff47 plus the v1 patch) goes live only once the user personally
+    approves it.
+  - Whether to merge A+B into [38;5;153mdemo/v2-frac[39m. It only speeds up regenerating
+    datasets later, and nothing is waiting on it right now.
+
+  C was not done, as decided.
+
+[38;5;246m✻[39m [38;5;246mSautéed for 39s · done 7:06 PM[39m
+
+[38;5;246m[48;5;237m❯ [38;5;231m（用户委托代回）验收结果收到：逐字节通过、1.47×、pytest 523 过。A+B [39m
+  [38;5;231m可以合进 demo/v2-frac（只合代码，不重生成数据、不动 [39m
+  [38;5;231mdata/b2/、不重启线上）；合完报 SHA。E1 [39m
+  [38;5;231m上线仍等用户本人批，已在待批清单里。之后没有别的活就待命。[39m
+[49m
+[38;5;246m [39m Checking branch state and that changes are disjoint
+[38;5;246m  ⎿  $ cd ~/projects/seismic-picker-v2 && git status --short && git fetch -q
+[39m     [38;5;246morigin && git rev-parse demo/v2-frac origin/demo/v2-frac [39m
+     [38;5;246mdemo/v2-frac-vec origin/demo/v2-frac-vec && git merge-base demo/v2-frac
+[39m     [38;5;246mdemo/v2-frac-vec && git diff --stat 20b60bc demo/v2-frac && git diff [39m
+     [38;5;246m--stat 20b60bc demo/v2-frac-v…[39m
+
+[38;5;174m✽[39m [38;5;180mFrosting…[38;5;174m [38;5;246m(9s · ↓[39m [38;5;246m696 tokens)[39m
+                                     [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle) · esc to interrupt[39m

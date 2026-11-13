@@ -1,0 +1,35 @@
+
+
+  [38;5;246mRan [1m3[0m[38;5;246m shell commands [39m
+
+[38;5;231m●[39m Now the tests: "no venv left" becomes "empty or absent", and I'll add a
+  section where [38;5;153mROOT[39m isn't writable, like [38;5;153m/mnt[39m on the VM.
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m Request (3) is fixed and passes its 57 tests, and the old rm -rf failure
+  would now be caught. Before I take up requests (1) and (2), I'm checking
+  who owns gpu/x3-gemma-fp16.
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m [38;5;153mgpu/x3-gemma-fp16[39m is one commit ([38;5;153m769da07[39m) on top of [38;5;153mgpu/g1-v2[39m's [38;5;153m367c0e3[39m.
+  Both of Notes' first two requests are commits to Notes' own branch. Next
+  I'll reply to Notes.
+[38;5;246m  ⎿  “Reply to Notes on T1 asks 1-3” → [39m
+     [38;5;246muds:/run/user/1000/cc-socks/534278.sock[39m
+[38;5;246m  ⎿  Allowed by auto mode classifier[39m
+
+[38;5;246m [39m Recording two lessons from the M1 run
+[38;5;246m  ⎿  $ f=$(ls ~/projects/_docs/lessons.md 2>/dev/null || find [39m
+     [38;5;246m~/projects/_docs -maxdepth 2 -name lessons.md | head -1); echo $f; tail
+[39m     [38;5;246m-3 "$f"; cat >> "$f" <<'EOF'[39m
+     [38;5;246m- 2026-11-13 infra gpuctl M1: the contract / integration suites start [39m
+     [38;5;246m`target/debug/gpuctl` without building it, and `cargo test` doesn't reb…
+
+[38;5;174m✽[39m [38;5;174mImprovising… [38;5;246m(9m 16s · ↓[39m [38;5;246m24.5k tokens · thought for 2s)[39m
+                                     [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle) · esc to interrupt[39m

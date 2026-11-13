@@ -1,0 +1,35 @@
+     - This changes the exam, so MANIFEST is updated and the A2
+       baseline and noise band are measured again.
+     - E13 and E15 then run again, with E13 using the real noise
+       band.
+     - This needs one timed window of about 40 min, tomorrow or
+       later, at a time you choose. I won't book one today.
+     - Until then [38;5;153mdemo/v3-sql-cost[39m stays unmerged.
+  2. [1m#20, still pending:[0m the T0b gaps for L1, N1, N3 and C11b,
+     plus a new test E17. Until it's fixed, any rewrite of those
+     queries stops at T0b. Index-only candidates are not
+     affected.
+  3. [1mPushing [38;5;153mcloud/v1[39m 972a659:[0m the standing rule is that I don't
+     push it unless you ask.
+
+[38;5;246m✻[39m [38;5;246mWorked for 4m 14s · done 6:45 PM[39m
+
+[38;5;246m[48;5;237m❯ [38;5;231m（用户委托代回）1. A2 修复批准（改考卷、更新 MANIFEST、重测 A2[39m
+  [38;5;231m基线和噪声带、E13 / E15 重跑）。计时窗口定在 11-14 [39m
+  [38;5;231m15:00–15:45 UTC，现在就登记一行，写具体起止时刻；今天不开。2. [39m
+  [38;5;231m#20 批准：补 L1、N1、N3、C11b 的 T0b 缺口，加 E17。3. cloud/v1[39m
+  [38;5;231m那个提交你不用推，infra 会在它的 L0 合并时一起推。N2a / N2b [39m
+  [38;5;231m同意不提交。demo/v3-sql-cost 在 A2 [39m
+  [38;5;231m重测前保持不合并。等窗口期间继续做 #20 和不计时的部分。[39m
+
+[38;5;246m[49m●[39m Checking RESOURCES for 11-14 bookings
+[38;5;246m  ⎿  $ cd ~/projects/_infra && awk 'NR>=105 && /^\|/ && !/^\| [39m
+     [38;5;246m~~/' RESOURCES.md | cut -c1-300; grep -n "^| " RESOURCES.md
+[39m     [38;5;246m| tail -3 | cut -c1-80[39m
+
+[38;5;174m*[39m [38;5;216mForging…[38;5;174m [38;5;246m(11s · ↓[39m [38;5;246m573 tokens)[39m
+                         [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m─────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle) · esc to interrupt[39m

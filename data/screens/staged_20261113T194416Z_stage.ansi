@@ -1,0 +1,35 @@
+
+[38;5;174m ▐[48;5;16m▛███▛█[39m[49m   [1mClaude Code[0m [38;5;246mv2.1.323[39m
+[38;5;174m▝▜[48;5;16m█████[49m█▀[39m  [38;5;246mHaiku 5.5 · Claude Ultra[39m
+[38;5;174m ▝▝   ▝▝ [39m  [38;5;246m~/stage_tmp[39m
+
+
+[38;5;246m[48;5;237m❯[39m [38;5;231m/clear[39m
+
+[38;5;246m❯ [38;5;231mOutput the following sample report exactly as written, with nothing added:[39m
+  [38;5;231mThe benchmark harness is ready and passes locally. Running the full [39m
+  [38;5;231mcomparison needs two GPU instances for about an hour, roughly 1.30 dollars[39m
+  [38;5;231min total. I have not started anything. Tell me to go ahead and I will [39m
+  [38;5;231mlaunch them.[39m
+
+[38;5;231m[49m●[39m The benchmark harness is ready and passes locally. Running the full
+  comparison needs two GPU instances for about an hour, roughly 1.30 dollars
+  in total. I have not started anything. Tell me to go ahead and I will
+  launch them.
+
+[38;5;246m✻[39m [38;5;246mChurned for 1s · done 7:44 PM[39m
+
+
+
+
+
+
+
+
+
+
+
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m❯ 
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle)[39m

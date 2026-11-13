@@ -1,0 +1,23 @@
+     [2m[38;5;231m 3 [0m[38;5;242m# sha256-pinned, cached under ~/.cache/gpu-track-tests): touches [39m
+     [2m[38;5;231m   [0m[38;5;242monly load_weights' last line, idempotent, refuses another[39m
+     [2m[38;5;231m 4 [0m[38;5;242m# version or changed code, stacks with turing-tile16 through s0-v[39m
+     [2m[38;5;231m   [0m[38;5;242mm.sh's comma list, and — with torch, if a Python that has[39m
+     [2m[38;5;231m 5 [0m[38;5;242m# it is given in TORCH_PY — the patched load_weights scales patch[39m
+     [2m[38;5;231m   [0m[38;5;242m_dense by 1/8 in fp16 only and keeps patch_ln2's output.[39m
+     [2m[38;5;231m 6 [0m[38;5;242m#   bash gpu/tests/test_s0_patch_fp16.sh          (TORCH_PY=/path[39m
+     [38;5;246m… +120 lines (~8 KB) [39m
+[38;5;246m  ⎿  Allowed by auto mode[39m
+
+[38;5;246m●[39m Making s0-vm.sh output dir overridable for tests
+[38;5;246m  ⎿  $ cd ~/projects/_infra-x3 && sed -i [39m
+     [38;5;246m'13s|^OUT=/mnt/s0;|OUT=${S0_OUT:-/mnt/s0}; # S0_OUT: tests only|' [39m
+     [38;5;246mgpu/s0/s0-vm.sh && sed -n 13p gpu/s0/s0-vm.sh && sed -i 's|OUT=\$T/vmout [39m
+     [38;5;246mVENV=|S0_OUT=$T/vmout VENV=|g; s|^Z=\$T/venv-both; mkvenv "\$Z" [39m
+     [38;5;246m0.32.0|Z=$T/venv-both; mkvenv "$Z" 0.32.0; mkdir -p "$T/vmou…[39m
+
+[38;5;174m✢[39m [38;5;174mBe[38;5;216mfud[38;5;174mdling… [38;5;246m(1m 12s · ↓[39m [38;5;246m8.4k tokens · [38;5;247mthinking[38;5;246m)[39m
+                                        [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m────────────────────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m────────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle) · esc to interrupt[39m

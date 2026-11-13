@@ -1,0 +1,36 @@
+claude
+
+
+  Read 1 file, ran 1 shell command
+
+● The test caught a bug where a corrupt file's replacement state comes back
+  as trusted after restart. I'm persisting the untrusted mark explicitly.
+
+  Ran 2 shell commands
+
+› Message from @notes-26: From Notes: T1 prep side done on gpu/g1-v2@5c9317f
+(+ profiles @136dffa). Joint schedule: ~/projects/_docs/_plan/notes_… (ctrl+o
+to expand)
+
+● I'll finish the M1 test run first, then come back to Notes' three requests.
+
+  Ran 1 shell command
+
+● All 29 unit tests pass. Next the shared contract suite:
+
+  Ran 1 shell command
+
+● 64 tests pass and 6 fail, all on the "no script ran" check, which returns
+  an empty string instead of a count. I suspect the test reads a calls log
+  that was never created, so I'm checking that now.
+
+● Reading scripts_called and the B-case setup
+  ⎿  $ cd ~/projects/_infra-gpuctl/contracts/gpuctl/tests/server && grep -n
+     'scripts_called' -A4 run.sh | head -12; sed -n 92,120p run.sh
+
+✢ Improvising… (2m 11s · ↓ 6.3k tokens · thinking)
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

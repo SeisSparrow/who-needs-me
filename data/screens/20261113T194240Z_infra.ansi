@@ -1,0 +1,35 @@
+
+
+[38;5;231m●[39m 64 tests pass and 6 fail, all on the "no script ran" check, which returns
+  an empty string instead of a count. I suspect the test reads a calls log
+  that was never created, so I'm checking that now.
+
+  [38;5;246mRan [1m2[0m[38;5;246m shell commands [39m
+
+[38;5;231m●[39m The failure comes from the shared test suite rather than gpuctl: [38;5;153mgrep -c[39m on
+  a missing calls log prints nothing instead of 0. I'll make it treat a
+  missing log as 0, both here and on line 90.
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m The contract suite now passes 70/70. Next the integration tests and the
+  compile-fail probes:
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m One integration failure: some call never received [38;5;153mGPU_PROGRESS[39m. I suspect
+  it's the fake [38;5;153maz[39m; checking:
+
+  [38;5;246mRan [1m3[0m[38;5;246m shell commands [39m
+
+[38;5;231m●[39m The integration tests pass 43/43. Next the compile-fail probes, which check
+  that the sealed types can't be built outside their modules:
+
+[38;5;246m●[39m Running [1m1[0m shell command…
+
+[38;5;174m✶[39m [38;5;174mImprovising… [38;5;246m(3m 57s · ↓[39m [38;5;246m10.1k tokens · thought for 1s)[39m
+                                     [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle) · esc to interrupt[39m

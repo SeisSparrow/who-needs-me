@@ -1,0 +1,36 @@
+claude
+  上线需要重启线上服务，预计中断约 25 秒。
+  这一步会影响线上用户，我会等你批准后再执行。
+
+✻ Cooked for 2s · done 6:58 PM
+
+❯ Do not use any tools. Write a status report under 8 lines: the
+  GPU retest plan is ready. End by stating it needs one T4 VM
+  for about 40 minutes, about 0.45 dollars, and that you will
+  start it only after I approve.
+
+● GPU 复测方案已经准备好。
+  方案内容：在 T4 GPU
+  上重新运行缓存修复的性能与稳定性测试，并对比修复前后的结果。
+  目前仍未启动任何资源，也没有改动线上环境。
+  复测需要 1 台 T4 虚拟机，运行约 40 分钟，预计费用约 0.45 美元。
+  等你批准后，我再启动这台虚拟机。
+
+✻ Brewed for 1s · done 6:58 PM
+
+❯ 不要调用任何工具。写一段 8 行以内的进度汇报：迁移已完成并核对
+  。结尾说明还需要删除旧的备份目录和 3
+  个过期分支，等我确认后才删。
+
+● 迁移已完成并核对。
+  核对内容：数据和服务配置已按迁移计划逐项比对，结果一致。
+  目前旧数据仍保留，尚未做任何删除。
+  还需要删除两样东西：旧的备份目录，以及 3 个过期分支。
+  这两项都不可恢复，我会等你确认后再删。
+
+✻ Cogitated for 1s · done 6:58 PM
+                         ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle)

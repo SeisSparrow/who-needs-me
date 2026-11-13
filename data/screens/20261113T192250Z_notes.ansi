@@ -1,0 +1,35 @@
+
+  [38;5;246mRan [1m3[0m[38;5;246m shell commands [39m
+
+[38;5;231m●[39m All 10 pass. Now checking that the 3 new tests fail on the old code:
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m All 3 fail on the old code. Checking whether anything else on the page
+  reads the GPU embed capability directly:
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m Only the label uses it, and that's now correct on both inputs. Before
+  running the full suite (about 5 min), I'm checking the occupancy table,
+  since seismic and p2p may be running now:
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m The gate is free and nothing heavy is running. I'm booking a short row with
+  concrete times (19:21–19:35) for the test run, following the new rule:
+
+[38;5;246m [39m Running full test suite on cpu-embed-fix branch[38;5;246m · 2m 42s[39m
+[38;5;246m  ⎿  $ S=/tmp/claude-1000/-home-user-projects-notes/04b2026d-3c17-4c73-af0a-b
+[39m     [38;5;246m5d68d2c4f05/scratchpad; cd ~/projects/notes-cefix && date -u +%T && nice
+[39m     [38;5;246m-n 19 ./tests/run_tests.sh -p no:cacheprovider --deselect tests/test_s0[39m
+     [38;5;246m_retrieval.py::test_two_embed_arms_one_reranker_and_the_cpu_check > [39m
+     [38;5;246m$S/t_cefix.log … (2m 42s · 2 lines)[39m
+     [38;5;246m(ctrl+b ctrl+b (twice) to run in background)[39m
+
+[38;5;174m✻[39m [38;5;174mPerambulating… [38;5;246m(5m 32s · ↓[39m [38;5;246m12.5k tokens)[39m
+                                     [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle) · esc to interrupt[39m

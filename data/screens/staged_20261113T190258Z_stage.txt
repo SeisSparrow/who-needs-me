@@ -1,0 +1,36 @@
+bash
+user@host:~/stage_tmp$ claude --model haiku
+
+Resume this session with:
+claude --model haiku --resume 543d3fa8-570f-4f38-8ed8-3bc066c6894
+b
+user@host:~/stage_tmp$ 请继续上一步然后汇报
+请继续上一步然后汇报: command not found
+user@host:~/stage_tmp$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

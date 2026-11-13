@@ -1,0 +1,43 @@
+claude
+     ...
+      159          if who.strip('*').lower().startswith('p2p'):
+      160              continue                      # our own registration
+      161          start = occupied_from(cells[2], now)
+      162 +        until = occupied_until(end, now, start)
+      163 +        if until is None:
+      164 +            # shared rule (11-13): a row must give a concrete end; one that
+      165 +            # does not is busy - even if booked for later - and is named
+      166 +            out.append('%s (%s): no concrete end time (预计结束 = "%s")' % (who, cells
+          +[1][:40], end[:40]))
+      167 +            continue
+      168          minutes = float(os.environ.get('HEAVY_MINUTES', '30'))
+      169          if start is not None and start > now + datetime.timedelta(minutes=minutes):
+      170              continue                      # booked for later than this run reaches
+      161 -        until = occupied_until(end, now, start)
+      162 -        if until is None:
+      163 -            out.append('%s (%s), end unknown: %s' % (who, cells[1][:40], end[:40]))
+      164 -        elif until > now:
+      171 +        if until > now:
+      172              out.append('%s (%s) until %s UTC' % (who, cells[1][:40], until.strftime('%
+           m-%d %H:%M')))
+      173      return out
+      174
+  ⎿  Allowed by auto mode
+
+  Ran 2 shell commands
+
+● Gate tests are all green (24/24). I'm giving my row concrete times (planned 19:40–20:30) and staging
+  only my line, using a temp file plus rename.
+
+  Setting p2p row's concrete start/end and staging only that line
+  ⎿  $ cd ~/projects/_infra && git commit -m "RESOURCES 占用: p2p V4-6 第 3–5 步改为具体时刻
+     19:40–20:30（seismic v2 之后，用户 11-13 定的顺序）
+     Co-Authored-By: Claude Opus 5.5 <<email>>"; git status --short; git log -1
+     --format=%h; cd /home/user/projects/p2p-search-sim-v3 && git add node/tests/heavy_gate.py n…
+
+✽ Orbiting… (1m 7s · ↓ 6.0k tokens)
+                                                                ✔ Update installed · /restart to apply
+────────────────────────────────────────────────────────────────────────────────────────────────────────
+❯ 
+────────────────────────────────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

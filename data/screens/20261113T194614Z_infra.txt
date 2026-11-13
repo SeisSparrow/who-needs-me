@@ -1,0 +1,36 @@
+claude
+
+
+● The mutant was caught, which also showed that integration.sh doesn't
+  rebuild, so I'm rerunning all four suites on a fresh binary.
+
+  Ran 1 shell command
+
+● All four test suites pass on the fresh binary, with 29 unit, 70 contract,
+  43 integration and 11 compile-fail. Next I'll make integration.sh and the
+  adapter reject any binary older than its source.
+
+  Ran 4 shell commands
+
+● A stale binary now fails loudly instead of silently testing old code. Next
+  I'll strike the test row, stop the M1 clock, and collect line counts.
+
+  Ran 2 shell commands
+
+● Now I'll strike the test row and commit the M1 changes locally. The changes
+  fix one real gpuctl bug and three test-harness issues, all found today.
+
+  Committing the M1 fixes on c4/gpuctl and showing the README status · 4s
+  ⎿  $ cd ~/projects/_infra-gpuctl && git add -A gpuctl
+     contracts/gpuctl/tests/server/run.sh && git status --short && git commit
+     -q -m "gpuctl M1: compiles; unit 29, contract 70, integration 43,
+     compile-fail 11 all pass
+     - state: a corrupt state.json was replaced by an Off machine and read
+     back as truste…
+
+✶ Improvising… (7m 31s · ↓ 16.6k tokens)
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

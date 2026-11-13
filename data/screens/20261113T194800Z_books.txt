@@ -1,0 +1,36 @@
+claude
+
+  Pushed to demo/v3-sql-cost, merged demo/v3-sql-s2
+
+● The S2 fix is committed in the cost branch, and the 11-14 runner needs
+  --scripts A2 S2. I'm stopping the waiting runner, editing the script, and
+  restarting it.
+
+● Stop Task
+  ⎿  bash -n /tmp/claude-1000/-home-user-projects-CIS5500GroupProject/eb
+     673980-5449-4d33-9f83-fbe49cb79edc/scratchpad/g5/window_run.sh &&
+     /tmp/claude-1000/-home-user… · stopped
+
+  Ran 1 shell command
+
+● The only match was my own shell, so no old runner is left. Restarting it:
+
+  Ran 1 shell command
+
+● Now the RESOURCES row text for 11-14, then removing the S2 worktree, whose
+  branch is fully merged and pushed:
+
+  Ran 1 shell command
+
+● Now the R6 page text about the two exam changes. Reading the
+  honest-boundaries section to place it:
+
+  Reading 1 file…
+  ⎿  ~/projects/_docs/bookstore/v3_G4_page_draft_2026-11-13.md
+
+· Zesting… (1m 10s · ↓ 3.1k tokens)
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ↓ to manage

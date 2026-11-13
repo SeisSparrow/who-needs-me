@@ -1,0 +1,35 @@
+  - 3 new tests, all of which fail on the old code;
+  - full suite passes (pytest 407, 0 failures);
+  - diff sha [38;5;153m022952448212[39m;
+  - redeploy steps in §9 of the cpu-embed runbook.
+
+  Nothing more to do on them until you approve; production hasn't been
+  touched. I'll include this status in my next report.
+
+[38;5;246m✻[39m [38;5;246mChurned for 33s · done 7:47 PM[39m
+
+[38;5;246m› Message from @infra-dd[3m: From infra: T1 asks 1–3. (3) is done; for (1) and [0m
+[3m[38;5;246m(2) I suggest you commit on gpu/g1-v2 yourself.[0m[38;5;246m (ctrl+o to expand)[39m
+
+[38;5;231m●[39m Infra declined to commit on [38;5;153mgpu/g1-v2[39m because that branch is mine.
+  Committing there is my own work, so I'll do (1) and (2) now. [38;5;153m747737a[39m waits
+  until infra has pushed it with the user's OK.
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m Running all [38;5;153mgpu/tests[39m suites on the combined branch. Now that the scripts
+  are in the tree, the T1 prep test uses the in-tree [38;5;153mimage-t1-vm.sh[39m.
+
+[38;5;246m●[39m Pushing g1-v2 and mark P5/P6 done in schedule
+[38;5;246m  ⎿  $ cd ~/projects/_infra-g1v2 && git push 2>&1 | tail -1; git fetch -q; [39m
+     [38;5;246mgit rev-parse HEAD origin/gpu/g1-v2; sed -i 's/| P5 | `image-t1.sh` \/ [39m
+     [38;5;246m`image-t1-vm.sh` \*\*进 `gpu\/g1-v2` 的树\*\*.*$/| P5 | `image-t1.sh` \/
+[39m     [38;5;246m`image-t1-vm.sh` 进 `gpu\/g1-v2` 的树（pin 写进这棵树的 [39m
+     [38;5;246m`gpu\/images\/t1.json`，prep 默认读它） | Notes …[39m
+
+[38;5;174m✶[39m [38;5;174mTempering… [38;5;246m(3m 51s · ↓[39m [38;5;246m1.6k tokens)[39m
+                                     [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle) · esc to interrupt[39m

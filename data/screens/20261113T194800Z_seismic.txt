@@ -1,0 +1,36 @@
+claude
+    demo/v2-frac.
+  - Record: the merge is noted at the end of
+    seismic_b2_synth_vectorize_plan_2026-11-13.md.
+
+  E1 stays on the approval list until the user approves it personally.
+  Nothing else is in progress, so I'm standing by.
+
+✻ Cooked for 34s · done 7:17 PM
+
+❯ （用户委托代回）合并收到。有一处要补：合并后的
+  demo/v2-frac（e7ad517）你没有重跑测试，只比了文件。请在机器空闲时（现在
+  load 约 1，p2p 已跑完）对合并后的树跑一遍全量
+  pytest，把通过数报上来；跑之前按规则登记一行、写具体起止时刻。E1
+  上线仍等用户本人批。
+
+  Ran 2 shell commands
+
+● The only other active booking is books on 11-15, so there's no conflict.
+  Booking my row with concrete times (19:48–20:00; the last full run took 2
+  min 8 s):
+
+  Inserting booking row with concrete start and end times · 53s
+  ⎿  $ cd ~/projects/seismic-picker-v2 && git rev-parse HEAD && git status
+     --short && date -u +"start %T" && OMP_NUM_THREADS=1 timeout 1200 nice -n
+     19 .venv/bin/python -m pytest -q -p no:cacheprovider tests 2>&1 | tail
+     -12; echo "rc=${PIPESTATUS[0]}"; date -u +"end %T"; uptime (53s · 3
+     lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✽ Harmonizing… (1m 11s · ↓ 1.4k tokens)
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

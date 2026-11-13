@@ -1,0 +1,36 @@
+bash
+user@host:~/stage_tmp$ git status
+fatal: not a git repository (or any of the parent directories): .git
+user@host:~/stage_tmp$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,36 @@
+claude
+
+  Read 1 file
+
+● Update(~/projects/_infra-gpuctl/gpuctl/src/runner.rs)
+  ⎿  Added 3 lines, removed 2 lines
+      268          }
+      269          // SAFETY: signalling a process group we created (p
+           rocess_group(0) made pgid == the child's pid).
+      270          unsafe { libc::killpg(cur.pgid, libc::SIGTERM) };
+      271 -        let waited = tokio::time::timeout(Duration::from_se
+          -cs(10), cur.done.wait_for(|d| *d)).await;
+      272 -        if waited.is_err() {
+      271 +        // only whether it timed out: the Ref inside would
+          +keep `done` borrowed
+      272 +        let timed_out = tokio::time::timeout(Duration::from
+          +_secs(10), cur.done.wait_for(|d| *d)).await.is_err();
+      273 +        if timed_out {
+      274              unsafe { libc::killpg(cur.pgid, libc::SIGKILL)
+           };
+      275              let _ = cur.done.wait_for(|d| *d).await;
+      276          }
+  ⎿  Allowed by auto mode classifier
+
+  Rebuilding gpuctl under the lease
+  ⎿  $ cd ~/projects/_infra-gpuctl/gpuctl && . ~/.cargo/env && uptime &&
+     t0=$(date +%s) && ~/projects/_infra-lease/bin/with-lease cpu --expect
+     10m --note "infra gpuctl M1 cargo build" -- nice -n 19 cargo build -j2
+     2>&1; echo "rc=$? $(( $(date +%s) - t0 )) s"
+
+✽ Improvising… (24s · ↓ 950 tokens)
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

@@ -1,0 +1,36 @@
+claude
+
+● The row is recorded at 9a5a750, and I'm starting the 11-15 runner next,
+  using the full suite with the same load gate and noise floor against the
+  cost worktree's current HEAD.
+
+  Ran 2 shell commands
+
+● Both test windows are booked with runners waiting. I'm checking whether the
+  other write scripts share A2's same-transaction now() problem, starting
+  with S2 on the dev copy.
+
+  Ran 1 shell command
+
+● S2's shelf upsert is the same flaw: with an index on shelf(updated_at), 259
+  of 450 updates still come out HOT where they should be near zero. Because
+  that index could affect the S1 write-cost measurement, I'm preparing the S2
+  fix on a separate branch so tomorrow's 15:00 run is unaffected unless you
+  approve it.
+
+  Ran 3 shell commands
+
+● HOT is now 0 even without the extra index, which suggests shelf already has
+  an index involving updated_at. Checking:
+
+  Listing lib.shelf indexes
+  ⎿  $ cd ~/projects/CIS5500GroupProject-v3-s2 && set -a; . ./.env; set +a;
+     psql -XAt -d bookstore_v3_dev -c "select indexdef from pg_indexes where
+     schemaname='lib' and tablename='shelf'"
+
+✽ Shenaniganing… (1m 56s · ↓ 9.2k tokens)
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ↓ to manage

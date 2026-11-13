@@ -1,0 +1,36 @@
+claude
+  A2 "re-open" updates a row the same transaction
+  just inserted, which likely explains both the HOT
+  artefact and some of A2's noise. Next I'm reading
+  how the write scripts are driven.
+
+  Ran 1 shell command
+
+● I'm adding one shared writes.setup helper to replace
+  the four copies of the script loop, and calling it
+  before the counters start so seeding isn't timed.
+
+  Ran 3 shell commands
+
+● Checking that A2 now behaves, untimed: one round,
+  rolled back, on the dev copy. I run it once without
+  and once with an index on viewed_at created inside
+  the transaction, comparing the HOT share.
+
+● Untimed A2 HOT check on dev DB, rolled back
+  ⎿  $ cd ~/projects/CIS5500GroupProject-v3-cost &&
+     set -a; . ./.env; set +a; ~/projects/CIS5500Group
+     Project-v2/.venv/bin/python - <<'EOF'
+     import sys, psycopg
+     from psycopg.rows import dict_row
+     sys.path.insert(0,'bench/v3'); import evaluator
+     as E
+     queries, writes = E.load_exam(E.ROOT)
+     lookup={**queries.QU…
+
+* Forging… (7m 20s · ↓ 38.8k tokens · thinking)
+              ✔ Update installed · /restart to apply
+──────────────────────────────────────────────────────
+❯ 
+──────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to int…

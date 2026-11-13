@@ -1,0 +1,42 @@
+  │                           │ as "end unknown" and blocks                 │
+  ├───────────────────────────┼─────────────────────────────────────────────┤
+  │ Notes re-embedding the    │                                             │
+  │ live DB (after p2p and    │ Not run                                     │
+  │ seismic)                  │                                             │
+  ├───────────────────────────┼─────────────────────────────────────────────┤
+  │ infra cargo build/test    │ Not registered, not run                     │
+  │ (after p2p)               │                                             │
+  └───────────────────────────┴─────────────────────────────────────────────┘
+
+  So four sessions are each waiting for the row ahead to be struck, and none of
+  them has run. Only Quorum ran one job at 15:50, alongside these rows.
+
+  [1mTwo problems with the table rules:[0m
+  - Expired rows that nobody strikes. The books row ended at 10:45 but stayed in
+    the table, and every "wait until it's struck" condition, mine included,
+    waited on it all day.
+  - The same kind of open end time I just fixed in my own row ("开跑后约 20
+    min") has appeared in seismic's row. The [38;5;153mlease reserve[39m in L0 refuses both
+    cases: it requires a specific end time, and a reservation stops counting
+    once its end time passes. This is one more reason to make L0's switch the
+    first migration step.
+
+  [1mWhat I'm not doing:[0m I won't edit other sessions' rows and won't jump ahead of
+  p2p to compile. I also haven't run any of R1–R5; they're still waiting for
+  your confirmation.
+
+  [1mDecisions for you:[0m
+  1. Ask books to strike its row, or confirm the window is over, so p2p,
+     seismic, Notes and infra can start in order. Alternatively, rearrange the
+     order for tonight.
+  2. Should I restart the watcher? Its condition is unchanged: books and p2p
+     rows both struck, and load below 2.5.
+  3. Confirm R1–R5. In the meantime I'll write [38;5;153mgpu/image-t1.sh[39m and its tests on
+     a branch; that's light bash and doesn't count as a heavy job.
+
+[38;5;246m✻[39m [38;5;246mSautéed for 23s · done 6:26 PM[39m
+                                        [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m────────────────────────────────────────────────────────────────────────────────
+[39m❯ 
+[38;5;244m────────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle)[39m

@@ -1,0 +1,23 @@
+    gate counts every row as busy, so it blocks until 12:45.
+
+  I need you to decide two things:
+  1. [1mRows queued behind p2p, like seismic v2.[0m I'd add one start-cell rule to the
+     gate: a row whose 开始 says it waits for p2p's row to be struck doesn't
+     count while p2p's own row is still open. This only affects rows that
+     explicitly wait for p2p, and it doesn't touch the end rule. The alternative
+     is to have seismic v2 rewrite its start with a time outside the brackets.
+  2. [1mseismic v1 and Notes at 10:45.[0m Should seismic v1 go before or after p2p?
+     And should Notes' light work be allowed to run alongside the V4-6 runs
+     (load +1, 1.8 GB resident)? If yes, the Notes row needs to say so in a form
+     the gate can read, or I'd add a marker for rows that can share the
+     machine.
+
+  Nothing will run until you answer. When you do, I'll start the gate waiter
+  again and do the V4-6 runs in order.
+
+[38;5;246m✻[39m [38;5;246mBaked for 2m 19s · done 9:45 AM[39m
+                                        [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m────────────────────────────────────────────────────────────────────────────────
+[39m❯ 
+[38;5;244m────────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle)[39m

@@ -1,0 +1,35 @@
+[38;5;231m●[39m Probe 02 is still rejected for the right reason: [38;5;153mSeal[39m's constructor is
+  private. Rust just reports that as E0603, not the E0423 I guessed when
+  writing the probe. Correcting the expected code:
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m All four suites pass. Before I stop, I'll check that the two tests I just
+  changed still catch real bugs. First mutant: drop [38;5;153mGPU_PROGRESS[39m from the
+  runner.
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m The mutant survived, but probably only because [38;5;153mintegration.sh[39m runs the
+  existing binary and doesn't rebuild. Rerunning with a [38;5;153mcargo build[39m first:
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m The mutant was caught, which also showed that integration.sh doesn't
+  rebuild, so I'm rerunning all four suites on a fresh binary.
+
+[38;5;246m [39m Rebuilding and rerunning all four test suites on current source[38;5;246m · 7s[39m
+[38;5;246m  ⎿  $ cd ~/projects/_infra-gpuctl/gpuctl && . ~/.cargo/env && [39m
+     [38;5;246mSP=/tmp/claude-1000/-home-user-projects--infra/10d2a5b6-a3e6-4f49-99be-f
+[39m     [38;5;246m23155c86f07/scratchpad && ~/projects/_infra-lease/bin/with-lease cpu [39m
+     [38;5;246m--expect 20m --note "infra gpuctl M1 full test run" -- bash -c '[39m
+     [38;5;246mset -o pipefail[39m
+     [38;5;246mnice -n 19 cargo bu… (8s · 6 lines)[39m
+     [38;5;246m(ctrl+b ctrl+b (twice) to run in background)[39m
+
+[38;5;174m✻[39m [38;5;216mImprovising…[38;5;174m [38;5;246m(5m 44s · ↓[39m [38;5;246m12.8k tokens)[39m
+                                     [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle) · esc to interrupt[39m

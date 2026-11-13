@@ -1,0 +1,36 @@
+claude
+      passed but which isn't struck.
+  - 09:42 hole: the earlier fix also stays, so a table
+    with no 占用 section refuses (6246bb6).
+
+  My row (_infra 9de5196): it now has concrete times,
+  19:40–20:30, with your order written in. I staged
+  only my line; the other sessions' uncommitted
+  two-row reorder is untouched. _infra is 2 commits
+  ahead of its remote and one isn't mine, so I haven't
+  pushed it.
+
+  Gate waiter: started at 18:46 with load < 1.5, a
+  50-minute run length, and up to 4 h of waiting. At
+  the moment it refuses because of Notes' re-embed (to
+  19:15) and seismic v2 (to 19:35), which is the
+  order you set. When seismic's row is struck, or its
+  end has passed and load is under 1.5, the steps are:
+  1. Change my row's start and end to the actual
+     times.
+  2. Run the recorder smoke test, then campus k=0 with
+     the 60 s py-spy profile, then regions k=2, then
+     the replay check.
+  3. Strike my row as soon as it finishes, so infra's
+     cargo can start.
+  4. Report back with the CPU profile: per-node
+     RSS/CPU, the share of each category, and the
+     interpreter share measured against the Rust gate.
+
+✻ Cooked for 1m 26s · done 6:43 PM · 1 shell still
+  running
+              ✔ Update installed · /restart to apply
+──────────────────────────────────────────────────────
+❯ 
+──────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 1 shell · ↓ to manage

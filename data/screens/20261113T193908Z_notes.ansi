@@ -1,0 +1,35 @@
+  production ([38;5;153m08bbc4b[39m), using the existing [38;5;153mnotes-merge[39m worktree, so the
+  pending-approval fix diff stays as it is:
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m The output key still reads [38;5;153mhybrid_no_rerank[39m even with [38;5;153m--rerank[39m, so I'm
+  renaming it conditionally, then testing the offline and online paths.[38;5;246m [39m
+  [38;5;246m· summary[39m
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m Offline exits with the right message, but only after loading the Qwen model
+  (about a minute wasted). I'm moving the reranker check to before the model
+  load:
+
+  [38;5;246mRan [1m2[0m[38;5;246m shell commands [39m
+
+[38;5;231m●[39m Both paths work. With the reranker offline it exits in 0.35 s; online, the
+  result records [38;5;153mrerank_model[39m and [38;5;153mhybrid_rerank[39m. Committing:
+
+  [38;5;246mPushed to [1mdemo/eval-rerank[0m[38;5;246m [39m
+
+[38;5;231m●[39m Pushed as [38;5;153mdemo/eval-rerank@b7fa926[39m. Last input for the schedule: the exact
+  Notes same-metric commands from my next-session list.
+
+  [38;5;246mSearched for [1m1[0m[38;5;246m pattern, ran [1m4[0m[38;5;246m shell commands [39m
+
+[38;5;231m●[39m I have what I need. Writing the one-page joint schedule and command list:
+
+[38;5;174m*[39m [38;5;174mPerambulating… [38;5;246m(21m 51s · ↓[39m [38;5;246m51.4k tokens)[39m
+                                     [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle) · esc to interrupt[39m

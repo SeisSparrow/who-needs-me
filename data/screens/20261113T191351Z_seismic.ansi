@@ -1,0 +1,35 @@
+  [1mWhy it's less than 2×:[0m the 48% share for ray tracing
+  was measured under the profiler (cProfile). Ray
+  tracing makes about 160,000 small function calls, so
+  the profiler's own overhead inflated its share. The
+  real saving was 6.6 s, not the 11 s or so I
+  expected. This explanation is my inference; I didn't
+  measure it separately. For a full geometry's
+  dataset, roughly 52 min becomes about 36 min.
+
+  [1mCommits:[0m
+  - [1mv2:[0m [38;5;153mdemo/v2-frac-vec[39m is at 483d908 and pushed;
+    local, origin and the remote match. It is not
+    merged into [38;5;153mdemo/v2-frac[39m, and [38;5;153mdata/b2/[39m was not
+    touched.
+  - [1m[38;5;153m_infra[39m:[0m my row only, committed locally as 1e41b81.
+    I didn't push it or touch other sessions' rows.
+  - [1mNotes:[0m the results are in §5 of
+    [38;5;153mseismic_b2_synth_vectorize_plan_2026-11-13.md[39m, and
+    my memory index is updated.
+
+  [1mStill waiting on the user:[0m
+  - E1 (6c6ff47 plus the v1 patch) goes live only once
+    the user personally approves it.
+  - Whether to merge A+B into [38;5;153mdemo/v2-frac[39m. It only
+    speeds up regenerating datasets later, and nothing
+    is waiting on it right now.
+
+  C was not done, as decided.
+
+[38;5;246m✻[39m [38;5;246mSautéed for 39s · done 7:06 PM[39m
+              [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m──────────────────────────────────────────────────────
+[39m❯ [2m收到，跑完把逐字节结果和加速比贴给我[0m
+[38;5;244m──────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle)[39m

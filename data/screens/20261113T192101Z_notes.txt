@@ -1,0 +1,36 @@
+claude
+
+  Ran 3 shell commands
+
+● All 10 pass. Now checking that the 3 new tests fail on the old code:
+
+  Ran 1 shell command
+
+● All 3 fail on the old code. Checking whether anything else on the page
+  reads the GPU embed capability directly:
+
+  Ran 1 shell command
+
+● Only the label uses it, and that's now correct on both inputs. Before
+  running the full suite (about 5 min), I'm checking the occupancy table,
+  since seismic and p2p may be running now:
+
+  Ran 1 shell command
+
+● The gate is free and nothing heavy is running. I'm booking a short row with
+  concrete times (19:21–19:35) for the test run, following the new rule:
+
+  Running full test suite on cpu-embed-fix branch · 56s
+  ⎿  $ S=/tmp/claude-1000/-home-user-projects-notes/04b2026d-3c17-4c73-af0a-b
+     5d68d2c4f05/scratchpad; cd ~/projects/notes-cefix && date -u +%T && nice
+     -n 19 ./tests/run_tests.sh -p no:cacheprovider --deselect tests/test_s0
+     _retrieval.py::test_two_embed_arms_one_reranker_and_the_cpu_check >
+     $S/t_cefix.log … (56s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✽ Perambulating… (3m 46s · ↓ 12.5k tokens)
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

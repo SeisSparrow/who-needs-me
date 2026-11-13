@@ -1,0 +1,36 @@
+claude
+  with-lease cpu. Both rows are struck and pushed (bfcdc8e). The tests
+  started 2.5 minutes before their registered 19:42; nobody else was in that
+  slot, and the row says so. No processes or ports are left over.
+
+  Notes' three requests:
+  - (3) fixed: fetch now empties the directories prep creates instead of
+    deleting them, because on a GPU VM /mnt belongs to root and deleting them
+    gave "Permission denied". There's a new test with a non-writable root;
+    57/57 pass. Committed as gpu/image-t1 747737a, not pushed yet.
+  - (1) and (2) add commits to Notes' own branch gpu/g1-v2: cherry-pick my T1
+    files, and merge gpu/x3-gemma-fp16 (one commit, 769da07). I suggested
+    Notes run the two git commands in its own worktree, and told it that if
+    it wants me to do it instead, you'd have to approve pushes to gpu/g1-v2
+    first.
+
+  Decisions for you:
+  - Can I push c4/gpuctl (817c561, M1 done) and gpu/image-t1 (747737a, the
+    Notes (3) fix)? Notes' cherry-pick needs the second one.
+  - Do you want me to commit to gpu/g1-v2 for Notes, or leave it to Notes as
+    I suggested?
+
+  What's next:
+  - Quorum C7 is registered for 21:15–21:45.
+  - After its row is struck I'll start L0 S0, merging with-lease into
+    cloud/v1.
+  - GPU sessions wait for a date agreed with Notes. Notes' joint schedule is
+    in _docs/_plan/notes_infra_t1_joint_sessions_2026-11-13.md. I haven't
+    read it yet; I'll read it next and check it against §9.4.
+
+✻ Crunched for 9m 50s · done 7:48 PM
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle)

@@ -1,0 +1,36 @@
+claude
+● Started at 18:42:17, about 13 minutes to go. I'll continue when
+  it finishes.
+
+✻ Cooked for 56s · done 6:42 PM
+
+● Background command "Re-embed three presets on the live DB,
+logging" completed (exit code 0)
+
+  Ran 1 shell command
+
+● The re-embed finished cleanly in 11 min 24 s: all three presets
+  are on v2 with matching block counts and no dimension
+  mismatches, and the Qwen v1 versions are retired. Next I'll
+  switch the main service to the CPU backend. · summary
+
+  Ran 1 shell command
+
+● Restarted at 18:54 on the CPU backend; health ok. Verifying
+  from the public site (GPU offline):
+
+● Public checks: status semantic_search and vector-route searches
+
+  ⎿  $ P=https://<domain>/api; curl -s $P/status |
+     python3 -c 'import json,sys; d=json.load(sys.stdin);
+     print("can", d["can"]); print("gpu online", {k:v["online"]
+     for k,v in d["gpu"]["capabilities"].items()})'; echo '--- zh
+     query -> English notebook (quake-ai)'; curl -s
+     "$P/notebooks/quake-…
+
+· Finagling… (36s · ↓ 2.1k tokens · thinking)
+                         ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

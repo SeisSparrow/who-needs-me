@@ -1,0 +1,35 @@
+
+[38;5;174m ▐[48;5;16m▛███▛█[39m[49m   [1mClaude Code[0m [38;5;246mv2.1.322[39m
+[38;5;174m▝▜[48;5;16m█████[49m█▀[39m  [38;5;246mHaiku 5.5 · Claude Ultra[39m
+[38;5;174m ▝▝   ▝▝ [39m  [38;5;246m~/stage_tmp[39m
+
+  Fable 5.2 is here for your longest and toughest coding tasks.
+  It draws down usage faster than Opus 5.5. Switch with [38;5;153m/model[39m.
+
+[38;5;246m[48;5;237m❯[39m [38;5;231m/clear[39m
+
+[38;5;246m❯ [38;5;231mOutput the following sample report exactly as written, with [39m
+  [38;5;231mnothing added: Yesterday's deploy went fine and the public [39m
+  [38;5;231msite checks pass. The old branch was deleted last week. The [39m
+  [38;5;231mstorage cost is 0.14 dollars a month. Nothing is left to do on[39m
+  [38;5;231mthis task.[39m
+
+[38;5;231m[49m●[39m Yesterday's deploy went fine and the public site checks pass.
+  The old branch was deleted last week. The storage cost is 0.14
+  dollars a month. Nothing is left to do on this task.
+
+[38;5;246m✻[39m [38;5;246mBaked for 1s · done 7:02 PM[39m
+
+
+
+
+
+
+
+
+
+                         [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────
+[39m❯ 
+[38;5;244m─────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle)[39m

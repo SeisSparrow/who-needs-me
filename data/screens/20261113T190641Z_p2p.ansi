@@ -1,0 +1,35 @@
+
+
+[38;5;114m●[39m Background command "Wait in background for heavy
+gate to open (up to 4 h)" completed (exit code 0)
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m The gate opened at 19:05 with load 0.91. Before
+  starting I'm confirming why: seismic v2's planned
+  end was 19:35, so its row must have been struck.
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m seismic v2 finished and struck its row at 19:05, so
+  my start condition is met. Next I'm setting my row
+  to the actual times (19:08–19:58) and checking
+  py-spy and sudo before running.
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m Step ① is the recorder smoke run.
+
+[38;5;246m [39m Checking existing v4 data directories[38;5;246m · 36s[39m
+[38;5;246m  ⎿  $ date -u +%T && python3 tools/record_v4_run.py [39m
+     [38;5;246m--terms queries --out data/v4/smoke-write-outputs
+[39m     [38;5;246m2>&1 | tail -40; echo exit ${PIPESTATUS[0]}; [39m
+     [38;5;246mdate -u +%T; uptime (34s · 2 lines)[39m
+     [38;5;246m(ctrl+b ctrl+b (twice) to run in background)[39m
+
+[38;5;174m✢[39m [38;5;174mDeliberating… [38;5;246m(1m 5s · ↓[39m [38;5;246m2.4k tokens)[39m
+              [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m──────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m──────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle) · esc to int…[39m

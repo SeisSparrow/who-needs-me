@@ -1,0 +1,35 @@
+  A2 "re-open" updates a row the same transaction
+  just inserted, which likely explains both the HOT
+  artefact and some of A2's noise. Next I'm reading
+  how the write scripts are driven.
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m I'm adding one shared [38;5;153mwrites.setup[39m helper to replace
+  the four copies of the script loop, and calling it
+  before the counters start so seeding isn't timed.
+
+  [38;5;246mRan [1m3[0m[38;5;246m shell commands [39m
+
+[38;5;231m●[39m Checking that A2 now behaves, untimed: one round,
+  rolled back, on the dev copy. I run it once without
+  and once with an index on [38;5;153mviewed_at[39m created inside
+  the transaction, comparing the HOT share.
+
+[38;5;246m [39m Untimed A2 HOT check on dev DB, rolled back
+[38;5;246m  ⎿  $ cd ~/projects/CIS5500GroupProject-v3-cost && [39m
+     [38;5;246mset -a; . ./.env; set +a; ~/projects/CIS5500Group
+[39m     [38;5;246mProject-v2/.venv/bin/python - <<'EOF'[39m
+     [38;5;246mimport sys, psycopg[39m
+     [38;5;246mfrom psycopg.rows import dict_row[39m
+     [38;5;246msys.path.insert(0,'bench/v3'); import evaluator [39m
+     [38;5;246mas E[39m
+     [38;5;246mqueries, writes = E.load_exam(E.ROOT)[39m
+     [38;5;246mlookup={**queries.QU…[39m
+
+[38;5;174m✽[39m [38;5;174mForging… [38;5;246m(7m 20s · ↓[39m [38;5;246m38.8k tokens · [38;5;248mthinking[38;5;246m)[39m
+              [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m──────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m──────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle) · esc to int…[39m

@@ -1,0 +1,35 @@
+     [2m[38;5;231m     [0m[38;5;231m 50~~ | **已结束 08:10**（重嵌入 07:50–08:04，对比 08:04–08:[39m
+     [2m[38;5;231m     [0m[38;5;231m 06，一小批 = 1 的复测 08:06–08:09） | 服务常驻 1.76–1.96 GB[39m
+     [2m[38;5;231m     [0m[38;5;231m 、高水位 2.17 GB；评测时 Qwen 0.6B 另约 2.5 GB；重嵌入期间 [39m
+     [2m[38;5;231m     [0m[38;5;231m load 约 2.1 | 没有残留进程；只连 notes_test（Notes 2026-11-[39m
+     [2m[38;5;231m     [0m[38;5;231m 13 划掉） |[39m
+[38;5;246m  ⎿  Allowed by auto mode classifier[39m
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m I pushed [38;5;153mgpu/image-t1[39m ([38;5;153m68d480e[39m); local and remote are the same commit, with
+  nothing left unpushed.
+
+  I updated §5 of the image plan to list the three cache variables from §9.3
+  ([38;5;153mTRITON_CACHE_DIR[39m, [38;5;153mVLLM_CACHE_ROOT[39m, [38;5;153mTORCHINDUCTOR_CACHE_DIR[39m) and noted that
+  prep can call [38;5;153mgpu/image-t1-vm.sh fetch[39m directly. §3 named only two of
+  them, so I updated it too.
+
+  One count differs: [38;5;153mfetch[39m has six fallback reasons, not five: [38;5;153mversion[39m,
+  [38;5;153mmanifest[39m, [38;5;153mpart[39m, [38;5;153mstream[39m, [38;5;153munpack[39m and [38;5;153mimport[39m. The sixth, [38;5;153mimport[39m, catches an
+  unpacked venv whose [38;5;153mvllm[39m/[38;5;153mtorch[39m/[38;5;153mtriton[39m versions don't match the manifest.
+  When you pass this on, Notes should handle all six; prep's logic doesn't
+  change, since any non-zero exit from [38;5;153mfetch[39m means install from scratch. §5
+  now lists all six.
+
+  Nothing else has changed:
+  - [1m[38;5;153mcargo build[39m:[0m still waits for the watcher, which checks for p2p's row
+    (ending 20:30) to be struck or past its end time, with load below 2.5.
+  - [1mGPU sessions:[0m I'll post the time here before each start.
+
+[38;5;246m✻[39m [38;5;246mBaked for 32s · done 7:17 PM · 1 shell still running[39m
+                                     [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m❯ 
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m · [38;5;44m1 shell[38;5;246m · ↓ to manage[39m

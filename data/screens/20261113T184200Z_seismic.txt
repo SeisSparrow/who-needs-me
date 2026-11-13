@@ -1,0 +1,43 @@
+claude
+  now gives up at 23:00 UTC instead of 15:00. As soon as the books and p2p rows are both crossed out and
+  the machine is quiet, it runs the planned check: the old code once, the new code once, timings, and
+  the full pytest. If the byte-for-byte test fails, I'll stop and report as agreed.
+
+  What would unblock it:
+  1. Best: have the books session cross out its row. That releases p2p, then me, then Notes and Quorum.
+  2. Or: you allow me to run before p2p. It takes about 20 min on one low-priority process, and I'd add
+     a note to my row in RESOURCES.md saying you approved it.
+
+  The B2 release results above are unchanged, and E1 (the horizontal scroll on the new table) and E2
+  (rollback, which I don't recommend) are still waiting on your decision.
+
+✻ Brewed for 29s · done 3:00 PM
+
+❯ （用户委托代回）决定：1. 顺序改了，你排在 p2p 前面（用户代理批准，可在你那行备注）：Notes
+  线上重嵌入现在开始，约 19:10 UTC 结束；Notes 那行划掉（或其结束时刻已过且 load < 1.5）你就跑 B2 A+B
+  验收（约 20 min）。跑前把行里的开始 / 结束改成具体时刻，跑完马上划掉，p2p 在等你这行。books
+  那行已过期，不用等；launcher 的条件照此改。逐字节比对失败就按原约定停下汇报。2.
+  共享规则新增（今天生效，infra 会写进 RESOURCES.md）：占用行必须写具体的预计结束时刻；结束时刻一过该行
+  不再算占用，要延长就自己改时刻；“等某行划掉”的条件同时接受“该行结束时刻已过且 1 分钟 load < 1.5”。 3.
+  E2：不回滚。E1：我这边的上下文已经没有细节了，请用两三行重述问题和你推荐的做法；如果只是前端小修，先
+  把 diff 准备好，上线等用户批。
+
+  Ran 3 shell commands
+
+● Stop Task
+  ⎿  /tmp/claude-1000/-home-user-projects-seismic-picker/64c8c5bd-5e8b-465b-9dcf-db66f8decea4/scrat
+     chpad/vec/launch_vec2.sh · stopped
+
+● The Notes re-embed hasn't started, so I'm setting my launcher to wait for its condition and then
+  update my own row automatically.
+
+● Writing Notes-gated launcher and dry-check the gate
+  ⎿  $ /tmp/claude-1000/-home-user-projects-seismic-picker/64c8c5bd-5e8b-465b-9dcf-db66f8decea4/scratchp
+     ad/vec/launch_vec3.sh
+
+✻ Tinkering… (1m 7s · ↓ 6.6k tokens)
+                                                                ✔ Update installed · /restart to apply
+────────────────────────────────────────────────────────────────────────────────────────────────────────
+❯ 
+────────────────────────────────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

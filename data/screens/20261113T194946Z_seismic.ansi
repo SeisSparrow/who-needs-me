@@ -1,0 +1,35 @@
+[38;5;231m●[39m The only other active booking is books on 11-15, so there's no conflict.
+  Booking my row with concrete times (19:48–20:00; the last full run took 2
+  min 8 s):
+
+  [38;5;246mRan [1m2[0m[38;5;246m shell commands [39m
+
+[38;5;231m●[39m All passed. It actually started at 19:47:10, before the booked 19:48, so
+  I'm recording the actual times when I cross out the row:
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m The full pytest on the merged [38;5;153mdemo/v2-frac[39m (e7ad517) passed: [1m523 passed, 1
+[0m  [1mskipped[0m. That's the same count as on the A+B commit (483d908) before the
+  merge, and it includes the byte-for-byte chunk 0 tests for all three
+  geometries.
+
+  - [1mRan:[0m 19:47:10–19:49:24 UTC, about 2 min 13 s, one process at lowest
+    priority. The 2 warnings are the usual obspy divide warning from a web
+    API test.
+  - [1mBooking:[0m I booked a row for 19:48–20:00 before starting, but the run
+    actually began at 19:47:10, about a minute early. The crossed-out row
+    records the actual times and says so.
+  - [1mRecords:[0m no processes are left over. My row is crossed out and committed
+    locally in [38;5;153m_infra[39m (d06d0b4, my row only, not pushed). The result is also
+    at the end of [38;5;153mseismic_b2_synth_vectorize_plan_2026-11-13.md[39m.
+
+  E1 is still waiting for the user's own approval. Nothing else is running,
+  so I'm standing by.
+
+[38;5;246m✻[39m [38;5;246mWorked for 2m 47s · done 7:49 PM[39m
+                                     [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m❯ 
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle)[39m

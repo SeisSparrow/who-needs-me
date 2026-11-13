@@ -1,0 +1,36 @@
+claude
+    realistic for an append-only table, so A2's HOT column will show only a
+    small difference; the wall time and WAL columns still carry the cost.
+  - MANIFEST is updated.
+  - New baseline.py remeasure: re-times only A2 and its noise band, merges
+    the result in, and marks the baseline table as re-measured.
+  - E13: the test's noise bands for write scripts can now be raised to the
+    full-scale baseline bands.
+
+  Also updated:
+  - The plan (§十 #20), the checklist doc and the self-test record.
+  - The candidate list: L1 rewrites can now be submitted, and N2a / N2b are
+    marked "not submitted (agreed)".
+  - The R6 draft has a "Not tried" sentence for N2a / N2b with the reason.
+
+  Needs your approval: a second timed window of about 45 minutes, any day
+  after 11-14, for the full self-test suite. The A2 change feeds into every
+  T2 judgement, so E1–E12 have to be re-run after it too. Tomorrow's 45
+  minutes only covers the A2 re-measure and E13–E17. I'd only merge
+  demo/v3-sql-cost after that full run is green.
+
+✻ Worked for 11m 12s · done 7:07 PM · 1 shell still running
+
+❯ （用户委托代回）第二个计时窗口批准：11-15 15:00–15:50 UTC，全量自测
+  E1–E17，现在登记一行、写具体起止。明天（11-14 15:00–15:45）那个照旧只做 A2
+  重测和 E13–E17。demo/v3-sql-cost 等 11-15
+  全量跑绿之后再合并，合并前报结果。两次窗口之间继续做不计时的部分。
+
+● Running 1 shell command…
+
+· Shenaniganing… (9s · ↓ 169 tokens)
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ↓ to manage

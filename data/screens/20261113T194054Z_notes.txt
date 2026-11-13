@@ -1,0 +1,36 @@
+claude
+    against a fake blob store and covers a hit, all five fallbacks (version
+    / manifest / part / stream / import), T1 switched off, and a dry run. The
+    other 9 gpu/tests suites still pass.
+  - Also added:
+    - profiles for the --enforce-eager comparison: gpu/g1-v2@136dffa;
+    - eval_embed_ab.py --rerank: branch demo/eval-rerank@b7fa926.
+  - Schedule and command list:
+    _docs/_plan/notes_infra_t1_joint_sessions_2026-11-13.md. Session 1 is
+    1h35m and up to $1.10; session 2 is 1h10m and up to $0.84; $1.94 in
+    total.
+  - Session 2 is too short. By G2's timings, everything assigned to it needs
+    about 95 minutes, against a 70-minute TTL.
+    - Order: cold-start check → 4B with Menu R2 → X3.
+    - Cut points: 8B, then 4B with the reranker on one card plus the EG2
+      rerank, then 4B without eager. Each has a "start only if" time limit in
+      the schedule.
+    - Whatever doesn't fit gets recorded as not done. If items remain
+      afterwards, I'll ask you about one more short session (about $0.27),
+      which would go over the $2.0 cap.
+  - Sent to infra:
+    - two requests before the sessions: copy their T1 scripts into gpu/g1-v2
+      so prep and the pin file are found by default, and merge the X3 branch,
+      which merges cleanly;
+    - one small issue in their script that doesn't block anything: on the VM
+      it can't delete the directories themselves, so it leaves "Permission
+      denied" messages, though prep's pre-created directories make it work.
+  - Not started: SERVES / --publish-serves. It'll be part of the same
+    gpu/g1-v2 change set but only merges after Menu signs the contract.
+
+✻ Cooked for 23m 2s · done 7:40 PM
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle)

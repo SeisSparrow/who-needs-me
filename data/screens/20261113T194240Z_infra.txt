@@ -1,0 +1,36 @@
+claude
+
+  Ran 2 shell commands
+
+● The failure comes from the shared test suite rather than gpuctl: grep -c on
+  a missing calls log prints nothing instead of 0. I'll make it treat a
+  missing log as 0, both here and on line 90.
+
+  Ran 1 shell command
+
+● The contract suite now passes 70/70. Next the integration tests and the
+  compile-fail probes:
+
+  Ran 1 shell command
+
+● One integration failure: some call never received GPU_PROGRESS. I suspect
+  it's the fake az; checking:
+
+  Ran 3 shell commands
+
+● The integration tests pass 43/43. Next the compile-fail probes, which check
+  that the sealed types can't be built outside their modules:
+
+  Running 1 shell command…
+  ⎿  $ cd ~/projects/_infra-gpuctl/gpuctl && . ~/.cargo/env && t0=$(date
+     +%s); ~/projects/_infra-lease/bin/with-lease cpu --expect 20m --note
+     "infra gpuctl M1 compile-fail probes" -- nice -n 19 bash
+     tests/compile_fail.sh 2>&1 | tail -20; echo "rc=${PIPESTATUS[0]} $((
+     $(date +%s) - t0 )) s"; uptime
+
+· Improvising… (3m 57s · ↓ 10.1k tokens · thought for 1s)
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

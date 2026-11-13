@@ -1,0 +1,36 @@
+claude
+  单，先不发布。你继续按顺序做 v2 的 B2 A+B 验收：Notes
+  重嵌入已在 18:54 跑完并切换，它那行划掉（或 19:15 已过且 load
+  < 1.5）你就开，跑完马上划掉并汇报，p2p 在等你。
+
+  Ran 1 shell command
+
+● The A+B check hasn't started yet, but nothing is blocking it
+  now. The Notes row was crossed out at 18:55, and load is 0.36
+  now, down from 1.50 a minute earlier.
+
+  The launcher (bg2bfdcms) has been waiting since 18:43. It
+  starts after three checks a minute apart, so I expect it to
+  begin around 18:57–18:59. When it starts, it writes the actual
+  start and end times into my row in RESOURCES.md.
+
+  What it runs:
+  - The old code's chunk 0 tests.
+  - The new code's full test_b2_chunk_regen.py.
+  - Timing for the old and new code, three runs each.
+  - The full pytest suite.
+
+  That's about 20 minutes, and it crosses out my row as soon as
+  it finishes, so p2p can start.
+
+  When it's done I'll report the byte-for-byte result and the
+  speedup. If the byte-for-byte test fails, I stop and report as
+  agreed. E1 stays off the live site until the user personally
+  approves it.
+
+✻ Sautéed for 8s · done 6:55 PM · 1 shell still running
+                         ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────
+❯ 收到，跑完把逐字节结果和加速比贴给我
+─────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 1 shell · ↓ to manage

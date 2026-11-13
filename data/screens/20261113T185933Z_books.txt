@@ -1,0 +1,36 @@
+claude
+  and the typed NULL::uuid in N1/N3 is unhandled. I'm
+  checking the constants and how the light tests get a
+  connection next.
+
+  Ran 1 shell command
+
+● I'm building #20 so CTE and subquery columns resolve
+  through the defining node's output, leaving renamed
+  columns as unknown, and typing operators via exact
+  pg_operator matches.
+
+  Ran 2 shell commands
+
+● All 396 comparisons in the exam originals now pass
+  (before: L1, N1, N3, C11b had unknowns). Checking
+  that the types it infers are actually right, not
+  just "known":
+
+  Showing inferred types for the four former gaps
+  ⎿  $ cd ~/projects/CIS5500GroupProject-v3-cost &&
+     set -a; . ./.env; set +a; ~/projects/CIS5500Group
+     Project-v2/.venv/bin/python - <<'EOF'
+     import sys, psycopg
+     sys.path.insert(0,'bench/v3'); import evaluator
+     as E
+     queries, writes = E.load_exam(E.ROOT)
+     with psycopg.connect(dbname='bookstore_v3_dev',
+     prepar…
+
+* Forging… (3m 46s · ↓ 17.6k tokens · thinking)
+              ✔ Update installed · /restart to apply
+──────────────────────────────────────────────────────
+❯ 
+──────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to int…

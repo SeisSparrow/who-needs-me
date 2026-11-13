@@ -1,0 +1,35 @@
+    realistic for an append-only table, so A2's HOT column will show only a
+    small difference; the wall time and WAL columns still carry the cost.
+  - [1mMANIFEST[0m is updated.
+  - [1mNew [38;5;153mbaseline.py remeasure[39m:[0m re-times only A2 and its noise band, merges
+    the result in, and marks the baseline table as re-measured.
+  - [1mE13:[0m the test's noise bands for write scripts can now be raised to the
+    full-scale baseline bands.
+
+  [1mAlso updated:[0m
+  - The plan (§十 #20), the checklist doc and the self-test record.
+  - The candidate list: L1 rewrites can now be submitted, and N2a / N2b are
+    marked "not submitted (agreed)".
+  - The R6 draft has a "Not tried" sentence for N2a / N2b with the reason.
+
+  [1mNeeds your approval:[0m a second timed window of about 45 minutes, any day
+  after 11-14, for the full self-test suite. The A2 change feeds into every
+  T2 judgement, so E1–E12 have to be re-run after it too. Tomorrow's 45
+  minutes only covers the A2 re-measure and E13–E17. I'd only merge
+  [38;5;153mdemo/v3-sql-cost[39m after that full run is green.
+
+[38;5;246m✻[39m [38;5;246mWorked for 11m 12s · done 7:07 PM · 1 shell still running[39m
+
+[38;5;246m[48;5;237m❯ [38;5;231m（用户委托代回）第二个计时窗口批准：11-15 15:00–15:50 UTC，全量自测 [39m
+  [38;5;231mE1–E17，现在登记一行、写具体起止。明天（11-14 15:00–15:45）那个照旧只做 A2[39m
+  [38;5;231m重测和 E13–E17。demo/v3-sql-cost 等 11-15 [39m
+  [38;5;231m全量跑绿之后再合并，合并前报结果。两次窗口之间继续做不计时的部分。[39m
+
+[38;5;246m[49m●[39m Running [1m1[0m shell command…
+
+[38;5;174m✶[39m [38;5;174mShenaniganing… [38;5;246m(8s · ↓[39m [38;5;246m137 tokens)[39m
+                                     [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m · [38;5;44m1 shell[38;5;246m · esc to interrupt · ↓ to manage[39m

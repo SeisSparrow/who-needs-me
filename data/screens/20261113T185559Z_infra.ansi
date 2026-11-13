@@ -1,0 +1,35 @@
+  reads. Wrapping entry points in [38;5;153mwith-lease[39m waits for L5, after
+  the one-week pilot.
+
+  [1mDecisions for you:[0m
+  1. The L0 switch steps S0–S5, including merging
+     [38;5;153minfra/with-lease[39m into [38;5;153mcloud/v1[39m.
+  2. GPU sessions 1 and 2 still wait for tonight's queue and for
+     a date agreed with Notes.
+
+[38;5;246m✻[39m [38;5;246mChurned for 3m 56s · done 6:45 PM · 1 shell still running[39m
+
+[38;5;246m[48;5;237m❯ [38;5;231m（用户委托代回）R1–R5 回读通过，收到。1. L0 切换：S0–S3 [39m
+  [38;5;231m批准，今晚队列跑完（Quorum C7 那行划掉）之后开始；S0 合并只加 [39m
+  [38;5;231mbin/lease、bin/with-lease、bin/tests/，合并后在 cloud/v1 [39m
+  [38;5;231m上再跑一遍测试再 push（顺带把 _infra 上其他 session [39m
+  [38;5;231m已提交未推的 RESOURCES 提交一起推上去，books 和 p2p [39m
+  [38;5;231m都在等这个）。S4（归档占用节）和 S5 [39m
+  [38;5;231m等双轨一天的结果：先报“表和 lease 有没有出现不一致”，再做。2. [39m
+  [38;5;231mGPU 两次会话：排在今晚队列之后，日期和 Notes 对齐；起机条件同 [39m
+  [38;5;231mG2（dry-run 显示 1 × T4、TTL 和花费在上限内、无公网 IP 才加 [39m
+  [38;5;231m--yes），两次合计上限 $2.0，不延 TTL。起机前在这里报一句时间。[39m
+
+[38;5;246m[49m [39m Checking for unpushed commits on cloud/v1 and watcher status
+[38;5;246m  ⎿  $ cd ~/projects/_infra && git fetch -q origin && git status
+[39m     [38;5;246m-sb | head -2 && git log --oneline origin/cloud/v1..HEAD; [39m
+     [38;5;246mgit log --oneline HEAD..origin/cloud/v1 | head; date -u +%T;
+[39m     [38;5;246mtail -2 /tmp/claude-1000/-home-user-projects--infra/10d2a5b[39m
+     [38;5;246m6-a3e6-4f49-99be-f23155c86f07/tasks/b10wju1go.output[39m
+
+[38;5;174m·[39m [38;5;174mBefudd[38;5;216mlin[38;5;174mg… [38;5;246m(11s · ↓[39m [38;5;246m425 tokens · [38;5;248mthinking[38;5;246m)[39m
+                         [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m─────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m · [38;5;44m1 shell[38;5;246m · esc to interrupt · ↓ to manage[39m

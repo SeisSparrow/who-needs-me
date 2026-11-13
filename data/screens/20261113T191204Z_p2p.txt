@@ -1,0 +1,36 @@
+claude
+
+  Listed 1 directory, ran 2 shell commands
+
+● The only failure is 15 false deaths, all
+  predecessor-silence. I'm checking whether they line
+  up with the publish burst or with the py-spy attach.
+
+  Ran 2 shell commands
+
+● The 15 false deaths all fall in the first 5–9 s of
+  the publish burst, and the py-spy profiler isn't the
+  cause since it attached after the first three. The
+  likely culprit is CPU starvation under load 6 on 4
+  vCPU outlasting the 3 s silence timeout; the ring
+  recovered and matched the oracle afterward, so I'll
+  record this as a finding and move on to step ③,
+  regions with k=2.
+
+● Running 40-process regions rehearsal with 2 replicas
+  · 40s
+  ⎿  $ cd /home/user/projects/p2p-search-sim-v3 &&
+     S=/tmp/claude-1000/-home-user-projects-p2p-search
+     -sim-v3/87cf737c-05a7-429b-8b78-fd4adf7e9427/scra
+     tchpad; date -u +%T; uptime; python3
+     tools/demo_rehearsal.py --layout regions
+     --replicas 2 > $S/reh_regions.log 2>&1; echo exit
+     $?; date -u +%T; uptime (39s · 3 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Deliberating… (6m 30s · ↓ 6.9k tokens)
+              ✔ Update installed · /restart to apply
+──────────────────────────────────────────────────────
+❯ 
+──────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to int…

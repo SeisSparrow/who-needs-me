@@ -1,0 +1,36 @@
+claude
+  - v2: demo/v2-frac is at 6c6ff47 and pushed; local, origin and
+    the remote all match. Only web/frac-strings.js changed:
+    - English headers are now grid posterior (n), net · Gaussian,
+      net · mixture and net · no SNR / σ, and the pick types are
+      just literature / measured.
+    - Chinese: the posterior column and the pick types are
+      shortened the same way.
+    - The meanings (4 / 5 ms Gaussian, EQT + STA/LTA, the two
+      network heads, "no SNR / σ") moved into the table note.
+  - Checks:
+    - screens_frac.js on the picking page (Chinese and English,
+      1280 and 390 px) exits 0.
+    - At 1280 px the table no longer scrolls sideways in either
+      language, and it still shows 6 rows and 2 † marks with the
+      first row's numbers unchanged.
+    - jsdom tests pass: 115 picking-page checks and 186 frontend
+      checks.
+  - v1 patch: ~/projects/_docs/_plan/seismic_v2_phaseB_B2_E1_rele
+    ase_2026-11-13.patch. It passes git apply --check against the
+    live tree but has not been applied.
+  - Release record: updated with a new §六 in
+    seismic_v2_phaseB_B2_release_2026-11-13.md.
+
+  Needs your approval: whether to put E1 live. Once approved I'll
+  release it the same way as B2: a separate worktree with make
+  test, fast-forward and restart in one command, push and check
+  the SHAs, then check the public site. That means one more
+  restart of v1.
+
+✻ Worked for 4m 50s · done 6:46 PM · 1 shell still running
+                         ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 1 shell · ↓ to manage

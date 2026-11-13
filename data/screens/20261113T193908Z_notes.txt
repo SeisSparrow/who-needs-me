@@ -1,0 +1,36 @@
+claude
+  production (08bbc4b), using the existing notes-merge worktree, so the
+  pending-approval fix diff stays as it is:
+
+  Ran 1 shell command
+
+● The output key still reads hybrid_no_rerank even with --rerank, so I'm
+  renaming it conditionally, then testing the offline and online paths.
+  · summary
+
+  Ran 1 shell command
+
+● Offline exits with the right message, but only after loading the Qwen model
+  (about a minute wasted). I'm moving the reranker check to before the model
+  load:
+
+  Ran 2 shell commands
+
+● Both paths work. With the reranker offline it exits in 0.35 s; online, the
+  result records rerank_model and hybrid_rerank. Committing:
+
+  Pushed to demo/eval-rerank
+
+● Pushed as demo/eval-rerank@b7fa926. Last input for the schedule: the exact
+  Notes same-metric commands from my next-session list.
+
+  Searched for 1 pattern, ran 4 shell commands
+
+● I have what I need. Writing the one-page joint schedule and command list:
+
+· Perambulating… (21m 51s · ↓ 51.4k tokens)
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

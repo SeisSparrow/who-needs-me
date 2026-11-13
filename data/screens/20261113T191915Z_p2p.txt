@@ -1,0 +1,36 @@
+claude
+
+● The busiest server now shows 88.5% of busy time in the interpreter, down
+  from 95.4%, with the idle executor counted as wait. I'm checking whether
+  the new data directories should be committed, then building the budget
+  table.
+
+  Pushed to demo/v3-campus, ran 1 shell command
+
+● Pushed (e3dec01). Next I'm pulling the per-building budget numbers,
+  including what CPU looks like after the publish burst. That decides whether
+  a 2-hour demo stays under the B2ts_v2 baseline.
+
+  Ran 2 shell commands
+
+● The budget table is done, but the k=2 "steady state" figure was measured
+  only seconds after build 6 went down, so it's an upper bound rather than
+  idle. I'm writing the report sections next.
+
+● Filling V4-6 report sections 1, 4, 5, 6, 7, 8 with results
+  ⎿  $ cd ~/projects/_docs/_plan && python3 - <<'EOF'
+     import os
+     p='p2p_v4_V4-6_report_2026-11-13.md'; t=open(p).read()
+     def rep(old,new):
+     global t; assert t.count(old)==1, old[:60]; t=t.replace(old,new)
+     rep("## 1. 结论（待第 3–5 步补全）","## 1. 结论")
+     rep("- 40 进程的结果、每栋楼的内存 / CPU、回放检查、Rust
+     基线：**待跑**。",
+     """- **40 进…
+
+✢ Deliberating… (13m 40s · ↓ 22.8k tokens)
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

@@ -1,0 +1,23 @@
+  [1mWhat I did:[0m restarted the launcher ([38;5;153mbe59dqwht[39m) with the same conditions. The
+  only change is that it now gives up at 23:00 UTC instead of 15:00. As soon as
+  the books and p2p rows are both crossed out and the machine is quiet, it runs
+  the planned check: the old code once, the new code once, timings, and the full
+  pytest. If the byte-for-byte test fails, I'll stop and report as agreed.
+
+  [1mWhat would unblock it:[0m
+  1. [1mBest:[0m have the books session cross out its row. That releases p2p, then me,
+     then Notes and Quorum.
+  2. [1mOr:[0m you allow me to run before p2p. It takes about 20 min on one
+     low-priority process, and I'd add a note to my row in [38;5;153mRESOURCES.md[39m saying
+     you approved it.
+
+  The B2 release results above are unchanged, and E1 (the horizontal scroll on
+  the new table) and E2 (rollback, which I don't recommend) are still waiting on
+  your decision.
+
+[38;5;246m✻[39m [38;5;246mBrewed for 29s · done 3:00 PM · 1 shell still running[39m
+                                        [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m────────────────────────────────────────────────────────────────────────────────
+[39m❯ 
+[38;5;244m────────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m · [38;5;44m1 shell[38;5;246m · ↓ to manage[39m

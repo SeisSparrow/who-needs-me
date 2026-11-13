@@ -1,0 +1,23 @@
+
+
+  [38;5;246mRan [1m4[0m[38;5;246m shell commands [39m
+
+[38;5;231m●[39m 进度：补丁、[38;5;153ms0-vm.sh[39m 支持多个补丁（逗号分隔）、X3 的 profile
+  和测试都写好了。趁 18:50 的重任务开始前，把这几个只需几秒的轻量测试跑掉。
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m Test harness bug (my [38;5;153mIterable[39m stub); fix to the real [38;5;153mtyping.Iterable[39m.
+
+[38;5;246m [39m Running scan and lib regression tests[38;5;246m · 1m 17s[39m
+[38;5;246m  ⎿  $ cd ~/projects/_infra-x3 && for t in test_s0_scan.sh test_lib.sh; do [39m
+     [38;5;246mprintf '%s: ' $t; nice timeout 240 bash gpu/tests/$t 2>&1 | tail -1; done;
+[39m     [38;5;246mdate -u +%H:%M:%S (1m 15s · 1 line)[39m
+     [38;5;246m(ctrl+b ctrl+b (twice) to run in background)[39m
+
+[38;5;174m✻[39m [38;5;174mBefuddling… [38;5;246m(3m 37s · ↓[39m [38;5;246m10.4k tokens)[39m
+                                        [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m────────────────────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m────────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle) · esc to interrupt[39m

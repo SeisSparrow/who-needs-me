@@ -1,0 +1,35 @@
+      E17, E15, E13, E14, E16, in that order. The [38;5;153mtest_write_scripts_run[39m
+      tests cover S2.
+    - The RESOURCES.md row now says it covers A2 and S2 ([38;5;153mcloud/v1[39m [38;5;153m1d4ae97[39m, my
+      line only, not pushed).
+  - [1m11-15 window:[0m no change was needed. That runner ([38;5;153mbwo9sh0gg[39m) uses the
+    branch as it stands at start time, so the full E1–E17 run includes the S2
+    fix, with the re-measured noise bands as its floor.
+  - [1mR6 draft[0m ([38;5;153mv3_G4_page_draft_2026-11-13.md[39m): new section §7b, "Two changes
+    to the exam after the baseline", in English and Chinese. It sits between
+    the honest boundaries and the known limits and says:
+    - both scripts ran a few hundred actions in one transaction, where [38;5;153mnow()[39m
+      doesn't move;
+    - so the "last viewed" and "last changed" times were rewritten with the
+      same value, and those updates stayed in place in a way the live site
+      never allows;
+    - for history, this hid the cost of an index on the view time, and the
+      self-test caught it;
+    - for the shelf, it made writes look cheaper and would have charged a
+      status index for a loss the site doesn't have.
+
+    The page keeps the first baseline's numbers for these two scripts beside
+    the re-measured ones. They are read from [38;5;153mremeasured[39m in [38;5;153mbaseline.json[39m, not
+    copied by hand, and that's added to the pre-release checks. If the
+    windows change the exam again, this section changes with it.
+
+  On 11-14 I'll report the A2/S2 re-measure and E13–E17; on 11-15, the
+  full-run result. I'll merge into [38;5;153mdemo/v3-sql[39m only after you've seen a green
+  run.
+
+[38;5;246m✻[39m [38;5;246mChurned for 1m 32s · done 7:48 PM · 2 shells still running[39m
+                                     [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m❯ 
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m · [38;5;44m2 shells[38;5;246m · ↓ to manage[39m

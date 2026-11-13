@@ -1,0 +1,35 @@
+[38;5;231m●[39m Started at 18:42:17, about 13 minutes to go. I'll continue when
+  it finishes.
+
+[38;5;246m✻[39m [38;5;246mCooked for 56s · done 6:42 PM[39m
+
+[38;5;114m●[39m Background command "Re-embed three presets on the live DB,
+logging" completed (exit code 0)
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m The re-embed finished cleanly in 11 min 24 s: all three presets
+  are on v2 with matching block counts and no dimension
+  mismatches, and the Qwen v1 versions are retired. Next I'll
+  switch the main service to the CPU backend.[38;5;246m · summary[39m
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m Restarted at 18:54 on the CPU backend; health ok. [1mVerifying [0m
+  [1mfrom the public site[0m (GPU offline):
+
+[38;5;246m [39m Public checks: status semantic_search and vector-route searches
+
+[38;5;246m  ⎿  $ P=https://<domain>/api; curl -s $P/status | [39m
+     [38;5;246mpython3 -c 'import json,sys; d=json.load(sys.stdin); [39m
+     [38;5;246mprint("can", d["can"]); print("gpu online", {k:v["online"] [39m
+     [38;5;246mfor k,v in d["gpu"]["capabilities"].items()})'; echo '--- zh
+[39m     [38;5;246mquery -> English notebook (quake-ai)'; curl -s [39m
+     [38;5;246m"$P/notebooks/quake-…[39m
+
+[38;5;174m*[39m [38;5;174mF[38;5;216mina[38;5;174mgling… [38;5;246m(36s · ↓[39m [38;5;246m2.1k tokens · [38;5;249mthinking[38;5;246m)[39m
+                         [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m─────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle) · esc to interrupt[39m

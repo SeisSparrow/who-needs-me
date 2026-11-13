@@ -1,0 +1,35 @@
+
+[38;5;231m●[39m The store stalled for about 4 seconds during the publish on the campus
+  setup, while the regions setup ran steadily, so the false deaths look like
+  a one-off machine-wide stall near 19:08:20, not the publish load itself.
+  I'm checking the kernel log for that minute.
+
+  [38;5;246mRan [1m2[0m[38;5;246m shell commands [39m
+
+[38;5;231m●[39m The journal shows py-spy launching at 19:08:23, after the stall had already
+  ended, so the cause is in the rehearsal code that runs just before the
+  profiler attaches. I'm reading that code now.
+
+  [38;5;246mRan [1m2[0m[38;5;246m shell commands [39m
+
+[38;5;231m●[39m The stall isn't in the rehearsal script, which only sleeps and reads /proc,
+  so it must come from the 40 nodes; campus and regions differ in how they
+  deliver the publish burst. I'm now tracing every event type second by
+  second through the stall.
+
+[38;5;246m [39m Per-second event mix around the stall in both runs
+[38;5;246m  ⎿  $ cd /home/user/projects/p2p-search-sim-v3/data/v4 && python3 - <<'EOF'[39m
+     [38;5;246mimport json,collections[39m
+     [38;5;246mfor d in ('rehearsal-campus-k0','rehearsal-regions-k2'):[39m
+     [38;5;246mc=collections.defaultdict(collections.Counter)[39m
+     [38;5;246mfor l in open(d+'/trace.ndjson'):[39m
+     [38;5;246me=json.loads(l)[39m
+     [38;5;246ms=int(e['t']//1000)[39m
+     [38;5;246mif 35<=s<=45: c[s][e['type']]…[39m
+
+[38;5;174m✽[39m [38;5;174mWad[38;5;216mdli[38;5;174mng… [38;5;246m(4m 43s · ↓[39m [38;5;246m18.4k tokens · [38;5;247mthinking[38;5;246m)[39m
+                                     [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle) · esc to interrupt[39m

@@ -1,0 +1,35 @@
+[1m[32muser@host[0m:[1m[34m~/stage_tmp[0m$ claude --model haiku
+
+[2mResume this session with:[0m
+[2mclaude --model haiku --resume 543d3fa8-570f-4f38-8ed8-3bc066c6894
+b[0m
+[1m[32muser@host[0m:[1m[34m~/stage_tmp[0m$ 请继续上一步然后汇报
+请继续上一步然后汇报: command not found
+[1m[32muser@host[0m:[1m[34m~/stage_tmp[0m$ ls -la && git status
+total 8
+drwxr-xr-x  2 user user 4096 Nov 13 18:56 [1m[34m.[0m
+drwxr-x--- 36 user user 4096 Nov 13 19:02 [1m[34m..[0m
+fatal: not a git repository (or any of the parent directories): .
+git
+[1m[32muser@host[0m:[1m[34m~/stage_tmp[0m$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

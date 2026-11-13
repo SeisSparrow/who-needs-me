@@ -1,0 +1,36 @@
+bash
+user@host:~/stage_tmp$ python3 -c "print(1+1)"; date -u
+2
+Fri Nov 13 19:45:40 UTC 2026
+user@host:~/stage_tmp$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

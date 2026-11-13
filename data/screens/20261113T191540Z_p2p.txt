@@ -1,0 +1,36 @@
+claude
+
+  Searched for 1 pattern, ran 3 shell commands
+
+● The run finished but reports "ok": false, so I'm finding which check
+  failed. All 7 queries match the oracle and nothing is over budget.
+
+  Listed 1 directory, ran 2 shell commands
+
+● The only failure is 15 false deaths, all predecessor-silence. I'm checking
+  whether they line up with the publish burst or with the py-spy attach.
+
+  Ran 2 shell commands
+
+● The 15 false deaths all fall in the first 5–9 s of the publish burst, and
+  the py-spy profiler isn't the cause since it attached after the first
+  three. The likely culprit is CPU starvation under load 6 on 4 vCPU
+  outlasting the 3 s silence timeout; the ring recovered and matched the
+  oracle afterward, so I'll record this as a finding and move on to step ③,
+  regions with k=2.
+
+  Running 40-process regions rehearsal with 2 replicas · 4m 16s
+  ⎿  $ cd /home/user/projects/p2p-search-sim-v3 &&
+     S=/tmp/claude-1000/-home-user-projects-p2p-search-sim-v3/87cf737c-05a7-4
+     29b-8b78-fd4adf7e9427/scratchpad; date -u +%T; uptime; python3
+     tools/demo_rehearsal.py --layout regions --replicas 2 >
+     $S/reh_regions.log 2>&1; echo exit $?; date -u +%T; uptime (4m 15s · 3
+     lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Deliberating… (10m 5s · ↓ 6.9k tokens)
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

@@ -1,0 +1,36 @@
+claude
+  ├─────────────────────────────────┼────────────────────────────────────┤
+  │ Full pytest                     │ 523 passed, 1 skipped              │
+  └─────────────────────────────────┴────────────────────────────────────┘
+
+  Why it's less than 2×: the 48% share for ray tracing was measured under the
+  profiler (cProfile). Ray tracing makes about 160,000 small function calls,
+  so the profiler's own overhead inflated its share. The real saving was 6.6
+  s, not the 11 s or so I expected. This explanation is my inference; I
+  didn't measure it separately. For a full geometry's dataset, roughly 52 min
+  becomes about 36 min.
+
+  Commits:
+  - v2: demo/v2-frac-vec is at 483d908 and pushed; local, origin and the
+    remote match. It is not merged into demo/v2-frac, and data/b2/ was not
+    touched.
+  - _infra: my row only, committed locally as 1e41b81. I didn't push it or
+    touch other sessions' rows.
+  - Notes: the results are in §5 of
+    seismic_b2_synth_vectorize_plan_2026-11-13.md, and my memory index is
+    updated.
+
+  Still waiting on the user:
+  - E1 (6c6ff47 plus the v1 patch) goes live only once the user personally
+    approves it.
+  - Whether to merge A+B into demo/v2-frac. It only speeds up regenerating
+    datasets later, and nothing is waiting on it right now.
+
+  C was not done, as decided.
+
+✻ Sautéed for 39s · done 7:06 PM
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 收到，跑完把逐字节结果和加速比贴给我
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle)

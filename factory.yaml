@@ -1,0 +1,179 @@
+# Declarative config for who-needs-me. The classifier only reads this file.
+# Changing it must go through eval (needs_human recall on the holdout must not drop).
+
+layer0:
+  # each rule can be switched off for ablations; scheme A (rules only) uses all of them
+  rules:
+    dropped_to_shell: true   # pane command is a shell, not claude      -> dropped_to_shell
+    auth_error: true         # /login or API error in the last lines    -> needs_human: machine
+    trust_prompt: true       # "Yes, I trust this folder" dialog        -> needs_human: machine
+    busy: true               # spinner "Word… (" or "esc to interrupt"  -> busy
+    empty_session: true      # welcome banner, no conversation yet       -> idle_done (added after eval 1)
+    tripwire: true           # keywords in the last message             -> needs_human: <reason>
+    ghost_text: true         # dim (ESC[2m) suggestion in the input box -> stripped, flagged
+    stale_background: true   # unchanged for N min + background task    -> flagged (fact only)
+
+  # precedence when several decisive rules fire (first wins)
+  precedence: [dropped_to_shell, auth_error, trust_prompt, busy, empty_session, tripwire]
+
+  shell_commands: [bash, zsh, sh, fish, dash, ksh, tcsh]
+  stale_minutes_threshold: 30
+  last_message_max_lines: 40
+  # tripwire only scans the last N non-blank lines of the last message, where requests
+  # for approval sit; narration further up ("before each deploy, ...") is left to layer 1
+  tripwire_tail_lines: 4
+
+  # "Waiting for approval" cues (case-insensitive). A tripwire hit on the same or an
+  # adjacent line as a cue is shown red; cue lines are also the preferred evidence.
+  approval_cues:
+    - '等你(?:的)?(?:批准|确认|批)'
+    - '批了再|批准后再|确认后再'
+    - '\bonce you approve'
+    - '\bwaiting (?:for|on) (?:your|the user''?s?)(?: own)? (?:approval|go-ahead|confirmation|sign-off)'
+    - '\bon your say-so\b'
+    - '\buntil (?:the user|you) approves?\b'
+    - '\bawaiting (?:your )?approval\b'
+
+  # Matched case-insensitively against the last message only. Deliberately broad:
+  # tripwire OR model, recall over precision (design doc 4.4).
+  tripwire:
+    deploy:
+      - '\bdeploy(?:ing|ment)?\b'
+      - '\brelease\b'
+      - '\broll ?out\b'
+      - '\bgo live\b'
+      - '\b(?:push|ship) to prod(?:uction)?\b'
+      - '\brestart (?:the )?(?:prod|production|live) '
+      - '上线'
+      - '发布'
+      - '部署'
+    spend:
+      - '\bpurchase\b'
+      - '\bbilling\b'
+      - '\bcharge[sd]?\b'
+      - '\btop[- ]up\b'
+      - '\bpay(?:ment)?\b'
+      - '\bspin up\b'
+      - '\bprovision\b'
+      - '\bstart the [\w-]+ (?:VM|instance|cluster)\b'
+      - '\$\d'
+      - '付费'
+      - '花钱'
+      - '充值'
+      - '购买'
+      - '费用'
+    delete:
+      - '\brm -rf\b'
+      - '\bdrop (?:table|database|schema)\b'
+      - '\btruncate\b'
+      - '\bpush --force\b|\bforce[- ]push\b'
+      - '\breset --hard\b'
+      - '\bdelete\b'
+      - '\bdestroy\b'
+      - '\bwipe\b'
+      - '\bpurge\b'
+      - '删除'
+      - '删掉'
+      - '清空'
+    machine:
+      - '\blog ?in\b'
+      - '\bsign in\b'
+      - '\bplug (?:in|the)\b'
+      - '\b(?:2FA|MFA)\b'
+      - '\bon your (?:machine|laptop)\b'
+      - '登录'
+      - '插上'
+      - '扫码'
+      - '本人'
+
+layer1:
+  backend: gemini
+  gemini:
+    url: https://generativelanguage.googleapis.com/v1beta/decisions
+    model: gemini-decision-1
+    timeout_s: 30
+    max_workers: 4
+  # One call asks all questions. Each question asks one thing, stated positively,
+  # with an "unclear" escape; no counting, no time arithmetic (facts are computed by code).
+  questions:
+    turn_end:
+      type: choice
+      instructions: >-
+        Classify how the assistant's last_message ends, from the user's point of view.
+        Judge only last_message. The facts were measured by code and are reliable.
+      criteria:
+        reporting_done: >-
+          Reports work that is finished and does not ask the user to answer, decide or
+          approve anything.
+        asking_question: >-
+          Somewhere in the message, even in the middle, explicitly asks the user a question
+          or asks the user to choose or state a position.
+        awaiting_approval: >-
+          States that something will only be done after the user approves or confirms it,
+          whether phrased as a request or as a statement.
+        waiting_on_background: >-
+          Says it is waiting for a background task, job or timer and will continue on its
+          own; nothing is asked of the user.
+        unclear: None of the above is clearly the case.
+    wants_deploy:
+      type: noul
+      instructions: >-
+        Does last_message say the assistant is waiting for the user to approve a deploy,
+        release, publish, or a restart of a live or production service? Count requests and
+        statements alike (e.g. "will go live after you approve"). Deploys that already
+        happened, or are only mentioned as history or plans with no approval pending, do
+        not count.
+    wants_spend:
+      type: noul
+      instructions: >-
+        Does last_message say the assistant is waiting for the user to approve spending
+        money, such as starting paid cloud machines, buying something, or topping up
+        credit? Count requests and statements alike. Costs only mentioned as history do
+        not count.
+    wants_delete:
+      type: noul
+      instructions: >-
+        Does last_message say the assistant is waiting for the user to approve deleting
+        data, files, backups, branches or resources? Count requests and statements alike.
+        Deletions that already happened do not count.
+    wants_machine:
+      type: noul
+      instructions: >-
+        Does last_message say the user personally has to act on a machine before work can
+        continue, such as logging in, running a login command, plugging in a device, or
+        clicking a confirmation?
+
+# Layer 2, version 2 (after the first holdout evaluation; see eval.md).
+# Fixed by the design doc, not tuned:
+# - tripwire_mode escalate: tripwire OR any wants_* over threshold -> needs_human (doc 4.4).
+# Chosen on the tuning set only (python -m who_needs_me.tune -> data/tuning_report.md):
+# - wants_threshold: among the settings with the fewest missed needs_human, take the
+#   LOWEST threshold (not the one with fewest false alarms), never below the design
+#   value 0.2. On the tuning set every threshold ties at 8/8, so this gives 0.2.
+# - turn_end_min_confidence: unchanged from version 1 (0.3).
+policy:
+  tripwire_mode: escalate      # escalate: keyword hit -> needs_human; hint: shown, decides nothing
+  wants_threshold: 0.2         # any wants_* >= this -> needs_human
+  turn_end_min_confidence: 0.3 # below this, or "unclear" -> needs_human: low_confidence
+  severity: [delete, deploy, spend, machine]  # several pending -> most severe wins
+  # Display tier only; the reported needs_human set does not change. Red = some wants_*
+  # >= red_threshold, or a tripwire hit next to an approval cue, or a machine rule
+  # (login/API error, trust prompt). Everything else reported is yellow ("check").
+  # Chosen on the tuning set: highest red precision; ties -> lowest threshold. At 0.85
+  # all 8 true needs_human stay red, red precision 8/10 (0.5: 8/13). Picked after the
+  # first holdout evaluation, from the tuning set only.
+  red_threshold: 0.85
+
+tuning:
+  selection: lowest_wants_among_max_recall
+  wants_floor: 0.2
+
+# Version 1, frozen: the policy used for the first holdout evaluation (eval.md, part 1).
+# It was chosen by "fewest misses, then fewest false alarms" and gave wants 0.9 / hint;
+# kept here only so the comparison table can be regenerated. Layer 0 had no
+# empty_session rule then.
+policy_v1:
+  tripwire_mode: hint
+  wants_threshold: 0.9
+  turn_end_min_confidence: 0.3
+  severity: [delete, deploy, spend, machine]

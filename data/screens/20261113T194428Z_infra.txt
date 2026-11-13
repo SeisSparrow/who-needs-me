@@ -1,0 +1,36 @@
+claude
+● Probe 02 is still rejected for the right reason: Seal's constructor is
+  private. Rust just reports that as E0603, not the E0423 I guessed when
+  writing the probe. Correcting the expected code:
+
+  Ran 1 shell command
+
+● All four suites pass. Before I stop, I'll check that the two tests I just
+  changed still catch real bugs. First mutant: drop GPU_PROGRESS from the
+  runner.
+
+  Ran 1 shell command
+
+● The mutant survived, but probably only because integration.sh runs the
+  existing binary and doesn't rebuild. Rerunning with a cargo build first:
+
+  Ran 1 shell command
+
+● The mutant was caught, which also showed that integration.sh doesn't
+  rebuild, so I'm rerunning all four suites on a fresh binary.
+
+  Rebuilding and rerunning all four test suites on current source · 8s
+  ⎿  $ cd ~/projects/_infra-gpuctl/gpuctl && . ~/.cargo/env &&
+     SP=/tmp/claude-1000/-home-user-projects--infra/10d2a5b6-a3e6-4f49-99be-f
+     23155c86f07/scratchpad && ~/projects/_infra-lease/bin/with-lease cpu
+     --expect 20m --note "infra gpuctl M1 full test run" -- bash -c '
+     set -o pipefail
+     nice -n 19 cargo bu… (8s · 6 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✻ Improvising… (5m 45s · ↓ 12.8k tokens)
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

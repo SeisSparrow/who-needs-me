@@ -1,0 +1,35 @@
+  [1mResult:[0m Live; asset hashes and cache headers correct over the
+    public site; player hidden (no episode registered)
+  ────────────────────────────────────────
+  [1mBranch:[0m cpu-embed
+  [1mLive at:[0m code at 11:17; switch 18:54
+  [1mLive commit:[0m [38;5;153m08bbc4b[39m
+  [1mResult:[0m Switch rolled back; code stays live on the GPU backend
+
+  Before each deploy, the merged tree passed the full suite
+  (pytest 377 / 386 / 393 / 404, 0 failures, one known deselect
+  each time). Each runbook has its deploy record.
+
+  [1mGPU plan (infra §9.4).[0m I confirm the two script changes it
+  gives me on [38;5;153mgpu/g1-v2[39m:
+  1. [1mBefore session 1:[0m [38;5;153mmodel-serve.sh[39m exports the build caches
+     under [38;5;153m/mnt/gpu-cache[39m: [38;5;153mTRITON_CACHE_DIR[39m, [38;5;153mVLLM_CACHE_ROOT[39m and
+     [38;5;153mTORCHINDUCTOR_CACHE_DIR[39m. §5 says "two variables" but §9.3
+     lists three; I'll do three.
+  2. [1mBefore session 2:[0m prep tries the tarball first, checking in
+     the §9.3 order, and on any failure cleans up and installs
+     from scratch the current way. It will be tested locally with
+     a fake blob. §9.4 asks for "hit plus four fallbacks", but
+     §9.3's checks give five failure reasons (version, manifest,
+     part, whole stream, import versions), so I'll test all five.
+
+  The joint schedule and command list come next. The SERVES
+  change stays in the same change set and merges only after Menu
+  signs the contract.
+
+[38;5;246m✻[39m [38;5;246mCogitated for 1m 53s · done 6:55 PM[39m
+                         [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────
+[39m❯ 
+[38;5;244m─────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle)[39m

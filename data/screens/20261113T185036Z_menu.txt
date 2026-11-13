@@ -1,0 +1,24 @@
+claude
+    token 要读的量。草稿里按更正后的写。
+  - 跨机 PP：每个 token 只传 20 KiB，占 69.8 ms 里的 0.11%。也如实写了 TP
+    的实测：eager 模式下 TP 更慢，打开 CUDA graph 后 TP 更快。
+  - prefix cache：27B 用新排法命中 60.7%，旧排法 8.8%；9B 命中 92.5%。
+  - 草稿档四个候选的表、Gemma 12B 的 fp16 溢出、冷启动构成都写进去了。冷启动约
+    27 分钟，按日志时间戳重排后各段加起来和墙钟时间一致。
+  - T4 带宽 320 GB/s 是唯一取自书外的数字，出处是 NVIDIA
+    的产品简介和产品页。2018 年的 datasheet 写的是 300 GB/s。
+
+  还发现 menu_v2_next §7.10.3 的冷启动表把 49 s 的下载重复算了一次。合计 27
+  分钟没错，所以那张表我没改，等你说要改再改。
+
+  Sources:
+  - NVIDIA T4 product brief
+  - NVIDIA T4 product page
+  - T4 datasheet (Dec 2018)
+
+✻ Worked for 5m 19s · done 6:47 PM
+                                        ✔ Update installed · /restart to apply
+────────────────────────────────────────────────────────────────────────────────
+❯ 
+────────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle)

@@ -1,0 +1,35 @@
+  │ 69.9 % │ 3.5 % │ 7.5 % │ 3.4 % │ 3.3 % │ 0.1 % │ 11.6 % │ 0.6 % │
+  └────────┴───────┴───────┴───────┴───────┴───────┴────────┴───────┘
+
+  - [1m88.5 % of busy time is inside the interpreter.[0m That meets the gate's
+    first condition (at least 50 %).
+  - [1mClassifier fix:[0m the first figure was 95.4 % because the classifier
+    counted an idle thread-pool worker as work. After the fix, the same
+    recording gives 88.5 %. The fix is in e3dec01, with a test, and the old
+    result is kept.
+  - [1mBiggest pieces of "logic":[0m reading the corpus and converting addresses to
+    strings.
+  - [1mVerdict:[0m the gate's second condition ("40 nodes tight on the budget")
+    isn't met, so [1mno port now[0m. What could change that: a proper idle
+    measurement with k=2, and the publish peak once each building VM runs
+    only 5 processes.
+
+  In interview terms, the principle is this: the interpreter dominates the
+  CPU, but CPU isn't the bottleneck. A rewrite would make a tool that isn't
+  the constraint faster, and Amdahl's law says it would buy nothing at the
+  system level.
+
+  [1mWritten up:[0m V4-6 report §1 and §4–§8, and the progress row (03e5410,
+  pushed). Still to do: the V4-5 report §10 regression line, the learning
+  guide and the interview notes.
+
+  [1mOne slip:[0m I cut the smoke run's output with [38;5;153m| tail[39m, against your rule for
+  state-changing commands. The exit code was 0 and I then read the saved
+  summary in full. Every later run wrote to a log file that I read whole.
+
+[38;5;246m✻[39m [38;5;246mCogitated for 14m 16s · done 7:19 PM
+[39m                                     [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m❯ 
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle)[39m

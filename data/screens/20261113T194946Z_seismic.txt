@@ -1,0 +1,36 @@
+claude
+● The only other active booking is books on 11-15, so there's no conflict.
+  Booking my row with concrete times (19:48–20:00; the last full run took 2
+  min 8 s):
+
+  Ran 2 shell commands
+
+● All passed. It actually started at 19:47:10, before the booked 19:48, so
+  I'm recording the actual times when I cross out the row:
+
+  Ran 1 shell command
+
+● The full pytest on the merged demo/v2-frac (e7ad517) passed: 523 passed, 1
+  skipped. That's the same count as on the A+B commit (483d908) before the
+  merge, and it includes the byte-for-byte chunk 0 tests for all three
+  geometries.
+
+  - Ran: 19:47:10–19:49:24 UTC, about 2 min 13 s, one process at lowest
+    priority. The 2 warnings are the usual obspy divide warning from a web
+    API test.
+  - Booking: I booked a row for 19:48–20:00 before starting, but the run
+    actually began at 19:47:10, about a minute early. The crossed-out row
+    records the actual times and says so.
+  - Records: no processes are left over. My row is crossed out and committed
+    locally in _infra (d06d0b4, my row only, not pushed). The result is also
+    at the end of seismic_b2_synth_vectorize_plan_2026-11-13.md.
+
+  E1 is still waiting for the user's own approval. Nothing else is running,
+  so I'm standing by.
+
+✻ Worked for 2m 47s · done 7:49 PM
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle)

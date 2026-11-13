@@ -1,0 +1,43 @@
+claude
+          +前后各 3 次 + 全量 pytest | **Notes 重嵌入那行划掉之后**（或其结束时刻已过且 1 分钟 lo
+          +ad < 1.5；预计 19:10 开跑） | 预计 19:35 | 1 进程，nice 19，`OMP_NUM_THREADS=1`，load
+          ++1；内存 < 1.5 GB | 写到 tmp / scratchpad，不写 `data/b2/`；不连 PG；**排在 p2p V4-6
+          +前面：用户代理 11-13 18:45 批准**（books 行已过期，不再等）；p2p 在等本行，跑完马上划
+          +掉（seismic 2026-11-13 登记，18:45 改） |
+      126  | ~~Notes（四个分支上线：robust → docparse → podcast → cpu-embed，用户 11-13 批）~~ |
+           ~~轻操作：每步上线前合并树全套测试、重启 notes / notes-parse、`install.sh --web`、`ins
+           tall.sh --embed`~~ | ~~11-13 10:45~~ | **已结束 11:18**（四次全套测试 10:46–11:16；rob
+           ust 10:59、docparse 11:05、podcast 11:11 上线；cpu-embed 的备份 / 合并 / 起 notes-embe
+           d 11:17。剩下的切换和核对并进下一行） | ~~测试单进程 load +1~~；notes-embed 常驻 anon
+           1.72 GB（MemoryMax 2.5 GB），空闲 CPU ≈ 0 | 没有残留测试进程（Notes 2026-11-13 划掉）
+           |
+      127  | Notes（cpu-embed 第 3 步：线上库重嵌入三个预置） | `NOTES_EMBED_BACKEND=cpu tools/re
+           embed.py --presets`（906 块，经 notes-embed；notes_test 演练 13 min 15 s） | **11-13 1
+           8:45**（用户委托代回批准：排在 seismic B2 和 p2p V4-6 **之前**，已通知它们）；重嵌入约
+            13 min → `notes.env` 加一行 + 重启 notes + 公网核对 | **19:15** | 持续占 2 核（CPUQuo
+           ta 200 %、nice 5），load +2；内存在 notes-embed 的 2.5 GB 上限内 | 排在 seismic 后面：
+           它要量墙钟，不和它重叠；结束马上划掉（Notes 2026-11-13 登记） |
+      128  | ~~Quorum（v3 P2-7 测试实例验收）~~ | ~~① `BUILD_DIR=build-p2 bin/build.sh`（一次 jav
+           ac）；② `bin/regression.sh unit`（约 1 min）；③ `bin/p2-check.sh`：回环 Live 集群 KVS
+           8370 / Flame 9370 + 夹具 <ip>:8089 + 测试 SearchServer 8097，7 个 Live job，docp
+           arse 用检查器自己的假 socket（`run-p2/docparse.sock`，**不碰** `/run/notes-parse`）；
+           只打本地夹具，不发外网请求~~ | ~~11-13 15:50~~ | **已结束 11-13 15:51**（①② 15:47–15:4
+           8：javac 一次、unit 419 / 419；③ 15:48:44–15:50:43，7 个 job、全部检查通过；实际比登记
+           的 15:50 早 3 min 开跑） | ~~约 8 个 JVM、nice 19~~；结束时 load 0.47 | 没有残留进程、
+           端口已释放（15:51 核过）；线上 8090 health 200；没碰 build/、quorum.service、/run/note
+           s-parse |
+  ⎿  (timeout 5m)
+  ⎿  Allowed by auto mode classifier
+
+  R3: create private container and read back
+  ⎿  $ cd ~/projects/_infra && AZ=./azvenv/bin/az && $AZ storage container-rm create -g <resource-group>
+     --storage-account <storage-account> -n gpu-env --public-access off -o json; echo "rc=$?"; echo "---
+     readback"; $AZ storage container-rm show -g <resource-group> --storage-account <storage-account> -n gpu-env
+     --query…
+
+✶ Ideating… (1m 2s · ↓ 1.5k tokens)
+                                                                ✔ Update installed · /restart to apply
+────────────────────────────────────────────────────────────────────────────────────────────────────────
+❯ 
+────────────────────────────────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

@@ -1,0 +1,36 @@
+claude
+      3667  ```
+      3668
+      3663 -C++ 里 `Simulator::Schedule` 返回一个 `EventId`，`Cancel()
+           -` 它就是「收到消息、重置定时器」；Python 里对应 `TimerHand
+           -le.cancel()`。两边的协议代码一样，差别全在「时间从哪来」。
+      3669 +C++ 里 `m_predecessorLastSeen` 是 `Time` 对象，`+`、`<` 是
+           + ns-3 给 `Time` 重载的运算符；`MilliSeconds(...)` 把整数毫
+           +秒变成 `Time`。协议代码两边一模一样，差别全在「现在几点」
+           +从哪来。
+      3670
+      3671  **2. 剖析样本的分类：按最内层的、属于我们的帧。**
+      3672
+  ⎿  Allowed by auto mode
+
+● The three documents are finished, so I'm moving on to the V4-6b analysis of
+  the 15 false deaths, checking the recorded trace to see whether the
+  judging node or the judged peer was starved in each case.
+
+  Measuring event-loop gaps and per-process CPU around false deaths
+  ⎿  $ python3 - <<'EOF'
+     import json,collections
+     ev=[json.loads(l) for l in open('trace.ndjson')]
+     m=json.load(open('manifest.json'))
+     fd=[e for e in ev if e['type']=='chord_dead' and e['t']<50000]
+     by=collections.defaultdict(list)
+     for e in ev: by[e['node']].append(e['t'])
+     def maxgap(n,a,b):
+     ts=sorted(t fo…
+
+✻ Waddling… (2m 57s · ↓ 11.7k tokens · thinking)
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

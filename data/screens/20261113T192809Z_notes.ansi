@@ -1,0 +1,35 @@
+  doesn't need a visitor re-embed step. Writing the redeploy steps into the
+  runbook:
+
+  [38;5;246mRead [1m1[0m[38;5;246m file [39m
+
+[38;5;231m●[39m Part 1 and part 2 are done. On to part 3: has infra pushed [38;5;153mgpu/image-t1[39m
+  yet?
+
+  [38;5;246mRan [1m2[0m[38;5;246m shell commands [39m
+
+[38;5;231m●[39m Infra's fetch covers all six fallback reasons, so prep can call it and
+  install from scratch on non-zero exit. I spotted one likely problem in it
+  and will report that to infra next, then look at the gpu/g1-v2 worktree.[38;5;246m [39m
+  [38;5;246m· summary[39m
+
+  [38;5;246mRan [1m6[0m[38;5;246m shell commands [39m
+
+[38;5;231m●[39m Now the change on [38;5;153mgpu/g1-v2[39m. First, [38;5;153ms0-vm.sh[39m exports the three cache
+  variables:
+
+[38;5;246m●[39m Adding cache env vars and T1 tarball prep with fallback
+[38;5;246m  ⎿  $ cd ~/projects/_infra-g1v2 && python3 - <<'EOF'[39m
+     [38;5;246mfrom pathlib import Path[39m
+     [38;5;246mp = Path("gpu/s0/s0-vm.sh"); s = p.read_text()[39m
+     [38;5;246mold = "export HF_HOME=/mnt/hf\n"[39m
+     [38;5;246massert s.count(old) == 1[39m
+     [38;5;246ms = s.replace(old, old + """# Compile caches on /mnt/gpu-cache (infra [39m
+     [38;5;246mplan 2026-11-13 §9.3): T1 packs this tree next to …[39m
+
+[38;5;174m*[39m [38;5;174mPerambulating… [38;5;246m(10m 53s · ↓[39m [38;5;246m27.1k tokens · [38;5;249mthinking[38;5;246m)[39m
+                                     [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle) · esc to interrupt[39m

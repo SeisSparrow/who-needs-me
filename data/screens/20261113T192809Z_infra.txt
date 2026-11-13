@@ -1,0 +1,36 @@
+claude
+            notes-parse 的配置和进程；有访客上传时 Quorum 拿 `parse_bu
+           sy` 让路；结束马上划掉（Quorum session 2026-11-13 登记） |
+      134  | ~~bookstore v3（评估器改动的冒烟，不计时）~~ | ~~E1–E4、E
+           7、E13–E16，worktree `CIS5500GroupProject-v3-cost`~~ | ~~No
+           tes G2 / p2p 之后~~ | **已结束 11-13 06:24**（04:22–04:26
+           误开一次，见上次记录；05:24–05:40、05:42–06:24 两段，后一段
+           和 seismic `b2-nosnr` 05:42–06:22 重叠，load 2–5） | ~~1 个
+            PG 后端 + node~~ | 判对错的部分通过；计时类的 E13–E15 在负
+           载下判无效（A/A 漂移 > 30 %），挪到 08:45 的独占窗口；没有
+           残留克隆（books 2026-11-13） |
+      135  | ~~bookstore v3 评估（计时，独占）~~ | ~~G1-4 基线（全部 Q
+            计时 + 计划 + 7 个写脚本的噪声带）+ 评估器自测全量 E1–E16
+           ，worktree `CIS5500GroupProject-v3-cost`~~ | ~~11-13 08:45~
+           ~ | **已结束 11-13 09:50**（08:45、08:46 两次检查 load 0.05
+            / 0.02，08:46 开跑，**没有顺延**；基线 08:46–09:09，自测 0
+           9:09–09:50）。**这一行本该 09:50 就划掉，因为我的会话被中断
+           ，拖到 18:4x 才划，耽误了等它的 session，抱歉** | ~~1 个 PG
+            后端；load 约 +1；内存 < 1 GB~~；结束时 1 分钟 load 1.29 |
+            克隆库 `bookstore_v3_c*` 已全部删除（18:42 核对 0 个），没
+           有残留进程；窗口 09:50 起就空了（books 2026-11-13） |
+  ⎿  Allowed by auto mode classifier
+
+  Ran 1 shell command
+
+● The build row is registered and pushed (0c0da4f): 11-13 19:36–19:51,
+  between Notes' tests (ending 19:35) and Quorum C7 (21:15). At 19:36 I'll
+  start nice -n 19 cargo build -j2 under with-lease cpu. The M1 clock resumes
+  then.
+
+✻ Cogitated for 43s · done 7:20 PM · 1 shell still running
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 1 shell · ↓ to manage

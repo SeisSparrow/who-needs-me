@@ -1,0 +1,35 @@
+[38;5;231m●[39m The gate is free and nothing heavy is running. I'm booking a short row with
+  concrete times (19:21–19:35) for the test run, following the new rule:
+
+  [38;5;246mPushed to [1mcloud/v1[0m[38;5;246m, ran [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m Full pytest suite passes (407, including the 3 new tests), with the other
+  suites all green too; I'm committing, pushing, and crossing out the row.[38;5;246m [39m
+  [38;5;246m· summary[39m
+
+  [38;5;246mPushed to [1mdemo/cpu-embed-fix, cloud/v1[0m[38;5;246m [39m
+
+[38;5;231m●[39m Pushed and the row is crossed out. Last piece: how many visitor-notebook
+  blocks the redeploy would need to re-embed (read-only):
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m All five visitor notebooks expired on 11-03 and 11-04, so the redeploy
+  doesn't need a visitor re-embed step. Writing the redeploy steps into the
+  runbook:
+
+  [38;5;246mRead [1m1[0m[38;5;246m file [39m
+
+[38;5;231m●[39m Part 1 and part 2 are done. On to part 3: has infra pushed [38;5;153mgpu/image-t1[39m
+  yet?
+
+[38;5;246m [39m Checking whether infra pushed gpu/image-t1
+[38;5;246m  ⎿  $ cd ~/projects/_infra && git show [39m
+     [38;5;246morigin/gpu/image-t1:gpu/image-t1-vm.sh[39m
+
+[38;5;174m*[39m [38;5;174mPerambula[38;5;216mtin[38;5;174mg… [38;5;246m(9m 5s · ↓[39m [38;5;246m18.1k tokens · thinking)[39m
+                                     [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle) · esc to interrupt[39m

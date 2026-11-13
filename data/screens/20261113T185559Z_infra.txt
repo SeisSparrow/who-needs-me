@@ -1,0 +1,36 @@
+claude
+  reads. Wrapping entry points in with-lease waits for L5, after
+  the one-week pilot.
+
+  Decisions for you:
+  1. The L0 switch steps S0–S5, including merging
+     infra/with-lease into cloud/v1.
+  2. GPU sessions 1 and 2 still wait for tonight's queue and for
+     a date agreed with Notes.
+
+✻ Churned for 3m 56s · done 6:45 PM · 1 shell still running
+
+❯ （用户委托代回）R1–R5 回读通过，收到。1. L0 切换：S0–S3
+  批准，今晚队列跑完（Quorum C7 那行划掉）之后开始；S0 合并只加
+  bin/lease、bin/with-lease、bin/tests/，合并后在 cloud/v1
+  上再跑一遍测试再 push（顺带把 _infra 上其他 session
+  已提交未推的 RESOURCES 提交一起推上去，books 和 p2p
+  都在等这个）。S4（归档占用节）和 S5
+  等双轨一天的结果：先报“表和 lease 有没有出现不一致”，再做。2.
+  GPU 两次会话：排在今晚队列之后，日期和 Notes 对齐；起机条件同
+  G2（dry-run 显示 1 × T4、TTL 和花费在上限内、无公网 IP 才加
+  --yes），两次合计上限 $2.0，不延 TTL。起机前在这里报一句时间。
+
+● Checking for unpushed commits on cloud/v1 and watcher status
+  ⎿  $ cd ~/projects/_infra && git fetch -q origin && git status
+     -sb | head -2 && git log --oneline origin/cloud/v1..HEAD;
+     git log --oneline HEAD..origin/cloud/v1 | head; date -u +%T;
+     tail -2 /tmp/claude-1000/-home-user-projects--infra/10d2a5b
+     6-a3e6-4f49-99be-f23155c86f07/tasks/b10wju1go.output
+
+✢ Befuddling… (12s · ↓ 425 tokens · thinking)
+                         ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ↓ to manage

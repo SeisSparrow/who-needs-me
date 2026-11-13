@@ -1,0 +1,36 @@
+claude
+            克隆库 `bookstore_v3_c*` 已全部删除（18:42 核对 0 个），没
+           有残留进程；窗口 09:50 起就空了（books 2026-11-13） |
+  ⎿  Allowed by auto mode classifier
+
+  Ran 1 shell command
+
+● The build row is registered and pushed (0c0da4f): 11-13 19:36–19:51,
+  between Notes' tests (ending 19:35) and Quorum C7 (21:15). At 19:36 I'll
+  start nice -n 19 cargo build -j2 under with-lease cpu. The M1 clock resumes
+  then.
+
+✻ Cogitated for 43s · done 7:20 PM
+
+● Background command "Wait until 19:36 UTC for the registered build slot"
+completed (exit code 0)
+
+  Ran 1 shell command
+
+● Load is 4.28 at 19:36. Notes' row is gone and no pytest is running, so I'll
+  check what's using the CPU before starting.
+
+  Ran 2 shell commands
+
+● Nothing is using CPU now; the spike looks transient. I'll wait in the
+  background for load to drop below 2.5, then start the build under the lease
+  and resume the M1 clock.
+
+● Running 1 shell command…
+
+* Actualizing… (1m 0s · ↓ 1.2k tokens · thought for 3s)
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

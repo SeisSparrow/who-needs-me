@@ -1,0 +1,35 @@
+
+[38;5;174m ▐[48;5;16m▛███▛█[39m[49m   [1mClaude Code[0m [38;5;246mv2.1.323[39m
+[38;5;174m▝▜[48;5;16m█████[49m█▀[39m  [38;5;246mHaiku 5.5 · Claude Ultra[39m
+[38;5;174m ▝▝   ▝▝ [39m  [38;5;246m~/stage_tmp[39m
+
+
+[38;5;246m[48;5;237m❯[39m [38;5;231m/clear[39m
+
+[38;5;246m❯ [38;5;231mOutput the following sample report exactly as written, with nothing added:[39m
+  [38;5;231mSummary of the options. Option A reuses the current VM and is free. [39m
+  [38;5;231mOption B rents a larger VM at about 4 dollars a day and finishes sooner. I[39m
+  [38;5;231mrecommend B. Nothing is provisioned yet; B will only be provisioned on [39m
+  [38;5;231myour say-so.[39m
+
+[38;5;231m[49m●[39m Summary of the options. Option A reuses the current VM and is free. Option
+  B rents a larger VM at about 4 dollars a day and finishes sooner. I
+  recommend B. Nothing is provisioned yet; B will only be provisioned on your
+  say-so.
+
+[38;5;246m✻[39m [38;5;246mWorked for 1s · done 7:44 PM[39m
+
+
+
+
+
+
+
+
+
+
+
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m❯ 
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle)[39m

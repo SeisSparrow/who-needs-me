@@ -1,0 +1,35 @@
+    against a fake blob store and covers a hit, all five fallbacks (version
+    / manifest / part / stream / import), T1 switched off, and a dry run. The
+    other 9 [38;5;153mgpu/tests[39m suites still pass.
+  - [1mAlso added:[0m
+    - profiles for the [38;5;153m--enforce-eager[39m comparison: [38;5;153mgpu/g1-v2@136dffa[39m;
+    - [38;5;153meval_embed_ab.py --rerank[39m: branch [38;5;153mdemo/eval-rerank@b7fa926[39m.
+  - [1mSchedule and command list:[0m
+    [38;5;153m_docs/_plan/notes_infra_t1_joint_sessions_2026-11-13.md[39m. Session 1 is
+    1h35m and up to $1.10; session 2 is 1h10m and up to $0.84; $1.94 in
+    total.
+  - [1mSession 2 is too short.[0m By G2's timings, everything assigned to it needs
+    about 95 minutes, against a 70-minute TTL.
+    - Order: cold-start check → 4B with Menu R2 → X3.
+    - Cut points: 8B, then 4B with the reranker on one card plus the EG2
+      rerank, then 4B without eager. Each has a "start only if" time limit in
+      the schedule.
+    - Whatever doesn't fit gets recorded as not done. If items remain
+      afterwards, I'll ask you about one more short session (about $0.27),
+      which would go over the $2.0 cap.
+  - [1mSent to infra:[0m
+    - two requests before the sessions: copy their T1 scripts into [38;5;153mgpu/g1-v2[39m
+      so prep and the pin file are found by default, and merge the X3 branch,
+      which merges cleanly;
+    - one small issue in their script that doesn't block anything: on the VM
+      it can't delete the directories themselves, so it leaves "Permission
+      denied" messages, though prep's pre-created directories make it work.
+  - [1mNot started:[0m SERVES / [38;5;153m--publish-serves[39m. It'll be part of the same
+    [38;5;153mgpu/g1-v2[39m change set but only merges after Menu signs the contract.
+
+[38;5;246m✻[39m [38;5;246mCooked for 23m 2s · done 7:40 PM[39m
+                                     [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m❯ 
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle)[39m

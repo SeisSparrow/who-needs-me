@@ -1,0 +1,36 @@
+claude
+
+ ▐▛███▛█   Claude Code v2.1.322
+▝▜██████▀  Haiku 5.5 · Claude Ultra
+ ▝▝   ▝▝   ~/stage_tmp
+
+  Fable 5.2 is here for your longest and toughest coding tasks.
+  It draws down usage faster than Opus 5.5. Switch with /model.
+
+❯ /clear
+
+❯ Output the following sample report exactly as written, with
+  nothing added: Yesterday's deploy went fine and the public
+  site checks pass. The old branch was deleted last week. The
+  storage cost is 0.14 dollars a month. Nothing is left to do on
+  this task.
+
+● Yesterday's deploy went fine and the public site checks pass.
+  The old branch was deleted last week. The storage cost is 0.14
+  dollars a month. Nothing is left to do on this task.
+
+✻ Baked for 1s · done 7:02 PM
+
+❯ 请原样输出下面这段示例汇报，一个字都不要改，也不要加别的话：已
+  按你的批准删除旧备份目录，上线也已完成，公网核对通过。本轮没有
+  待办，也没有需要你确认的事项。
+
+● 已按你的批准删除旧备份目录，上线也已完成，公网核对通过。本轮没
+  有待办，也没有需要你确认的事项。
+
+✻ Sautéed for 0s · done 7:02 PM
+                         ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle)

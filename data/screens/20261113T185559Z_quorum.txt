@@ -1,0 +1,36 @@
+claude
+  4. 两件旧事
+  - P1 修复上线后的验证记录：在 ~/projects/_docs/_plan/quorum_fet
+    ch_cache_contract_2026-11-12.md §十五-补（第 297
+    行起）。结论：部署的那份 class 在测试实例上 16/16 条事件带
+    worker 标签，修复前的版本 0/16；线上从 04:49 到 10:49
+    没有访客跑过 Live。那一节标题还写着"未上线"，已改成"已上线
+    04:47 UTC"。
+  - 冷启动去掉固定等待：~/projects/_docs/_plan/quorum_startup_rea
+    dy_plan_2026-11-13.md。方案写完了（目标 24.5 s → 约 9
+    s，判定线是冷启动 3 次的中位数 ≤ 10 s），代码没动，按排期放在
+    K2 之前。
+  - 读超时补齐：~/projects/_docs/_plan/quorum_read_timeouts_plan_
+    2026-11-13.md。方案写完了（10
+    类调用、先量再定取值、黑洞单测、HW2–HW9
+    全量回归前后对比、一次故障注入），代码没动，按排期在 P2
+    上线之后、K2 之前，约 1 天，分支 demo/v3-t7。
+
+✻ Brewed for 2m 18s · done 6:44 PM
+
+❯ （用户委托代回）收到。P2-8 的 jepsen.io seed（合计 ≤ 141
+  个请求）已列入用户待批清单，批之前不发请求。C7 照登记的
+  21:15–21:45 UTC 做。等档期这段时间，可以先在分支上写“冷启动去
+  掉固定等待”的代码（判定线照方案：冷启动 3 次中位数 ≤ 10
+  s），只写代码和单元测试，集群测量等 C7 之后另登记一行。
+
+● Showing time and read the startup-ready plan
+  ⎿  $ date -u +%T; cat ~/projects/_docs/_plan/quorum_startup_rea
+     dy_plan_2026-11-13.md
+
+· Tinkering… (9s · ↓ 282 tokens · thinking)
+                         ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

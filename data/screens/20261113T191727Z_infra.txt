@@ -1,0 +1,36 @@
+claude
+      prep tarball=fallback reason=….
+    - Notes can call it directly from prep, or treat it as the reference
+      implementation of the format.
+  - Tests: 51 pass against a fake az and a fake curl. They cover:
+    - every fallback reason;
+    - the SAS never appearing in any command's arguments;
+    - a read-only SAS failing to upload.
+  - Against real Azure: check passes (anonymous gets 409). A real 5-minute
+    read SAS was issued and sent straight to /dev/null, which confirms the
+    R4/R5 role assignments work.
+  - Bug caught before commit: while writing scan I hit the grep | head +
+    pipefail trap again, which would have read a hit as clean. It's fixed,
+    and a 50-hit test covers it.
+
+  Decision for you: can I push gpu/image-t1? It also needs to go to Notes
+  with two notes:
+  - fetch is available to call from prep.
+  - Session 1 needs TRITON_CACHE_DIR, VLLM_CACHE_ROOT and
+    TORCHINDUCTOR_CACHE_DIR exported to /mnt/gpu-cache/… in model-serve.sh.
+
+✻ Cooked for 4m 11s · done 6:59 PM · 1 shell still running
+
+❯ （用户委托代回）gpu/image-t1 可以 push。Notes
+  已确认它那两处改动：model-serve.sh 导出三个缓存变量（TRITON_CACHE_DIR、VLL
+  M_CACHE_ROOT、TORCHINDUCTOR_CACHE_DIR，按 §9.3 的三个，不是 §5
+  写的两个，请把 §5 改成一致），prep 先试 tarball、五种失败原因都回退。fetch
+  可以直接从 prep 调，这一点我转给 Notes。其余照旧：cargo build 等 p2p
+  那行划掉；GPU 会话起机前报时间。
+
+✽ Brewing…
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ↓ to manage

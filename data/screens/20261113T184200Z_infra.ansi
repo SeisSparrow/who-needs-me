@@ -1,0 +1,42 @@
+     [38;5;77m[48;5;22m     +[38;5;231m前后各 3 次 [48;5;28m+ 全量 pytest [48;5;22m| **[48;5;28mNotes[48;5;22m [48;5;28m重嵌入那行划掉之后[48;5;22m**（[48;5;28m或其结束时刻已过且[48;5;22m [48;5;28m1[48;5;22m [48;5;28m分钟[48;5;22m [48;5;28mlo[39m[49m
+     [38;5;77m[48;5;22m     +[38;5;231m[48;5;28mad[48;5;22m [48;5;28m<[48;5;22m [48;5;28m1.5[48;5;22m；[48;5;28m预计 19:10 开跑[48;5;22m） | [48;5;28m预计[48;5;22m [48;5;28m19:35[48;5;22m | 1 进程，nice 19，`OMP_NUM_THREADS=1`，load [39m[49m
+     [38;5;77m[48;5;22m     +[38;5;231m+1；内存 < 1.5 GB | 写到 tmp / scratchpad，不写 `data/b2/`；不连 PG；[48;5;28m**排在 p2p V4-6 [48;5;22m [39m[49m
+     [38;5;77m[48;5;22m     +[38;5;231m[48;5;28m前面：用户代理 11-13 18:45 批准**（books 行已过期，不再等）；p2p 在等本行，[48;5;22m跑完马上划 [39m[49m
+     [38;5;77m[48;5;22m     +[38;5;231m掉（seismic 2026-11-13 登记[48;5;28m，18:45 改[48;5;22m） |                                             [39m[49m
+     [2m[38;5;231m 126 [0m[38;5;231m | ~~Notes（四个分支上线：robust → docparse → podcast → cpu-embed，用户 11-13 批）~~ | [39m
+     [2m[38;5;231m     [0m[38;5;231m ~~轻操作：每步上线前合并树全套测试、重启 notes / notes-parse、`install.sh --web`、`ins[39m
+     [2m[38;5;231m     [0m[38;5;231m tall.sh --embed`~~ | ~~11-13 10:45~~ | **已结束 11:18**（四次全套测试 10:46–11:16；rob[39m
+     [2m[38;5;231m     [0m[38;5;231m ust 10:59、docparse 11:05、podcast 11:11 上线；cpu-embed 的备份 / 合并 / 起 notes-embe[39m
+     [2m[38;5;231m     [0m[38;5;231m d 11:17。剩下的切换和核对并进下一行） | ~~测试单进程 load +1~~；notes-embed 常驻 anon [39m
+     [2m[38;5;231m     [0m[38;5;231m 1.72 GB（MemoryMax 2.5 GB），空闲 CPU ≈ 0 | 没有残留测试进程（Notes 2026-11-13 划掉） [39m
+     [2m[38;5;231m     [0m[38;5;231m |[39m
+     [2m[38;5;231m 127 [0m[38;5;231m | Notes（cpu-embed 第 3 步：线上库重嵌入三个预置） | `NOTES_EMBED_BACKEND=cpu tools/re[39m
+     [2m[38;5;231m     [0m[38;5;231m embed.py --presets`（906 块，经 notes-embed；notes_test 演练 13 min 15 s） | **11-13 1[39m
+     [2m[38;5;231m     [0m[38;5;231m 8:45**（用户委托代回批准：排在 seismic B2 和 p2p V4-6 **之前**，已通知它们）；重嵌入约[39m
+     [2m[38;5;231m     [0m[38;5;231m  13 min → `notes.env` 加一行 + 重启 notes + 公网核对 | **19:15** | 持续占 2 核（CPUQuo[39m
+     [2m[38;5;231m     [0m[38;5;231m ta 200 %、nice 5），load +2；内存在 notes-embed 的 2.5 GB 上限内 | 排在 seismic 后面：[39m
+     [2m[38;5;231m     [0m[38;5;231m 它要量墙钟，不和它重叠；结束马上划掉（Notes 2026-11-13 登记） |[39m
+     [2m[38;5;231m 128 [0m[38;5;231m | ~~Quorum（v3 P2-7 测试实例验收）~~ | ~~① `BUILD_DIR=build-p2 bin/build.sh`（一次 jav[39m
+     [2m[38;5;231m     [0m[38;5;231m ac）；② `bin/regression.sh unit`（约 1 min）；③ `bin/p2-check.sh`：回环 Live 集群 KVS [39m
+     [2m[38;5;231m     [0m[38;5;231m 8370 / Flame 9370 + 夹具 <ip>:8089 + 测试 SearchServer 8097，7 个 Live job，docp[39m
+     [2m[38;5;231m     [0m[38;5;231m arse 用检查器自己的假 socket（`run-p2/docparse.sock`，**不碰** `/run/notes-parse`）；[39m
+     [2m[38;5;231m     [0m[38;5;231m 只打本地夹具，不发外网请求~~ | ~~11-13 15:50~~ | **已结束 11-13 15:51**（①② 15:47–15:4[39m
+     [2m[38;5;231m     [0m[38;5;231m 8：javac 一次、unit 419 / 419；③ 15:48:44–15:50:43，7 个 job、全部检查通过；实际比登记[39m
+     [2m[38;5;231m     [0m[38;5;231m 的 15:50 早 3 min 开跑） | ~~约 8 个 JVM、nice 19~~；结束时 load 0.47 | 没有残留进程、[39m
+     [2m[38;5;231m     [0m[38;5;231m 端口已释放（15:51 核过）；线上 8090 health 200；没碰 build/、quorum.service、/run/note[39m
+     [2m[38;5;231m     [0m[38;5;231m s-parse |[39m
+[38;5;246m  ⎿  (timeout 5m)[39m
+[38;5;246m  ⎿  Allowed by auto mode classifier[39m
+
+[38;5;246m●[39m R3: create private container and read back
+[38;5;246m  ⎿  $ cd ~/projects/_infra && AZ=./azvenv/bin/az && $AZ storage container-rm create -g <resource-group> [39m
+     [38;5;246m--storage-account <storage-account> -n gpu-env --public-access off -o json; echo "rc=$?"; echo "--- [39m
+     [38;5;246mreadback"; $AZ storage container-rm show -g <resource-group> --storage-account <storage-account> -n gpu-env
+[39m     [38;5;246m--query…[39m
+
+[38;5;174m·[39m [38;5;174mId[38;5;216meat[38;5;174ming… [38;5;246m(1m 1s · ↓[39m [38;5;246m1.5k tokens)[39m
+                                                                [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m────────────────────────────────────────────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m────────────────────────────────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle) · esc to interrupt[39m

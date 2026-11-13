@@ -1,0 +1,36 @@
+claude
+  menu_g1_profile_params.md §9. Next I'm adding profiles for the
+  --enforce-eager comparison and a --rerank option to eval_embed_ab.py.
+  · summary
+
+  Pushed to gpu/g1-v2, ran 2 shell commands
+
+● Next, eval_embed_ab.py --rerank. It goes on its own small branch off
+  production (08bbc4b), using the existing notes-merge worktree, so the
+  pending-approval fix diff stays as it is:
+
+  Ran 1 shell command
+
+● The output key still reads hybrid_no_rerank even with --rerank, so I'm
+  renaming it conditionally, then testing the offline and online paths.
+  · summary
+
+  Ran 1 shell command
+
+● Offline exits with the right message, but only after loading the Qwen model
+  (about a minute wasted). I'm moving the reranker check to before the model
+  load:
+
+  Testing --rerank online against fake vLLM rerank endpoint · 2s
+  ⎿  $ S=/tmp/claude-1000/-home-user-projects-notes/04b2026d-3c17-4c73-af0a-b
+     5d68d2c4f05/scratchpad; cd ~/projects/notes-merge && .venv/bin/python -c
+     "from src import config; print(config.GPU_API_KEY_VAR,
+     config.GPU_ENDPOINTS['rerank'])"; (.venv/bin/python tools/fake_vllm.py
+     --port 18765 --api-key test …
+
+· Perambulating… (20m 5s · ↓ 44.5k tokens)
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

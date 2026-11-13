@@ -1,0 +1,23 @@
+
+
+[38;5;231m●[39m 进度：补丁、[38;5;153ms0-vm.sh[39m 支持多个补丁（逗号分隔）、X3 的 profile
+  和测试都写好了。趁 18:50 的重任务开始前，把这几个只需几秒的轻量测试跑掉。
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m Test harness bug (my [38;5;153mIterable[39m stub); fix to the real [38;5;153mtyping.Iterable[39m.
+
+[38;5;246m [39m Running model-serve regression tests[38;5;246m · 5s[39m
+[38;5;246m  ⎿  $ date -u +%H:%M:%S; cd ~/projects/_infra-x3 && time (nice timeout 300 bash
+[39m     [38;5;246mgpu/tests/test_model_serve.sh > /tmp/claude-1000/-home-user-projects-MenuT[39m
+     [38;5;246mranslator-v2/8b8af80e-6a70-4267-a541-7aca976170ad/scratchpad/ms.log 2>&1; [39m
+     [38;5;246mecho rc=$?); tail -3 [39m
+     [38;5;246m/tmp/claude-1000/-home-user-projects-MenuTranslator-v2… (4s · 2 lines)[39m
+     [38;5;246m(ctrl+b ctrl+b (twice) to run in background)[39m
+
+[38;5;174m✢[39m [38;5;174mBefuddling… [38;5;246m(1m 47s · ↓[39m [38;5;246m10.2k tokens)[39m
+                                        [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m────────────────────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m────────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle) · esc to interrupt[39m

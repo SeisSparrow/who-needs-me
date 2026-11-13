@@ -1,0 +1,35 @@
+
+  [38;5;246mListed [1m1[0m[38;5;246m directory, ran [1m2[0m[38;5;246m shell commands [39m
+
+[38;5;231m●[39m The only failure is 15 false deaths, all
+  [38;5;153mpredecessor-silence[39m. I'm checking whether they line
+  up with the publish burst or with the py-spy attach.
+
+  [38;5;246mRan [1m2[0m[38;5;246m shell commands [39m
+
+[38;5;231m●[39m The 15 false deaths all fall in the first 5–9 s of
+  the publish burst, and the py-spy profiler isn't the
+  cause since it attached after the first three. The
+  likely culprit is CPU starvation under load 6 on 4
+  vCPU outlasting the 3 s silence timeout; the ring
+  recovered and matched the oracle afterward, so I'll
+  record this as a finding and move on to step ③,
+  regions with k=2.
+
+[38;5;246m [39m Running 40-process regions rehearsal with 2 replicas
+  [38;5;246m· 39s[39m
+[38;5;246m  ⎿  $ cd /home/user/projects/p2p-search-sim-v3 && [39m
+     [38;5;246mS=/tmp/claude-1000/-home-user-projects-p2p-search
+[39m     [38;5;246m-sim-v3/87cf737c-05a7-429b-8b78-fd4adf7e9427/scra
+[39m     [38;5;246mtchpad; date -u +%T; uptime; python3 [39m
+     [38;5;246mtools/demo_rehearsal.py --layout regions [39m
+     [38;5;246m--replicas 2 > $S/reh_regions.log 2>&1; echo exit
+[39m     [38;5;246m$?; date -u +%T; uptime (39s · 3 lines)[39m
+     [38;5;246m(ctrl+b ctrl+b (twice) to run in background)[39m
+
+[38;5;174m·[39m [38;5;180mDeliberating…[38;5;174m [38;5;246m(6m 30s · ↓[39m [38;5;246m6.9k tokens)[39m
+              [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m──────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m──────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle) · esc to int…[39m

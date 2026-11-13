@@ -1,0 +1,42 @@
+  - 跑完 load 0.47。测试实例的进程、端口和测试 socket 的状态文件都清干净了，线上 8090 健康（200）。没碰
+    [38;5;153mbuild/[39m、[38;5;153mquorum.service[39m 和共享 docparse（[38;5;153m/run/notes-parse[39m）。结果已写进 P2 计划 §七。
+
+  [1mP2-0 调研数[0m（你上次让我报，这里补上）：
+  - 不发请求、只扫现有数据：白名单前缀里能确认的 PDF 链接共 17 个。
+  - 真实调研：三站各 150 个请求，合计正好 450，没超批的预算。找到的 PDF：census 1 个、gov-uk 0 个、nist
+    2 个，共 3 个。
+  - 原因：150 页只走到各站的目录页；PDF 大多在更深的页面上，或在别的主机上（[38;5;153massets.publishing.service.go
+[39m    [38;5;153mv.uk[39m、[38;5;153mwww2.census.gov[39m）。前缀没有放宽。
+  - 结论：离 50 个差很远，P2-8 要加新 seed。候选是
+    jepsen.io、raft.github.io、usenix.org，每个都要你单独批，还要先过 SeedValidator（会发请求）。
+
+  [1m接下来，等你定[0m：
+  1. [1mC7[0m：用真 docparse 验收。这个不用你批，我会登记占用、避开 Notes 有访客上传的时段再跑。
+  2. [1mP2-8[0m：真实站点验收。需要你批一个新 seed，推荐 jepsen.io（之前在 Showcase 里看到 32 个 PDF）。
+  3. [1mP2-9[0m：上线。照你说的，上线前先给你 diff，你批了再上。
+
+[38;5;246m✻[39m [38;5;246mWorked for 5m 45s · done 3:52 PM[39m
+
+[38;5;246m[48;5;237m❯ [38;5;231m（用户委托代回）1. C7（真 docparse 验收）：可以做，排在今天这串之后。顺序（UTC）：Notes [39m
+  [38;5;231m重嵌入（现在到约 19:10）→ seismic 验收 → p2p V4-6（约到 20:40）→ infra cargo → [39m
+  [38;5;231m你。登记时写具体起止时刻。共享规则新增（今天生效，infra 会写进 [39m
+  [38;5;231mRESOURCES.md）：占用行必须写具体的预计结束时刻；结束时刻一过该行不再算占用，要延长就自己改时刻；“等某[39m
+  [38;5;231m行划掉”的条件同时接受“该行结束时刻已过且 1 分钟 load < 1.5”。 2. P2-8 新 seed [39m
+  [38;5;231m要用户本人批（会对外发请求），先不动。请把 jepsen.io 的预案写好：请求上限、速率、robots、预计 PDF [39m
+  [38;5;231m数、SeedValidator 会发多少请求，等批。3. P2-9 上线：C7 和 P2-8 之后给 diff，用户批。4. [39m
+  [38;5;231m两件旧事报一下：P1 修复上线后的验证记录路径；冷启动 sleep 和读超时两份方案现在的状态。[39m
+[49m
+  [38;5;246mSearched for [1m1[0m[38;5;246m pattern, ran [1m4[0m[38;5;246m shell commands [39m
+
+[38;5;231m●[39m 在写 jepsen.io 预案。先查本地已有的数据（不发请求），看 Showcase 里 jepsen.io 的 URL 和 PDF 是什么样。
+
+[38;5;246m●[39m Finding Live job pages cap and crawl delay default
+[38;5;246m  ⎿  $ sed -n 60,72p src/cis5550/search/live/LiveJobs.java; grep -n 'delayMs\s*=' [39m
+     [38;5;246msrc/cis5550/crawler/Scope.java src/cis5550/search/live/LiveJobs.java | head[39m
+
+[38;5;174m✢[39m [38;5;174mImagining… [38;5;246m(1m 2s · ↓[39m [38;5;246m4.4k tokens · [38;5;249mthinking[38;5;246m)[39m
+                                                                [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m────────────────────────────────────────────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m────────────────────────────────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle) · esc to interrupt[39m

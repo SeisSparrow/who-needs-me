@@ -1,0 +1,35 @@
+  important ones first. The A2 SQL is unchanged, so
+  I'm skipping the per-case capture tests.
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m The edit didn't apply because of shell quoting. I'll
+  rewrite the runner file directly:
+
+  [38;5;246mMade [1m1[0m[38;5;246m scratchpad edit [38;5;72m+37[38;5;246m, ran [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m The runner is waiting in the background ([38;5;153mbbgx1t8pu[39m)
+  and starts itself at 15:00 tomorrow once two load
+  checks pass. Now updating the docs for #20 and A2.
+
+  [38;5;246mRan [1m2[0m[38;5;246m shell commands [39m
+
+[38;5;231m●[39m That disk change is my own edit, just made. One more
+  non-timed item: the R6 draft should say why N2a /
+  N2b weren't submitted.
+
+  [38;5;246mRan [1m2[0m[38;5;246m shell commands [39m
+
+[38;5;211m●[39m [1mUpdate[0m(]8;id=1vb9dez;file:///home/user/projects/_docs/bookstore/v3_G4_page_draft_2026-11-13.md\~/projects/_…/v3_G4_page_draft_2026-11-13.md]8;;\)
+[38;5;246m  ⎿  File must be read first[39m
+
+[38;5;246m [39m Reading [1m1[0m file…
+[38;5;246m  ⎿  ~/projects/_docs/bookstore/v3_G4_page_draft_2026-
+[39m     [38;5;246m11-13.md[39m
+
+[38;5;174m✢[39m [38;5;174mForgin[38;5;216mg…[38;5;174m [38;5;246m(10m 53s · ↓[39m [38;5;246m58.8k tokens)[39m
+              [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m──────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m──────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m · [38;5;44m1 shell[38;5;246m · esc to interrupt · ↓ …[39m

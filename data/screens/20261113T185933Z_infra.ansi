@@ -1,0 +1,35 @@
+
+[38;5;231m●[39m The live check passes (409 for anonymous), and a
+  real 5-minute read SAS was issued and sent straight
+  to [38;5;153m/dev/null[39m, which shows R4/R5 work. Next I'll
+  write the tests against fake [38;5;153maz[39m and [38;5;153mcurl[39m.
+
+[38;5;114m●[39m [1mWrite[0m(]8;id=23ddtm;file:///home/user/projects/_infra-image/gpu/tests/test_image_t1.sh\~/projects/_infra-image/gpu…/test_image_t1.sh]8;;\)
+[38;5;246m  ⎿  [39mWrote [1m164[0m lines to [1m]8;id=23ddtm;file:///home/user/projects/_infra-image/gpu/tests/test_image_t1.sh\~/projects/_infra-image/g[0m]8;;\
+     [1m]8;id=23ddtm;file:///home/user/projects/_infra-image/gpu/tests/test_image_t1.sh\pu/tests/test_image_t1.sh[0m]8;;\
+     [2m[38;5;231m 1 [0m[38;5;242m#!/usr/bin/env bash[39m
+     [2m[38;5;231m 2 [0m[38;5;242m# image-t1.sh / image-t1-vm.sh against [39m
+     [2m[38;5;231m   [0m[38;5;242ma fake az, a fake curl (blobs in a dire[39m
+     [2m[38;5;231m   [0m[38;5;242mctory) and a scratch /mnt.[39m
+     [2m[38;5;231m 3 [0m[38;5;242m# Never touches Azure. Light: a few sma[39m
+     [2m[38;5;231m   [0m[38;5;242mll tarballs.   bash gpu/tests/test_imag[39m
+     [2m[38;5;231m   [0m[38;5;242me_t1.sh[39m
+     [2m[38;5;231m 4 [0m[38;5;148mset[38;5;231m -uo pipefail[39m
+     [2m[38;5;231m 5 [0m[38;5;231mGPU=$([38;5;148mcd[38;5;231m [38;5;186m"[38;5;231m$(dirname [38;5;186m"[38;5;231m$0[38;5;186m"[38;5;231m)[38;5;186m/.."[38;5;231m && [38;5;148mpwd[38;5;231m)[39m
+     [2m[38;5;231m 6 [0m[38;5;231mT=$([38;5;148mmktemp[38;5;231m -d); [38;5;148mtrap[38;5;231m [38;5;186m'rm -rf "$T"'[38;5;231m EXIT[39m
+     [38;5;246m… +158 lines [39m
+[38;5;246m  ⎿  Allowed by auto mode classifier[39m
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m 48 of 49 tests pass; the failure is in the test
+  itself, since the URL goes to curl via stdin and
+  never reaches the argv log it searches. I'm checking
+  the order from the script's own [38;5;153mput[39m lines instead.
+
+[38;5;174m✢[39m [38;5;174mBefuddling… [38;5;246m(3m 46s · thought for 2s)[39m
+              [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m──────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m──────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m · [38;5;44m1 shell[38;5;246m · esc to interrupt · ↓ …[39m

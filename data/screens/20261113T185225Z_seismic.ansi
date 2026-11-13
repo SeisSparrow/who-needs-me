@@ -1,0 +1,35 @@
+  - [1mv2:[0m [38;5;153mdemo/v2-frac[39m is at 6c6ff47 and pushed; local, origin and
+    the remote all match. Only [38;5;153mweb/frac-strings.js[39m changed:
+    - English headers are now [38;5;153mgrid posterior (n)[39m, [38;5;153mnet · Gaussian[39m,
+      [38;5;153mnet · mixture[39m and [38;5;153mnet · no SNR / σ[39m, and the pick types are
+      just [38;5;153mliterature[39m / [38;5;153mmeasured[39m.
+    - Chinese: the posterior column and the pick types are
+      shortened the same way.
+    - The meanings (4 / 5 ms Gaussian, EQT + STA/LTA, the two
+      network heads, "no SNR / σ") moved into the table note.
+  - [1mChecks:[0m
+    - [38;5;153mscreens_frac.js[39m on the picking page (Chinese and English,
+      1280 and 390 px) exits 0.
+    - At 1280 px the table no longer scrolls sideways in either
+      language, and it still shows 6 rows and 2 † marks with the
+      first row's numbers unchanged.
+    - jsdom tests pass: 115 picking-page checks and 186 frontend
+      checks.
+  - [1mv1 patch:[0m [38;5;153m~/projects/_docs/_plan/seismic_v2_phaseB_B2_E1_rele
+[39m    [38;5;153mase_2026-11-13.patch[39m. It passes [38;5;153mgit apply --check[39m against the
+    live tree but has not been applied.
+  - [1mRelease record:[0m updated with a new §六 in
+    [38;5;153mseismic_v2_phaseB_B2_release_2026-11-13.md[39m.
+
+  [1mNeeds your approval:[0m whether to put E1 live. Once approved I'll
+  release it the same way as B2: a separate worktree with [38;5;153mmake [39m
+  [38;5;153mtest[39m, fast-forward and restart in one command, push and check
+  the SHAs, then check the public site. That means one more
+  restart of v1.
+
+[38;5;246m✻[39m [38;5;246mWorked for 4m 50s · done 6:46 PM · 1 shell still running[39m
+                         [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────
+[39m❯ 
+[38;5;244m─────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m · [38;5;44m1 shell[38;5;246m · ↓ to manage[39m

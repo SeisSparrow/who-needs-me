@@ -1,0 +1,36 @@
+claude
+    - check confirms the account and container are still private.
+    - sas r|cw issues a token of at most 60 minutes. It refuses to write to a
+      terminal and refuses to sign at all if check fails.
+    - readback compares the uploaded blobs against the manifest.
+    - pin records the manifest's sha256 in git.
+  - gpu/image-t1-vm.sh runs on the GPU VM: scan, pack and upload (manifest
+    uploaded last), plus fetch.
+    - fetch implements the five checks in §9.3.
+    - On any failure it deletes the half-unpacked tree and prints @@stage
+      prep tarball=fallback reason=….
+    - Notes can call it directly from prep, or treat it as the reference
+      implementation of the format.
+  - Tests: 51 pass against a fake az and a fake curl. They cover:
+    - every fallback reason;
+    - the SAS never appearing in any command's arguments;
+    - a read-only SAS failing to upload.
+  - Against real Azure: check passes (anonymous gets 409). A real 5-minute
+    read SAS was issued and sent straight to /dev/null, which confirms the
+    R4/R5 role assignments work.
+  - Bug caught before commit: while writing scan I hit the grep | head +
+    pipefail trap again, which would have read a hit as clean. It's fixed,
+    and a 50-hit test covers it.
+
+  Decision for you: can I push gpu/image-t1? It also needs to go to Notes
+  with two notes:
+  - fetch is available to call from prep.
+  - Session 1 needs TRITON_CACHE_DIR, VLLM_CACHE_ROOT and
+    TORCHINDUCTOR_CACHE_DIR exported to /mnt/gpu-cache/… in model-serve.sh.
+
+✻ Cooked for 4m 11s · done 6:59 PM · 1 shell still running
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 1 shell · ↓ to manage

@@ -1,0 +1,36 @@
+claude
+    viewed_at never changed, so updates stayed HOT even with an index on it.
+  - The fix:
+    - A2 now seeds each round, untimed, with books viewed 1–9 days earlier.
+    - Half the views re-open those books and half open new ones.
+    - No reader opens the same book twice in a round.
+  - Checked untimed on the dev copy, rolled back. With an index on viewed_at,
+    the HOT share is now 0 (it was 1.0).
+  - One side effect: at the full 500 runs, even without the index only about
+    5 % of updates are HOT, because the seeded rows fill their pages. That's
+    realistic for an append-only table, so A2's HOT column will show only a
+    small difference; the wall time and WAL columns still carry the cost.
+  - MANIFEST is updated.
+  - New baseline.py remeasure: re-times only A2 and its noise band, merges
+    the result in, and marks the baseline table as re-measured.
+  - E13: the test's noise bands for write scripts can now be raised to the
+    full-scale baseline bands.
+
+  Also updated:
+  - The plan (§十 #20), the checklist doc and the self-test record.
+  - The candidate list: L1 rewrites can now be submitted, and N2a / N2b are
+    marked "not submitted (agreed)".
+  - The R6 draft has a "Not tried" sentence for N2a / N2b with the reason.
+
+  Needs your approval: a second timed window of about 45 minutes, any day
+  after 11-14, for the full self-test suite. The A2 change feeds into every
+  T2 judgement, so E1–E12 have to be re-run after it too. Tomorrow's 45
+  minutes only covers the A2 re-measure and E13–E17. I'd only merge
+  demo/v3-sql-cost after that full run is green.
+
+✻ Worked for 11m 12s · done 7:07 PM · 1 shell still running
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 1 shell · ↓ to manage

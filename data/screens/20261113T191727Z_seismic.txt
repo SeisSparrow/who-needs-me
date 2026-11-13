@@ -1,0 +1,36 @@
+claude
+    touched.
+  - _infra: my row only, committed locally as 1e41b81. I didn't push it or
+    touch other sessions' rows.
+  - Notes: the results are in §5 of
+    seismic_b2_synth_vectorize_plan_2026-11-13.md, and my memory index is
+    updated.
+
+  Still waiting on the user:
+  - E1 (6c6ff47 plus the v1 patch) goes live only once the user personally
+    approves it.
+  - Whether to merge A+B into demo/v2-frac. It only speeds up regenerating
+    datasets later, and nothing is waiting on it right now.
+
+  C was not done, as decided.
+
+✻ Sautéed for 39s · done 7:06 PM
+
+❯ （用户委托代回）验收结果收到：逐字节通过、1.47×、pytest 523 过。A+B
+  可以合进 demo/v2-frac（只合代码，不重生成数据、不动
+  data/b2/、不重启线上）；合完报 SHA。E1
+  上线仍等用户本人批，已在待批清单里。之后没有别的活就待命。
+
+  Ran 1 shell command
+
+● The two branches touch different files, so this is a no-conflict merge.
+  Merging in the main v2 tree, which goes back to demo/v2-frac:
+
+  Running 1 shell command…
+
+✢ Frosting… (10s · ↓ 722 tokens)
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

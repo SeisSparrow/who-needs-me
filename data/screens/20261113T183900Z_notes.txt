@@ -1,0 +1,24 @@
+claude
+  morning: search falls back to keywords (BM25) while the GPU is offline.
+  Nothing needs rolling back.
+
+  Decision needed: your instruction put the re-embed after p2p, so I'm holding
+  until you choose one of these:
+  1. Get p2p running first. Someone tells the seismic and Quorum sessions their
+     rows block p2p's gate (for example, by moving them to a time after p2p).
+     p2p runs its ~50 min, then seismic, then I re-embed, about 13 min. I'd put
+     concrete start and end times in my row just before starting.
+  2. Re-embed now while the machine is idle (13 min, 2 cores), then switch on
+     notes.env and verify from the public site. That puts my job ahead of p2p,
+     which you'd have to allow explicitly.
+
+  The robust, docparse and podcast branches are live and verified; details are
+  in my earlier message and in each runbook's deploy record. The four-branch
+  summary and the GPU two-session plan come after cpu-embed is finished.
+
+✻ Crunched for 22s · done 3:00 PM
+  new task? /clear to save 177.7k to… · ✔ Update installed · /restart to apply
+────────────────────────────────────────────────────────────────────────────────
+❯ 
+────────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle)

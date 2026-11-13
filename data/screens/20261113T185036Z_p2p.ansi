@@ -1,0 +1,35 @@
+  - [1mYour two tests:[0m
+    - against the current table, books' row (ended 10:45) no
+      longer counts as busy;
+    - a new test also covers a row whose end time has passed but
+      which isn't struck.
+  - [1m09:42 hole:[0m the earlier fix also stays, so a table with no
+    占用 section refuses (6246bb6).
+
+  [1mMy row[0m ([38;5;153m_infra[39m 9de5196): it now has concrete times,
+  19:40–20:30, with your order written in. I staged only my line;
+  the other sessions' uncommitted two-row reorder is untouched.
+  [38;5;153m_infra[39m is 2 commits ahead of its remote and one isn't mine, so
+  I haven't pushed it.
+
+  [1mGate waiter:[0m started at 18:46 with load < 1.5, a 50-minute run
+  length, and up to 4 h of waiting. At the moment it refuses
+  because of Notes' re-embed (to 19:15) and seismic v2 (to
+  19:35), which is the order you set. When seismic's row is
+  struck, or its end has passed and load is under 1.5, the steps
+  are:
+  1. Change my row's start and end to the actual times.
+  2. Run the recorder smoke test, then campus k=0 with the 60 s
+     py-spy profile, then regions k=2, then the replay check.
+  3. Strike my row as soon as it finishes, so infra's cargo can
+     start.
+  4. Report back with the CPU profile: per-node RSS/CPU, the
+     share of each category, and the interpreter share measured
+     against the Rust gate.
+
+[38;5;246m✻[39m [38;5;246mCooked for 1m 26s · done 6:43 PM · 1 shell still running[39m
+                         [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────
+[39m❯ 
+[38;5;244m─────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m · [38;5;44m1 shell[38;5;246m · ↓ to manage[39m

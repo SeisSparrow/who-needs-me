@@ -1,0 +1,36 @@
+bash
+user@host:~/stage_tmp$ （用户委托代回）可以，按方案做，做完汇报
+（用户委托代回）可以，按方案做，做完汇报: command not found
+user@host:~/stage_tmp$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

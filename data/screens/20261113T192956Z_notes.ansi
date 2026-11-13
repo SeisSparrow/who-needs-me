@@ -1,0 +1,35 @@
+     [2m[38;5;231m 1 [0m[38;5;242m#!/usr/bin/env bash[39m
+     [2m[38;5;231m 2 [0m[38;5;242m# model-serve.sh prep with the T1 tarball (infra plan 2026-11-[39m
+     [2m[38;5;231m   [0m[38;5;242m13 §9.3), FAKE=1: infra's real image-t1-vm.sh packs a small[39m
+     [2m[38;5;231m 3 [0m[38;5;242m# fake venv + compile cache into a fake blob store (a director[39m
+     [2m[38;5;231m   [0m[38;5;242my; a curl wrapper serves `-K` blob requests from it and passes[39m
+     [2m[38;5;231m 4 [0m[38;5;242m# every other call to the real curl), then model-serve's prep [39m
+     [2m[38;5;231m   [0m[38;5;242mfetches it into gpu-1's stand-in /mnt.[39m
+     [2m[38;5;231m 5 [0m[38;5;242m# Checks: a hit skips the install; each fallback (version, man[39m
+     [2m[38;5;231m   [0m[38;5;242mifest, part, stream, import) installs as before and leaves no[39m
+     [2m[38;5;231m 6 [0m[38;5;242m# half-unpacked tree; no pin / T1=0 → off; the SAS never shows[39m
+     [38;5;246m… +107 lines (~6 KB) [39m
+[38;5;246m  ⎿  Allowed by auto mode[39m
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m The fallback lines are printed correctly. The 5 failures are a bug in the
+  test itself: [38;5;153m$1[39m inside [38;5;153mcheck[39m's [38;5;153meval[39m refers to [38;5;153mcheck[39m's own first argument,
+  not [38;5;153mfell_back[39m's. Fixing:
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m The T1 test is 30/30 and the existing [38;5;153mtest_model_serve.sh[39m is still 85/85.
+  Running the rest of the [38;5;153mgpu/tests[39m suite on the branch:
+
+[38;5;246m [39m Running all gpu/tests shell suites on g1-v2
+[38;5;246m  ⎿  $ cd ~/projects/_infra-g1v2 && for t in gpu/tests/test_*.sh; do r=$(bash
+[39m     [38;5;246m"$t" 2>&1 | grep -E '[0-9]+ passed|SKIP' | tail -1); echo "$(basename [39m
+     [38;5;246m$t): ${r:-?? (rc $?)}"; done[39m
+
+[38;5;174m✽[39m [38;5;180mPerambulating…[38;5;174m [38;5;246m(12m 40s · ↓[39m [38;5;246m34.2k tokens)[39m
+                                     [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle) · esc to interrupt[39m

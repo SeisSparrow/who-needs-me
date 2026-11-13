@@ -1,0 +1,36 @@
+claude
+
+
+  Ran 1 shell command
+
+● Now measuring the layout. I'm serving the worktree's web/
+  statically on port 8598 (no model loading, much lighter than
+  make serve) and running screens_frac.js against the picking
+  page:
+
+  Ran 1 shell command
+
+● Notes re-embed started at 18:42. I'll only screenshot the one
+  page so the run stays short:
+
+  Ran 1 shell command
+
+● Exit code 0: the page doesn't scroll sideways at 1280 or 390 px
+  in either language, and the desktop table no longer scrolls
+  sideways either. Taking a close-up of the table to check it by
+  eye:
+
+  Checking how shot script takes its base URL · 7s
+  ⎿  $ cd /tmp/claude-1000/-home-user-projects-seismic-picker/64c
+     8c5bd-5e8b-465b-9dcf-db66f8decea4/scratchpad && mkdir -p
+     e1_table && NODE_PATH=e1/node_modules nice -n 19 node
+     rel_b2/shot_b2.js e1_table http://<ip>:8598 6 2>&1;
+     echo rc=$?; ls e1_table (6s · 5 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Tinkering… (3m 32s · ↓ 14.4k tokens)
+                         ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ↓ to manage

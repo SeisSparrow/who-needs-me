@@ -1,0 +1,36 @@
+claude
+  important ones first. The A2 SQL is unchanged, so
+  I'm skipping the per-case capture tests.
+
+  Ran 1 shell command
+
+● The edit didn't apply because of shell quoting. I'll
+  rewrite the runner file directly:
+
+  Made 1 scratchpad edit +37, ran 1 shell command
+
+● The runner is waiting in the background (bbgx1t8pu)
+  and starts itself at 15:00 tomorrow once two load
+  checks pass. Now updating the docs for #20 and A2.
+
+  Ran 2 shell commands
+
+● That disk change is my own edit, just made. One more
+  non-timed item: the R6 draft should say why N2a /
+  N2b weren't submitted.
+
+  Ran 2 shell commands
+
+● Update(~/projects/_…/v3_G4_page_draft_2026-11-13.md)
+  ⎿  File must be read first
+
+● Reading 1 file…
+  ⎿  ~/projects/_docs/bookstore/v3_G4_page_draft_2026-
+     11-13.md
+
+✽ Forging… (10m 54s · ↓ 58.8k tokens)
+              ✔ Update installed · /restart to apply
+──────────────────────────────────────────────────────
+❯ 
+──────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ↓ …

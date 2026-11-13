@@ -1,0 +1,35 @@
+
+
+[38;5;231m●[39m Checking that removing the worktrees only unlinked the symlinks and the
+  real data directories are intact:
+
+  [38;5;246mRan [1m1[0m[38;5;246m shell command [39m
+
+[38;5;231m●[39m A+B is merged into [38;5;153mdemo/v2-frac[39m at [1me7ad517[0m and pushed; local, origin and
+  the remote all match.
+
+  - [1mWhat went in:[0m a merge commit of A+B (483d908) on top of E1 (6c6ff47). The
+    two touch different files, so there were no conflicts. I checked the
+    merged tree: [38;5;153msrc[39m and [38;5;153mtests[39m match the A+B branch, and [38;5;153mweb[39m matches E1.
+  - [1mNot done, as asked:[0m no data was regenerated, [38;5;153mdata/b2/[39m wasn't touched, and
+    the live v1 site wasn't restarted. v1 is still at 6757510, the service
+    is active and the site returns 200. I didn't rerun the tests after the
+    merge; I relied on the file comparison above.
+  - [1mCleanup:[0m I removed the temporary worktrees (e1, vec/base, v1rel) and
+    deleted the local branch [38;5;153mdemo/v2-frac-e1[39m, which was already merged. Their
+    contents were all committed and pushed. The real [38;5;153mdata/[39m, [38;5;153m.venv[39m and [38;5;153mmodels[39m
+    directories are untouched, and all 259 files under
+    [38;5;153mdata/b2/measured_heel_H1[39m are still there. The v2 tree is back on
+    [38;5;153mdemo/v2-frac[39m.
+  - [1mRecord:[0m the merge is noted at the end of
+    [38;5;153mseismic_b2_synth_vectorize_plan_2026-11-13.md[39m.
+
+  E1 stays on the approval list until the user approves it personally.
+  Nothing else is in progress, so I'm standing by.
+
+[38;5;246m✻[39m [38;5;246mCooked for 34s · done 7:17 PM[39m
+                                     [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m❯ 
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle)[39m

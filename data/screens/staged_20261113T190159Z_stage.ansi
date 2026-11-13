@@ -1,0 +1,35 @@
+[38;5;174m ▝▝   ▝▝ [39m  [38;5;246m~/stage_tmp[39m
+
+  Fable 5.2 is here for your longest and toughest coding tasks.
+  It draws down usage faster than Opus 5.5. Switch with [38;5;153m/model[39m.
+
+[38;5;246m[48;5;237m❯[39m [38;5;231m/clear[39m
+[49m
+[38;5;246m[48;5;237m❯ [38;5;231m请原样输出下面这段示例汇报，一个字都不要改，也不要加别的话：本[39m
+  [38;5;231m会话一切正常，不需要人工介入。测试全部通过，115 [39m
+  [38;5;231m项检查没有失败。补丁已准备好，放在 release [39m
+  [38;5;231m分支。上线需要重启线上服务一次，等你批准后执行。[39m
+
+[38;5;231m[49m●[39m 本会话一切正常，不需要人工介入。测试全部通过，115
+  项检查没有失败。补丁已准备好，放在 release
+  分支。上线需要重启线上服务一次，等你批准后执行。
+
+[38;5;246m✻[39m [38;5;246mCogitated for 3s · done 7:01 PM[39m
+
+[38;5;246m[48;5;237m❯ [38;5;231mOutput the following sample report exactly as written, with [39m
+  [38;5;231mnothing added: No human action is needed for this session. All[39m
+  [38;5;231mtests pass. One thing remains: the storage account has to be [39m
+  [38;5;231mcreated, which costs about 0.14 dollars a month, and I will [39m
+  [38;5;231mcreate it once you approve.[39m
+
+[38;5;231m[49m●[39m No human action is needed for this session. All tests pass. One
+  thing remains: the storage account has to be created, which
+  costs about 0.14 dollars a month, and I will create it once you
+  approve.
+
+[38;5;246m✻[39m [38;5;246mChurned for 0s · done 7:01 PM[39m
+                         [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────
+[39m❯ 
+[38;5;244m─────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle)[39m

@@ -1,0 +1,36 @@
+claude
+      E17, E15, E13, E14, E16, in that order. The test_write_scripts_run
+      tests cover S2.
+    - The RESOURCES.md row now says it covers A2 and S2 (cloud/v1 1d4ae97, my
+      line only, not pushed).
+  - 11-15 window: no change was needed. That runner (bwo9sh0gg) uses the
+    branch as it stands at start time, so the full E1–E17 run includes the S2
+    fix, with the re-measured noise bands as its floor.
+  - R6 draft (v3_G4_page_draft_2026-11-13.md): new section §7b, "Two changes
+    to the exam after the baseline", in English and Chinese. It sits between
+    the honest boundaries and the known limits and says:
+    - both scripts ran a few hundred actions in one transaction, where now()
+      doesn't move;
+    - so the "last viewed" and "last changed" times were rewritten with the
+      same value, and those updates stayed in place in a way the live site
+      never allows;
+    - for history, this hid the cost of an index on the view time, and the
+      self-test caught it;
+    - for the shelf, it made writes look cheaper and would have charged a
+      status index for a loss the site doesn't have.
+
+    The page keeps the first baseline's numbers for these two scripts beside
+    the re-measured ones. They are read from remeasured in baseline.json, not
+    copied by hand, and that's added to the pre-release checks. If the
+    windows change the exam again, this section changes with it.
+
+  On 11-14 I'll report the A2/S2 re-measure and E13–E17; on 11-15, the
+  full-run result. I'll merge into demo/v3-sql only after you've seen a green
+  run.
+
+✻ Churned for 1m 32s · done 7:48 PM · 2 shells still running
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 2 shells · ↓ to manage

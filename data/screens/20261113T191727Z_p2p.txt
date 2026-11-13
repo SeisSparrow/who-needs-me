@@ -1,0 +1,36 @@
+claude
+● The heavy part finished, and the replay checks show regions k=2 at 21 of 21
+  passing, campus k=0 failing only on "honest" (the same 15 false deaths),
+  and smoke failing only the placement comparison because the test compares
+  against the full placement.tsv while this run published just the queries'
+  12 terms. I'm confirming nothing is still running, then striking my row so
+  infra can start.
+
+  Ran 2 shell commands
+
+● My row is struck (19:16:48, _infra 4cdb1b9), so infra's cargo can start.
+  Next I'm gathering the profile details and checking the budget against the
+  report's B2ts_v2 definition.
+
+  Ran 2 shell commands
+
+● The top "loop" frame is an idle pool worker at thread.py:89, with 4,968
+  samples, and py-spy's --idle flag would count it as interpreter time. I'm
+  checking whether the profile is inflated by that.
+
+  Ran 1 shell command
+
+● The idle work_queue.get thread at main.py:242 is being counted as asyncio
+  loop work, which overstates the interpreter share. I'm changing the
+  classifier to label that wait as wait, adding a test, and reclassifying the
+  saved recording without a rerun.
+
+● Finding profiler tests
+  ⎿  $ cat node/tests/test_profile_node.py
+
+· Deliberating… (11m 54s · ↓ 13.0k tokens)
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

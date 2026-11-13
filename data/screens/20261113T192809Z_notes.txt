@@ -1,0 +1,36 @@
+claude
+  doesn't need a visitor re-embed step. Writing the redeploy steps into the
+  runbook:
+
+  Read 1 file
+
+● Part 1 and part 2 are done. On to part 3: has infra pushed gpu/image-t1
+  yet?
+
+  Ran 2 shell commands
+
+● Infra's fetch covers all six fallback reasons, so prep can call it and
+  install from scratch on non-zero exit. I spotted one likely problem in it
+  and will report that to infra next, then look at the gpu/g1-v2 worktree.
+  · summary
+
+  Ran 6 shell commands
+
+● Now the change on gpu/g1-v2. First, s0-vm.sh exports the three cache
+  variables:
+
+  Adding cache env vars and T1 tarball prep with fallback
+  ⎿  $ cd ~/projects/_infra-g1v2 && python3 - <<'EOF'
+     from pathlib import Path
+     p = Path("gpu/s0/s0-vm.sh"); s = p.read_text()
+     old = "export HF_HOME=/mnt/hf\n"
+     assert s.count(old) == 1
+     s = s.replace(old, old + """# Compile caches on /mnt/gpu-cache (infra
+     plan 2026-11-13 §9.3): T1 packs this tree next to …
+
+· Perambulating… (10m 53s · ↓ 27.1k tokens · thinking)
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

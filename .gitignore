@@ -1,0 +1,18 @@
+# secrets — GEMINI_API_KEY lives only in the environment
+.env
+.env.*
+# extra literal strings to redact (usernames, hostnames); never committed
+.redact.local
+
+# raw, un-redacted screens never enter the repo (they live outside it anyway)
+data_raw/
+
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# dashboard runtime state and live captures (local only)
+state/
+captures/

@@ -1,0 +1,42 @@
+     [38;5;246m...[39m
+     [2m[38;5;231m 159 [0m[38;5;231m         [38;5;197mif[38;5;231m who.strip([38;5;186m'*'[38;5;231m).lower().startswith([38;5;186m'p2p'[38;5;231m):[39m
+     [2m[38;5;231m 160 [0m[38;5;231m             [38;5;197mcontinue[38;5;231m                      [38;5;242m# our own registration[39m
+     [2m[38;5;231m 161 [0m[38;5;231m         start = occupied_from(cells[[38;5;141m2[38;5;231m], now)[39m
+     [38;5;77m[48;5;22m 162 +[38;5;231m        until = occupied_until(end, now, start)                                       [39m[49m
+     [38;5;77m[48;5;22m 163 +[38;5;231m        [38;5;197mif[38;5;231m until [38;5;197mis[38;5;231m [38;5;141mNone[38;5;231m:                                                             [39m[49m
+     [38;5;77m[48;5;22m 164 +[38;5;231m            [38;5;242m# shared rule (11-13): a row must give a concrete end; one that[38;5;231m           [39m[49m
+     [38;5;77m[48;5;22m 165 +[38;5;231m            [38;5;242m# does not is busy - even if booked for later - and is named[38;5;231m              [39m[49m
+     [38;5;77m[48;5;22m 166 +[38;5;231m            out.append([38;5;186m'%s (%s): no concrete end time (预计结束 = "%s")'[38;5;231m % (who, cells[39m[49m
+     [38;5;77m[48;5;22m     +[38;5;231m[[38;5;141m1[38;5;231m][:[38;5;141m40[38;5;231m], end[:[38;5;141m40[38;5;231m]))                                                                  [39m[49m
+     [38;5;77m[48;5;22m 167 +[38;5;231m            [38;5;197mcontinue[38;5;231m                                                                  [39m[49m
+     [2m[38;5;231m 168 [0m[38;5;231m         minutes = [38;5;148mfloat[38;5;231m(os.environ.get([38;5;186m'HEAVY_MINUTES'[38;5;231m, [38;5;186m'30'[38;5;231m))[39m
+     [2m[38;5;231m 169 [0m[38;5;231m         [38;5;197mif[38;5;231m start [38;5;197mis[38;5;231m [38;5;197mnot[38;5;231m [38;5;141mNone[38;5;231m [38;5;197mand[38;5;231m start > now + datetime.timedelta(minutes=minutes):[39m
+     [2m[38;5;231m 170 [0m[38;5;231m             [38;5;197mcontinue[38;5;231m                      [38;5;242m# booked for later than this run reaches[39m
+     [38;5;167m[48;5;52m 161 -[38;5;231m        until = occupied_until(end, now, start)                                       [39m[49m
+     [38;5;167m[48;5;52m 162 -[38;5;231m        if until is None:                                                             [39m[49m
+     [38;5;167m[48;5;52m 163 -[38;5;231m            out.append('%s (%s), end unknown: %s' % (who, cells[1][:40], end[:40]))   [39m[49m
+     [38;5;167m[48;5;52m 164 -[38;5;231m        elif until > now:                                                             [39m[49m
+     [38;5;77m[48;5;22m 171 +[38;5;231m        [38;5;197mif[38;5;231m until > now:                                                               [39m[49m
+     [2m[38;5;231m 172 [0m[38;5;231m             out.append([38;5;186m'%s (%s) until %s UTC'[38;5;231m % (who, cells[[38;5;141m1[38;5;231m][:[38;5;141m40[38;5;231m], until.strftime([38;5;186m'%[39m
+     [2m[38;5;231m     [0m[38;5;231m [38;5;186mm-%d %H:%M'[38;5;231m)))[39m
+     [2m[38;5;231m 173 [0m[38;5;231m     [38;5;197mreturn[38;5;231m out[39m
+     [2m[38;5;231m 174 [0m[38;5;231m [39m
+[38;5;246m  ⎿  Allowed by auto mode[39m
+
+  [38;5;246mRan [1m2[0m[38;5;246m shell commands [39m
+
+[38;5;231m●[39m Gate tests are all green (24/24). I'm giving my row concrete times (planned 19:40–20:30) and staging
+  only my line, using a temp file plus rename.
+
+[38;5;246m●[39m Setting p2p row's concrete start/end and staging only that line
+[38;5;246m  ⎿  $ cd ~/projects/_infra && git commit -m "RESOURCES 占用: p2p V4-6 第 3–5 步改为具体时刻 [39m
+     [38;5;246m19:40–20:30（seismic v2 之后，用户 11-13 定的顺序）[39m
+     [38;5;246mCo-Authored-By: Claude Opus 5.5 <<email>>"; git status --short; git log -1 [39m
+     [38;5;246m--format=%h; cd /home/user/projects/p2p-search-sim-v3 && git add node/tests/heavy_gate.py n…[39m
+
+[38;5;174m✻[39m [38;5;174mOrbiting… [38;5;246m(1m 6s · ↓[39m [38;5;246m6.0k tokens)[39m
+                                                                [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m────────────────────────────────────────────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m────────────────────────────────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle) · esc to interrupt[39m

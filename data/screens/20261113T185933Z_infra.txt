@@ -1,0 +1,36 @@
+claude
+
+● The live check passes (409 for anonymous), and a
+  real 5-minute read SAS was issued and sent straight
+  to /dev/null, which shows R4/R5 work. Next I'll
+  write the tests against fake az and curl.
+
+● Write(~/projects/_infra-image/gpu…/test_image_t1.sh)
+  ⎿  Wrote 164 lines to ~/projects/_infra-image/g
+     pu/tests/test_image_t1.sh
+      1 #!/usr/bin/env bash
+      2 # image-t1.sh / image-t1-vm.sh against
+        a fake az, a fake curl (blobs in a dire
+        ctory) and a scratch /mnt.
+      3 # Never touches Azure. Light: a few sma
+        ll tarballs.   bash gpu/tests/test_imag
+        e_t1.sh
+      4 set -uo pipefail
+      5 GPU=$(cd "$(dirname "$0")/.." && pwd)
+      6 T=$(mktemp -d); trap 'rm -rf "$T"' EXIT
+     … +158 lines
+  ⎿  Allowed by auto mode classifier
+
+  Ran 1 shell command
+
+● 48 of 49 tests pass; the failure is in the test
+  itself, since the URL goes to curl via stdin and
+  never reaches the argv log it searches. I'm checking
+  the order from the script's own put lines instead.
+
+✽ Befuddling… (3m 46s · thought for 2s)
+              ✔ Update installed · /restart to apply
+──────────────────────────────────────────────────────
+❯ 
+──────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ↓ …

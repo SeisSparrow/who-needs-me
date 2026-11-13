@@ -1,0 +1,36 @@
+claude
+     ...
+      44  rm -rf "$R"; mkdir -p "$R/root/seeds" "$R/logs"
+      45  FX="http://<ip>:8089"
+      46  { printf 'p2fixture\ttest\tP2 fixture docs\t%s/d
+          ocs/index.html\t%s/docs/\tLocal fixture for the
+          P2 acceptance.\n' "$FX" "$FX"
+      37 -  printf 'p2bulk\ttest\tP2 fixture, 30 PDFs\t%s/
+         -bulk/index.html\t%s/bulk/\tLocal fixture for max
+         --pdfs.\n' "$FX" "$FX"; } > "$R/root/seeds/valida
+         -ted.tsv"
+      47 +  printf 'p2bulk\ttest\tP2 fixture, 30 PDFs\t%s/
+         +bulk/index.html\t%s/bulk/\tLocal fixture for max
+         +-pdfs.\n' "$FX" "$FX"
+      48 +  printf 'p2c7\ttest\tP2 fixture, real PDFs\t%s/
+         +c7/index.html\t%s/c7/\tLocal fixture for C7.\n'
+         +"$FX" "$FX"; } > "$R/root/seeds/validated.tsv"
+      49  PIDS=()
+      50  cleanup() {
+      51    for p in "${PIDS[@]:-}"; do [ -n "$p" ] && kil
+          l "$p" 2>/dev/null; done
+      52    RUN_DIR="$R/cluster" KVS_PORT=8370 FLAME_PORT=
+          9370 BUILD_DIR="$BUILD_DIR" bin/cluster.sh stop
+          >/dev/null 2>&1
+      42 -  rm -f "$SOCK"
+     … 12 more lines
+  ⎿  Allowed by auto mode
+
+● Running 1 shell command…
+
+✻ Tinkering… (1m 57s · ↓ 12.5k tokens · thought for 2s)
+                         ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

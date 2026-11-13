@@ -1,0 +1,36 @@
+claude
+
+ ▐▛███▛█   Claude Code v2.1.322
+▝▜██████▀  Haiku 5.5 · Claude Ultra
+ ▝▝   ▝▝   ~/stage_tmp
+
+  Fable 5.2 is here for your longest and toughest coding tasks.
+  It draws down usage faster than Opus 5.5. Switch with /model.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                   Ctrl+Y to paste deleted text
+─────────────────────────────────────────────────────────────────
+❯ approve the deploy
+─────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle)

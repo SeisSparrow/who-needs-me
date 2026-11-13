@@ -1,0 +1,35 @@
+     [38;5;77m[48;5;22m    +[38;5;186m9]{2}&[^ "]*sig=[A-Za-z0-9%+/=]{20,}'[38;5;231m [38;5;186m"[38;5;231m${dirs[@][39m[49m
+     [38;5;77m[48;5;22m    +[38;5;231m}[38;5;186m"[38;5;231m 2>/dev/null)                                 [39m[49m
+     [38;5;77m[48;5;22m 47 +[38;5;231m  [ -n [38;5;186m"[38;5;231m$found[38;5;186m"[38;5;231m ] && { [38;5;148mprintf[38;5;231m [38;5;186m'%s\n'[38;5;231m [38;5;186m"[38;5;231m$found[38;5;186m"[38;5;231m | [39m[49m
+     [38;5;77m[48;5;22m    +[38;5;231msed -n 1,5p; [38;5;148mecho[38;5;231m [38;5;186m"scan: a SAS token (above)"[38;5;231m; h[39m[49m
+     [38;5;77m[48;5;22m    +[38;5;231mits=1; }                                        [39m[49m
+     [2m[38;5;231m 48 [0m[38;5;231m   [ [38;5;186m"[38;5;231m$hits[38;5;186m"[38;5;231m = 0 ] && [38;5;148mecho[38;5;231m [38;5;186m"scan: clean ([38;5;231m${dirs[*[39m
+     [2m[38;5;231m    [0m[38;5;231m ]}[38;5;186m)"[39m
+     [2m[38;5;231m 49 [0m[38;5;231m   [38;5;148mreturn[38;5;231m [38;5;186m"[38;5;231m$hits[38;5;186m"[39m
+     [2m[38;5;231m 50 [0m[38;5;231m }[39m
+[38;5;246m  ⎿  Allowed by auto mode classifier[39m
+
+[38;5;231m●[39m Now the host side: [38;5;153mcheck[39m, [38;5;153msas[39m, [38;5;153mreadback[39m.
+
+[38;5;114m●[39m [1mWrite[0m(]8;id=g2wsyl;file:///home/user/projects/_infra-image/gpu/image-t1.sh\~/projects/_infra-image/gpu/image-t1.sh]8;;\)
+[38;5;246m  ⎿  [39mWrote [1m88[0m lines to
+     [1m]8;id=g2wsyl;file:///home/user/projects/_infra-image/gpu/image-t1.sh\~/projects/_infra-image/gpu/image-t1.sh[0m]8;;\
+     [2m[38;5;231m 1 [0m[38;5;242m#!/usr/bin/env bash[39m
+     [2m[38;5;231m 2 [0m[38;5;242m# T1 pre-installed environment, the host side.[39m
+     [2m[38;5;231m   [0m[38;5;242m Read-only except `pin` (writes a file in this rep[39m
+     [2m[38;5;231m   [0m[38;5;242mo).[39m
+     [2m[38;5;231m 3 [0m[38;5;242m# Plan: ~/projects/_docs/_plan/infra_gpu_image_pla[39m
+     [2m[38;5;231m   [0m[38;5;242mn_2026-11-13.md §9. The VM side is image-t1-vm.sh.[39m
+     [2m[38;5;231m 4 [0m[38;5;242m#[39m
+     [2m[38;5;231m 5 [0m[38;5;242m#   image-t1.sh check                  the account[39m
+     [2m[38;5;231m   [0m[38;5;242m and container are still private (exit 1 if not)[39m
+     [2m[38;5;231m 6 [0m[38;5;242m#   image-t1.sh sas r|cw [MINUTES]     a user dele[39m
+     [38;5;246m… +83 lines (~4 KB) [39m
+[38;5;246m  ⎿  Allowed by auto mode classifier[39m
+
+[38;5;174m✶[39m [38;5;174mBefuddling… [38;5;246m(1m 59s · ↓[39m [38;5;246m12.6k tokens · [38;5;249mthinking[38;5;246m)[39m
+                         [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m─────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m · [38;5;44m1 shell[38;5;246m · esc to interrupt · ↓ to manage[39m

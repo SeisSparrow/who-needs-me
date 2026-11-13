@@ -1,0 +1,36 @@
+claude
+  2. Before session 2: prep tries the tarball first, checking in the §9.3
+     order, and on any failure cleans up and installs from scratch the
+     current way. It will be tested locally with a fake blob. §9.4 asks for
+     "hit plus four fallbacks", but §9.3's checks give five failure reasons
+     (version, manifest, part, whole stream, import versions), so I'll test
+     all five.
+
+  The joint schedule and command list come next. The SERVES change stays in
+  the same change set and merges only after Menu signs the contract.
+
+✻ Cogitated for 1m 53s · done 6:55 PM
+
+❯ （用户委托代回）cpu-embed 的回滚处理得对。接下来：1. 在分支上修 api.py 的
+  semantic_search（CPU 后端时看 notes-embed
+  是否可用）并补一条断言这个字段的测试；给 reembed.py 加“切到已有的同模型
+  retired 版本”，免得再重算 11 分钟。2. 修完给 diff
+  和重新上线的步骤，重新上线要用户本人批，已列入待批清单，批之前不动线上。3.
+  infra 那边：gpu/image-t1 分支马上 push，里面的 fetch 可以直接从 prep
+  调；三个缓存变量和五种回退按你说的做。联合排期和命令清单照常出。
+
+● Starting with the fix, on a new branch off production (08bbc4b):
+
+  Creating fix worktree; read status code, gpu.py, embed client
+  ⎿  $ cd ~/projects/notes && git worktree add -b demo/cpu-embed-fix
+     ~/projects/notes-cefix 08bbc4b 2>&1 | tail -1; cd ~/projects/notes-cefix
+     && ln -s ~/projects/notes/.venv .venv && ln -s
+     ~/projects/notes/node_modules node_modules; sed -n 55,75p
+     src/web/api.py; cat src/gpu.py | sed -n 1,80p | grep -n '…
+
+* Perambulating… (11s · ↓ 562 tokens)
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt

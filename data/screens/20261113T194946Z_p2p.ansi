@@ -1,0 +1,35 @@
+     [2m[38;5;231m 3667 [0m[38;5;231m ```[39m
+     [2m[38;5;231m 3668 [0m[38;5;231m [39m
+     [38;5;167m[48;5;52m 3663 -[38;5;231mC++ 里 `Simulator::Schedule` 返回一个 `EventId`，`Cancel()[39m[49m
+     [38;5;167m[48;5;52m      -[38;5;231m` 它就是「收到消息、重置定时器」；Python 里对应 `TimerHand[39m[49m
+     [38;5;167m[48;5;52m      -[38;5;231mle.cancel()`。两边的协议代码一样，差别全在「时间从哪来」。[39m[49m
+     [38;5;77m[48;5;22m 3669 +[38;5;231mC++ 里 `m_predecessorLastSeen` 是 `Time` 对象，`+`、`<` 是[39m[49m
+     [38;5;77m[48;5;22m      +[38;5;231m ns-3 给 `Time` 重载的运算符；`MilliSeconds(...)` 把整数毫[39m[49m
+     [38;5;77m[48;5;22m      +[38;5;231m秒变成 `Time`。协议代码两边一模一样，差别全在「现在几点」 [39m[49m
+     [38;5;77m[48;5;22m      +[38;5;231m从哪来。                                                  [39m[49m
+     [2m[38;5;231m 3670 [0m[38;5;231m [39m
+     [2m[38;5;231m 3671 [0m[38;5;231m **2. 剖析样本的分类：按最内层的、属于我们的帧。**[39m
+     [2m[38;5;231m 3672 [0m[38;5;231m [39m
+[38;5;246m  ⎿  Allowed by auto mode[39m
+
+[38;5;231m●[39m The three documents are finished, so I'm moving on to the V4-6b analysis of
+  the 15 false deaths, checking the recorded trace to see whether the
+  judging node or the judged peer was starved in each case.
+
+[38;5;246m [39m Measuring event-loop gaps and per-process CPU around false deaths
+[38;5;246m  ⎿  $ python3 - <<'EOF'[39m
+     [38;5;246mimport json,collections[39m
+     [38;5;246mev=[json.loads(l) for l in open('trace.ndjson')][39m
+     [38;5;246mm=json.load(open('manifest.json'))[39m
+     [38;5;246mfd=[e for e in ev if e['type']=='chord_dead' and e['t']<50000][39m
+     [38;5;246mby=collections.defaultdict(list)[39m
+     [38;5;246mfor e in ev: by[e['node']].append(e['t'])[39m
+     [38;5;246mdef maxgap(n,a,b):[39m
+     [38;5;246mts=sorted(t fo…[39m
+
+[38;5;174m✽[39m [38;5;174mWaddling… [38;5;246m(2m 57s · ↓[39m [38;5;246m11.7k tokens · [38;5;248mthinking[38;5;246m)[39m
+                                     [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m─────────────────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle) · esc to interrupt[39m

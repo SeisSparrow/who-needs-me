@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Who Needs Me</title>
+<style>
+  :root {
+    --bg: #f6f5f2; --panel: #ffffff; --ink: #1d1d1b; --muted: #6b6a66; --line: #e3e1dc;
+    --red: #c4302b; --red-bg: #fbeceb; --amber: #a86400; --amber-bg: #fdf3e2;
+    --blue: #2f5fa7; --blue-bg: #eaf0f9; --green: #2f7a4a; --green-bg: #e8f3ec;
+    --grey-bg: #efeeea; --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #151514; --panel: #1f1f1d; --ink: #ecebe7; --muted: #9a9892; --line: #33322f;
+      --red: #ff6b63; --red-bg: #3a1d1b; --amber: #f0a43a; --amber-bg: #352813;
+      --blue: #7fa8ec; --blue-bg: #1b2638; --green: #6cc28d; --green-bg: #17291e;
+      --grey-bg: #2a2a27;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 20px 16px 48px; }
+  header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 16px; }
+  h1 { font-size: 22px; margin: 0; letter-spacing: -0.01em; }
+  .sub { color: var(--muted); font-size: 13px; }
+  .counts { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 18px; }
+  .count { padding: 4px 10px; border-radius: 999px; font-size: 13px; background: var(--grey-bg); }
+  .count b { font-variant-numeric: tabular-nums; }
+  .replay { display: flex; align-items: center; gap: 10px; margin: 0 0 16px; flex-wrap: wrap; }
+  .replay input { flex: 1; min-width: 0; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+          margin: 0 0 10px; overflow: hidden; border-left: 5px solid var(--line); }
+  .card.red { border-left-color: var(--red); }
+  .card.yellow { border-left-color: var(--amber); }
+  .card.dropped_to_shell { border-left-color: var(--muted); }
+  .card.waiting_reply { border-left-color: var(--blue); }
+  .card.idle_done { border-left-color: var(--green); }
+  .row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; padding: 12px 14px;
+         cursor: pointer; }
+  .name { font-weight: 600; font-size: 16px; }
+  .meta { color: var(--muted); font-size: 12.5px; }
+  .chip { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 12.5px;
+          font-weight: 600; white-space: nowrap; }
+  .chip.red { color: var(--red); background: var(--red-bg); }
+  .chip.yellow { color: var(--amber); background: var(--amber-bg); }
+  .chip.dropped_to_shell { color: var(--ink); background: var(--grey-bg); }
+  .chip.waiting_reply { color: var(--blue); background: var(--blue-bg); }
+  .chip.idle_done { color: var(--green); background: var(--green-bg); }
+  .chip.busy { color: var(--muted); background: var(--grey-bg); }
+  .evidence { grid-column: 1 / -1; font-family: var(--mono); font-size: 12.5px;
+              background: var(--grey-bg); border-radius: 6px; padding: 6px 8px;
+              overflow-wrap: anywhere; }
+  .tags { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { font-size: 11.5px; color: var(--muted); border: 1px solid var(--line);
+         border-radius: 4px; padding: 0 6px; }
+  .tag.by-model { color: var(--blue); border-color: var(--blue); }
+  .tag.by-rule { color: var(--ink); }
+  .detail { display: none; border-top: 1px solid var(--line); padding: 12px 14px; }
+  .card.open .detail { display: block; }
+  .detail h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+               color: var(--muted); margin: 10px 0 6px; }
+  .detail h3:first-child { margin-top: 0; }
+  pre { margin: 0; font: 12.5px/1.45 var(--mono); white-space: pre-wrap;
+        overflow-wrap: anywhere; max-height: 320px; overflow: auto; background: var(--grey-bg);
+        padding: 8px; border-radius: 6px; }
+  .probs { display: grid; grid-template-columns: minmax(0, max-content) minmax(0, 1fr) 3.5em; gap: 3px 10px;
+           align-items: center; font-size: 12.5px; }
+  .bar { height: 8px; background: var(--grey-bg); border-radius: 4px; overflow: hidden; }
+  .bar i { display: block; height: 100%; background: var(--blue); }
+  .bar i.hot { background: var(--red); }
+  .facts { display: grid; grid-template-columns: minmax(0, max-content) minmax(0, 1fr); gap: 2px 12px;
+           font-size: 12.5px; }
+  .facts span { overflow-wrap: anywhere; }
+  .facts span:nth-child(odd) { color: var(--muted); }
+  button { font: inherit; font-size: 13px; padding: 6px 12px; border-radius: 6px;
+           border: 1px solid var(--red); color: var(--red); background: transparent;
+           cursor: pointer; margin-top: 12px; }
+  button:hover { background: var(--red-bg); }
+  .empty { color: var(--muted); padding: 24px 0; }
+  .err { color: var(--red); font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Who needs me</h1>
+    <span class="sub" id="sub">loading…</span>
+  </header>
+  <div class="counts" id="counts"></div>
+  <div class="replay" id="replay" hidden>
+    <span class="sub">replay</span>
+    <input type="range" id="slider" min="0" max="0" value="0">
+    <span class="sub" id="at"></span>
+  </div>
+  <div id="list"></div>
+</div>
+<script>
+const LABEL = { red: "needs you", yellow: "to check", needs_human: "needs you", dropped_to_shell: "dropped to shell",
+  waiting_reply: "waiting for reply", idle_done: "idle, done", busy: "busy" };
+const ORDER = ["red", "yellow", "dropped_to_shell", "waiting_reply", "idle_done", "busy"];
+const kind = r => r.state === "needs_human" ? (r.tier || "red") : r.state;
+const open = new Set();
+let times = [], replay = false;
+
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c =>
+  ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const ts = t => t ? `${t.slice(9, 11)}:${t.slice(11, 13)} UTC` : "";
+
+function probRows(p) {
+  if (!p) return "";
+  const out = [];
+  for (const [q, v] of Object.entries(p)) {
+    if (typeof v === "number") {
+      out.push([q, v]);
+    } else if (v) {
+      const [best, pv] = Object.entries(v).sort((a, b) => b[1] - a[1])[0];
+      out.push([`${q}: ${best}`, pv]);
+    }
+  }
+  return `<div class="probs">${out.map(([k, v]) =>
+    `<span>${esc(k)}</span><span class="bar"><i class="${k.startsWith("wants") && v >= 0.2 ? "hot" : ""}"
+     style="width:${(v * 100).toFixed(0)}%"></i></span><span>${v.toFixed(2)}</span>`).join("")}</div>`;
+}
+
+function card(r) {
+  const f = r.facts || {};
+  const reason = r.state === "needs_human" ? ` · ${esc(r.human_reason)}` : "";
+  const tags = [
+    `<span class="tag by-${r.decided_by}">decided by ${r.decided_by}</span>`,
+    r.sticky ? `<span class="tag">held since ${ts(r.sticky.since)}</span>` : "",
+    r.current_state ? `<span class="tag">now: ${esc(LABEL[r.current_state])}</span>` : "",
+    f.stale_minutes != null ? `<span class="tag">unchanged ${f.stale_minutes} min</span>` : "",
+    f.background_task === "running" ? `<span class="tag">background task</span>` : "",
+    f.ghost_text_ignored ? `<span class="tag">ghost text ignored</span>` : "",
+    f.user_typing ? `<span class="tag">you typed something</span>` : "",
+    r.hint ? `<span class="tag">keyword: ${esc(r.hint.split(":")[0])}</span>` : "",
+  ].join("");
+  const factRows = Object.entries(f).map(([k, v]) =>
+    `<span>${esc(k)}</span><span>${esc(v)}</span>`).join("");
+  const k = kind(r);
+  return `<div class="card ${k} ${open.has(r.session) ? "open" : ""}" data-s="${esc(r.session)}">
+    <div class="row">
+      <div><span class="name">${esc(r.session)}</span>
+        <div class="meta">${esc(r.pane_command)} · captured ${ts(r.captured_at)}</div></div>
+      <div><span class="chip ${k}">${esc(LABEL[k] || r.state)}${reason}</span></div>
+      ${r.evidence ? `<div class="evidence">${esc(r.evidence)}</div>` : ""}
+      <div class="tags">${tags}</div>
+    </div>
+    <div class="detail">
+      ${r.probabilities ? `<h3>Decision model</h3>${probRows(r.probabilities)}` : ""}
+      <h3>Last message (what the model read)</h3><pre>${esc(r.last_message || "(none)")}</pre>
+      <h3>Receipts (computed by code)</h3><div class="facts">${factRows}</div>
+      ${r.sticky && !replay ? `<button data-ack="${esc(r.session)}">Dismiss — I've handled this</button>` : ""}
+    </div>
+  </div>`;
+}
+
+function render(snap) {
+  const c = snap.counts || {};
+  const head = `<span class="count"><b>${c.red || 0}</b> needs you · <b>${c.yellow || 0}</b> to check</span>`;
+  document.getElementById("counts").innerHTML = head + ORDER.slice(2).filter(s => c[s]).map(s =>
+    `<span class="count"><b>${c[s]}</b> ${LABEL[s]}</span>`).join("");
+  document.getElementById("sub").textContent =
+    `${snap.sessions.length} sessions · as of ${ts(snap.as_of)} · ` +
+    (snap.model ? "rules + Gemini Decision 1" : "rules only");
+  document.getElementById("list").innerHTML = snap.sessions.length
+    ? snap.sessions.map(card).join("") : `<div class="empty">No captures yet.</div>`;
+}
+
+async function load() {
+  try {
+    let url = "/status.json";
+    if (replay && times.length) url += `?at=${times[+document.getElementById("slider").value]}`;
+    const r = await fetch(url);
+    render(await r.json());
+  } catch (e) {
+    document.getElementById("sub").innerHTML = `<span class="err">board unreachable: ${esc(e)}</span>`;
+  }
+}
+
+document.getElementById("list").addEventListener("click", async e => {
+  const ack = e.target.closest("[data-ack]");
+  if (ack) {
+    await fetch("/ack", { method: "POST", body: JSON.stringify({ session: ack.dataset.ack }) });
+    return load();
+  }
+  const cardEl = e.target.closest(".card");
+  if (!cardEl || e.target.closest(".detail")) return;
+  const s = cardEl.dataset.s;
+  open.has(s) ? open.delete(s) : open.add(s);
+  cardEl.classList.toggle("open");
+});
+
+(async () => {
+  const t = await (await fetch("/timeline.json")).json();
+  replay = t.replay; times = t.times;
+  if (replay && times.length) {
+    const sl = document.getElementById("slider");
+    document.getElementById("replay").hidden = false;
+    sl.max = times.length - 1; sl.value = times.length - 1;
+    const show = () => { document.getElementById("at").textContent = ts(times[sl.value]); };
+    sl.addEventListener("input", show);
+    sl.addEventListener("change", load);
+    show();
+  }
+  load();
+  if (!replay) setInterval(load, 5000);
+})();
+</script>
+</body>
+</html>

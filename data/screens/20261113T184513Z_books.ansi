@@ -1,0 +1,35 @@
+
+
+  [38;5;246mRan [1m2[0m[38;5;246m shell commands [39m
+
+[38;5;231m●[39m E15's cause is clear (see below). For E13 I need the actual run
+  record.
+
+  [38;5;246mRan [1m3[0m[38;5;246m shell commands [39m
+
+[38;5;231m●[39m Both temp directories from the failing tests were already
+  cleaned up by later pytest runs, so the E13 details beyond the
+  assertion message are gone. Now the baseline results:
+
+  [38;5;246mRan [1m2[0m[38;5;246m shell commands [39m
+
+[38;5;231m●[39m Both failures trace back to A2 (more below). Now let me look at
+  the SQL for the top 8 to write the candidate list.
+
+  [38;5;246mRan [1m4[0m[38;5;246m shell commands [39m
+
+[38;5;231m●[39m Now the self-test record row and the task 2 candidate list.
+
+[38;5;246m●[39m Appending 11-13 window results to selftest record
+[38;5;246m  ⎿  $ cd ~/projects/CIS5500GroupProject-v3-cost && grep -nE "DO
+[39m     [38;5;246mUPDATE|UPDATE [a-z_.]+ SET" bench/v3/exam/writes.py | grep [39m
+     [38;5;246m-v "^.*match=" ; grep -n -B3 -A14 "^def r2\|^def s2" [39m
+     [38;5;246mbench/v3/exam/writes.py | grep -E "def|book|i %|//" | head [39m
+     [38;5;246m-20[39m
+
+[38;5;174m✻[39m [38;5;174mConsideri[38;5;216mng…[38;5;174m [38;5;246m(3m 32s · ↓[39m [38;5;246m16.4k tokens)[39m
+                         [38;5;114m✔ Update installed · /restart to apply[39m
+[38;5;244m─────────────────────────────────────────────────────────────────
+[38;5;246m❯ [39m
+[38;5;244m─────────────────────────────────────────────────────────────────
+[39m  [38;5;220m⏵⏵ auto mode on[38;5;246m (shift+tab to cycle) · esc to interrupt[39m

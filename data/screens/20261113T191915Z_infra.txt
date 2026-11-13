@@ -1,0 +1,36 @@
+claude
+           50~~ | **已结束 08:10**（重嵌入 07:50–08:04，对比 08:04–08:
+           06，一小批 = 1 的复测 08:06–08:09） | 服务常驻 1.76–1.96 GB
+           、高水位 2.17 GB；评测时 Qwen 0.6B 另约 2.5 GB；重嵌入期间
+           load 约 2.1 | 没有残留进程；只连 notes_test（Notes 2026-11-
+           13 划掉） |
+  ⎿  Allowed by auto mode classifier
+
+  Ran 1 shell command
+
+● I pushed gpu/image-t1 (68d480e); local and remote are the same commit, with
+  nothing left unpushed.
+
+  I updated §5 of the image plan to list the three cache variables from §9.3
+  (TRITON_CACHE_DIR, VLLM_CACHE_ROOT, TORCHINDUCTOR_CACHE_DIR) and noted that
+  prep can call gpu/image-t1-vm.sh fetch directly. §3 named only two of
+  them, so I updated it too.
+
+  One count differs: fetch has six fallback reasons, not five: version,
+  manifest, part, stream, unpack and import. The sixth, import, catches an
+  unpacked venv whose vllm/torch/triton versions don't match the manifest.
+  When you pass this on, Notes should handle all six; prep's logic doesn't
+  change, since any non-zero exit from fetch means install from scratch. §5
+  now lists all six.
+
+  Nothing else has changed:
+  - cargo build: still waits for the watcher, which checks for p2p's row
+    (ending 20:30) to be struck or past its end time, with load below 2.5.
+  - GPU sessions: I'll post the time here before each start.
+
+✻ Baked for 32s · done 7:17 PM · 1 shell still running
+                                     ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 1 shell · ↓ to manage

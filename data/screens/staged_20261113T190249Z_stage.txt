@@ -1,0 +1,36 @@
+claude
+
+ ▐▛███▛█   Claude Code v2.1.322
+▝▜██████▀  Haiku 5.5 · Claude Ultra
+ ▝▝   ▝▝   ~/stage_tmp
+
+  Fable 5.2 is here for your longest and toughest coding tasks.
+  It draws down usage faster than Opus 5.5. Switch with /model.
+
+❯ /clear
+
+❯ Output the following sample report exactly as written, with
+  nothing added: The re-embed job started at 18:42 and is
+  running in the background. About 13 minutes to go. I will
+  continue when it finishes.
+
+● The re-embed job started at 18:42 and is running in the
+  background. About 13 minutes to go. I will continue when it
+  finishes.
+
+✻ Baked for 1s · done 7:02 PM
+
+
+
+
+
+
+
+
+
+
+                         ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on (shift+tab to cycle)

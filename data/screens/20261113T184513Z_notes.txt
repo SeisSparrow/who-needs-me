@@ -1,0 +1,36 @@
+claude
+
+  Ran 1 shell command
+
+● It's 18:41, load 0.06, 0 jobs, all six sites 200, notes-embed
+  is up. Updating my occupancy row to concrete times:
+
+  Pushed to cloud/v1
+
+● Row is set to 18:45–19:15. State before the re-embed, then
+  start it (step 3):
+
+  Ran 2 shell commands
+
+● The re-embed started at about 18:42, roughly 3 minutes before
+  the 18:45 in my row, so I'll note the real start time when I
+  cross the row out. I'm reading §9.4 of infra's plan while it
+  runs. · summary
+
+  Searched for 1 pattern, ran 3 shell commands
+
+● I've read §9.4. The two script changes it asks of me on
+  gpu/g1-v2 are clear, and I'll list them in the report. I'm
+  waiting for the re-embed to finish before switching backends.
+
+  Ran 1 shell command
+
+● Started at 18:42:17, about 13 minutes to go. I'll continue when
+  it finishes.
+
+✻ Cooked for 56s · done 6:42 PM · 1 shell still running
+                         ✔ Update installed · /restart to apply
+─────────────────────────────────────────────────────────────────
+❯ 
+─────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 1 shell · ↓ to manage
