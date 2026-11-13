@@ -337,7 +337,7 @@ optionally `literal<TAB>replacement`.
   machines overwrite each other, and the board does not show which machine a session is on.
   Until that is fixed, give sessions a machine prefix (`vm2-infra`).
 - Machines are not discovered automatically; each is added once with one capture command.
-- The rules are written for the Claude Code terminal interface.
+- The rules are written for the Claude Code terminal interface. See "Other agents" below for what happens with Codex and Gemini CLI.
 - Tested with everything running on a laptop. Running the tool on the VM itself is the
   intended always-on setup and is not tested yet.
 
@@ -350,6 +350,46 @@ optionally `literal<TAB>replacement`.
 | Board stops updating after a few rounds | The capture loop was backgrounded without `< /dev/null` and the shell stopped it (`jobs` shows "Stopped"). |
 | `ssh` asks for a password | Set up an SSH key or Tailscale SSH for that host first. |
 | Every row is decided by rule | `GEMINI_API_KEY` is not set, or the board was started with `--no-model`. |
+
+## Other agents: Codex and Gemini CLI
+
+Tested on 2026-11-13 after the build, with Claude Code, Codex and Gemini CLI running side
+by side in local tmux sessions. No code was changed for this; it documents what the
+current version does. Short version: **the capture, the decision model and the board are
+tool-agnostic; the rule layer is written for Claude Code and misreads the other two.**
+
+| Stage | Claude Code | Codex | Gemini CLI |
+|---|---|---|---|
+| Session discovered, shown on the board | yes | yes | yes |
+| Just started, empty prompt | idle (correct) | "waiting for reply" (should be idle) | "waiting for reply" (should be idle) |
+| Startup dialog that needs a person | trust prompt: needs you, red (correct) | sign-in choice, browser sign-in, folder approval: all escalated (correct) | not seen |
+| Working on a task | busy (correct) | **not recognized**: `Working (6s • Esc to interrupt)` does not match the rule | not tested |
+| Finished, asks to deploy | needs you: deploy, red (correct) | not tested | not tested |
+| API error on screen | login error: needs you (correct) | escalated, but for the wrong reason (see below) | escalated, but for the wrong reason |
+| Exited to the shell | dropped to shell (correct) | dropped to shell (correct) | dropped to shell (correct) |
+
+What this showed:
+
+- **Dropping to the shell works for all three**, because it uses the command tmux reports
+  for the pane, not the screen. (tmux reports `node` for Codex and Gemini CLI, and a version
+  string for Claude Code on macOS; none of these is a shell.)
+- **Busy detection is Claude Code only.** Codex prints its own spinner line and the rule
+  does not match it.
+- **The echoed prompt is read as the session's message.** Codex and Gemini CLI show the
+  text you typed on the screen. The last-message extraction is built around Claude Code's
+  layout, so it picked up the typed task ("... I will do it once you approve") and flagged
+  the session for that, while the real state was an API error.
+- **Their error messages are not recognized.** Only Claude Code's login error has a rule.
+- **Not tested: a Codex or Gemini session that is actually answering.** On the test
+  machine both CLIs were too old for their current models (Codex 0.34.0, Gemini CLI 0.1.13)
+  and every request failed. If they were installed with npm, update them with
+  `npm install -g @openai/codex@latest @google/gemini-cli@latest`.
+- **Also found with Claude Code:** when a session asks for approval and then, without an
+  answer, asks a plain question, the earlier request is still on the screen and the row
+  stays yellow for deploy.
+
+Supporting another agent means giving it its own small rule set: its busy marker, its
+input box, its error strings, and how to skip the echoed prompt. Nothing else changes.
 
 ## Data and privacy
 
