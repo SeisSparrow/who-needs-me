@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import json
 import os
 import re
 import sys
@@ -224,6 +225,15 @@ class Screen:
         """First line of the .txt: the pane's current command at capture time (claude/bash)."""
         first = self.txt.read_text(encoding="utf-8", errors="replace").split("\n", 1)[0].strip()
         return first if PANE_CMD_RE.match(first) else None
+
+    def meta(self) -> dict:
+        """Receipts tmux reported with this capture (pane size, alternate screen, hook note);
+        empty for captures made before these were recorded."""
+        path = self.txt.with_name(self.txt.stem + ".meta.json")
+        try:
+            return json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            return {}
 
     def screen(self) -> str:
         """Screen content with colors. The .ansi is authoritative; the .txt minus its

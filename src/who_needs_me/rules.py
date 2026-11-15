@@ -32,8 +32,12 @@ CONFIG_PATH = Path(__file__).resolve().parents[2] / "factory.yaml"
 SGR_RE = re.compile(r"\x1b\[([0-9;]*)m")
 BORDER_RE = re.compile(r"^\s*─{20,}\s*$")
 SPINNER_RE = re.compile(r"^\s*[·✢✳✶✻✽*]\s+\S+…\s+\(")
-DONE_RE = re.compile(r"^\s*[·✢✳✶✻✽*]\s+\S+ for .*·\s*done\b")
-NOISE_RE = re.compile(r"✔ Update installed|/restart to apply")
+# "✻ Baked for 1m 2s · done 9:44 AM". In a very narrow pane the line wraps before "done"
+# ("✻ Worked for 6m 28s ·" / "done 9:06 AM · 1 shell" / "still running"), so a line that starts
+# at the left edge with the glyph and "<Word> for <duration>" is enough.
+DONE_RE = re.compile(r"^\s*[·✢✳✶✻✽*]\s+\S+ for .*·\s*done\b|^[·✢✳✶✻✽*]\s+\S+ for \d+(?:h|m|s)\b")
+# footer notices above the input box; in a narrow pane they are cut short ("new tas… · ✔ Update …")
+NOISE_RE = re.compile(r"✔ Update|/restart to apply|^\s*new t\S*… ·|^\s*new task\?")
 TOOL_CALL_RE = re.compile(r"^●\s+[A-Z][A-Za-z]*\(")
 USER_PROMPT_RE = re.compile(r"^[>❯]\s\S")
 PEER_MSG_RE = re.compile(r"^›\s")  # a message delivered from another session, not typed by a person
@@ -216,9 +220,10 @@ def _is_prompt(line: str) -> bool:
 
 # whitespace and box-drawing characters: both move when a pane is resized and its text re-wraps
 _WRAP_NOISE = re.compile(r"[\s\u2500-\u257f]+")
-# a 52x23 pane shows about 340 characters of conversation, and what is above the window is
-# gone after a resize, so the tail has to be shorter than the smallest pane in real use
-KEY_TAIL_CHARS = 200
+# a 52x23 pane shows about 340 characters of conversation and a 25x23 one about 200, and what is
+# above the window is gone after a resize, so the tail has to be shorter than the smallest pane
+# in real use
+KEY_TAIL_CHARS = 120
 
 
 def content_key(screen: str) -> str:
@@ -340,14 +345,24 @@ def rule_empty_session(p: Parsed) -> Hit | None:
     return None
 
 
-def rule_tripwire(message: str, cfg: dict) -> Hit | None:
-    """Keyword hit in the tail of the last message; the latest matching line wins."""
-    tail = [x for x in message.split("\n") if x.strip()][-cfg["tripwire_tail_lines"] :]
+def rule_tripwire(message: str, cfg: dict, width: int | None = None) -> Hit | None:
+    """Keyword hit in the tail of the last message; the latest matching line wins.
+
+    The tail is counted in lines of a pane about ``TAIL_REFERENCE_WIDTH`` columns wide. A
+    narrower pane wraps the same sentences into more lines, so the count grows with it;
+    otherwise resizing a window would change what is flagged."""
+    n = cfg["tripwire_tail_lines"]
+    if width and width < TAIL_REFERENCE_WIDTH:
+        n *= -(-TAIL_REFERENCE_WIDTH // width)
+    tail = [x for x in message.split("\n") if x.strip()][-n:]
     for line in reversed(tail):
         for reason, patterns in cfg["tripwire"].items():
             if any(re.search(pat, line, re.I) for pat in patterns):
                 return Hit("tripwire", "needs_human", reason, line.strip())
     return None
+
+
+TAIL_REFERENCE_WIDTH = 100
 
 
 def _lines(message: str) -> list[str]:
@@ -418,9 +433,14 @@ def evaluate(
     pane_command: str | None = None,
     stale: int | None = None,
     config: dict | None = None,
+    meta: dict | None = None,
 ) -> Layer0:
-    """Run all enabled layer-0 rules on one screen (ANSI text, pane command line removed)."""
+    """Run all enabled layer-0 rules on one screen (ANSI text, pane command line removed).
+
+    ``meta`` holds what tmux reported with the capture (``Screen.meta()``): pane width,
+    alternate screen, hook note. All of it is optional."""
     cfg = config or load_config()
+    meta = meta or {}
     on = cfg["rules"]
     p = parse(screen)
     who, prompt = who_spoke_last(p.body) if p.has_box else ("none", "")
@@ -442,7 +462,7 @@ def evaluate(
     if on.get("prompt_submitted"):
         hits.append(rule_prompt_submitted(p, who, prompt))
     if on.get("tripwire"):
-        hits.append(rule_tripwire(msg, cfg))
+        hits.append(rule_tripwire(msg, cfg, meta.get("width")))
     typed, ghost = "", ""
     if on.get("ghost_text"):
         ghost_hit, typed, ghost = rule_ghost_text(p)

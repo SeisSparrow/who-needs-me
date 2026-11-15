@@ -386,3 +386,66 @@ def test_a_wrapped_finished_turn_line_is_not_content():
     # a real new message after the status line still counts
     more = claude_screen([*msg, "✻ Cogitated for 3m 43s · done 9:09 AM", "● One more thing."])
     assert content_key(more) != content_key(wide)
+
+
+def test_a_very_narrow_pane_reads_the_same_as_a_wide_one():
+    """25 columns: the finished-turn line breaks before "done" and the footer notice is cut."""
+    from who_needs_me.rules import content_key, evaluate
+
+    wide = claude_screen(
+        [
+            "● says check_store_ack takes about 2 min, but it took 4.7 min.",
+            "",
+            "✻ Worked for 6m 28s · done 9:06 AM · 1 shell still running",
+            "                         ✔ Update installed · /restart to apply",
+        ]
+    )
+    narrow = claude_screen(
+        [
+            "● says check_store_ack",
+            "  takes about 2 min, but",
+            "  it took 4.7 min.",
+            "",
+            "✻ Worked for 6m 28s ·",
+            "  done 9:06 AM · 1 shell",
+            "  still running",
+            "   ✔ Update installed …",
+        ]
+    )
+    cut = claude_screen([*narrow.split("\n")[:7], "  new tas… · ✔ Update …"])
+    assert content_key(narrow) == content_key(wide) == content_key(cut)
+    for screen in (narrow, cut):
+        l0 = evaluate(screen)
+        assert l0.facts["who_spoke_last"] == "assistant"
+        assert l0.last_message.replace("\n", " ") == evaluate(wide).last_message
+        assert "running" not in l0.last_message and "Update" not in l0.last_message
+
+
+def test_keyword_tail_follows_the_pane_width():
+    """The keyword scan covers the last 4 lines of a wide pane. A narrow pane wraps those
+    sentences into more lines, and must still flag the same request."""
+    from who_needs_me.rules import evaluate
+
+    wide = claude_screen(
+        [
+            "● The fix is ready and tested. I will deploy it to production once you approve.",
+            "  The diff is saved in the plan folder.",
+            "  Nothing else changed.",
+            "  Tests: 40 passed.",
+        ]
+    )
+    narrow = claude_screen(
+        [
+            "● The fix is ready and",
+            "  tested. I will deploy",
+            "  it to production once",
+            "  you approve.",
+            "  The diff is saved in",
+            "  the plan folder.",
+            "  Nothing else changed.",
+            "  Tests: 40 passed.",
+        ]
+    )
+    assert "tripwire" in rules_of(evaluate(wide))
+    assert "tripwire" not in rules_of(evaluate(narrow))  # width unknown: 4 lines, as before
+    assert rules_of(evaluate(narrow, meta={"width": 25}))["tripwire"].reason == "deploy"

@@ -157,7 +157,9 @@ class Board:
             s = latest[name]
             text = redact(texts[s.id], extra)
             series = [(ts, key) for ts, key, _ in items]
-            l0s[name] = evaluate(text, s.pane_command(), stale_minutes(series), load_config())
+            l0s[name] = evaluate(
+                text, s.pane_command(), stale_minutes(series), load_config(), s.meta()
+            )
             keys[name] = items[-1][1]
 
         # The model is asked once per distinct input, not once per capture: an idle session
@@ -188,6 +190,7 @@ class Board:
                 "captured_at": s.ts,
                 "content_key": keys[name][:12],
                 "pane_command": l0.facts["pane_command"],
+                "pane_width": s.meta().get("width"),
                 **d.to_dict(),
                 "facts": l0.facts,
                 "last_message": l0.last_message,

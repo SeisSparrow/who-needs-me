@@ -290,3 +290,42 @@ def test_captures_deleted_from_the_folder_leave_the_board(tmp_path):
         f.unlink()
     assert {r["session"] for r in board.snapshot()["sessions"]} == {"a"}  # and no crash
     assert board.timeline() == ["20261113T200000Z"]
+
+
+def test_capture_records_what_tmux_reports_about_the_pane(tmp_path):
+    """Pane size, full-screen flag and the hook note go to a sidecar file; a narrow pane is
+    read further back; and a new hook note alone is a change worth writing."""
+    from who_needs_me.redact import scan
+
+    class Fake(FakeTmux):
+        note = ""
+
+        def __call__(self, cmd, **kw):
+            self.calls.append(cmd)
+            if cmd[1] == "list-panes":
+                out = f"a\ta:0.0\tclaude\t11\t25\t23\t0\t{self.note}\n"
+            else:
+                out = self.screens["a"]
+            return subprocess.CompletedProcess(cmd, 0, out, "")
+
+    fake = Fake({"a": "● hi\n"})
+    seen: dict = {}
+    t0 = datetime(2026, 11, 15, 9, 0, 0, tzinfo=UTC)
+    capture_once(tmp_path, runner=fake, now=t0, seen=seen)
+    (s,) = scan(tmp_path, 0)
+    assert s.meta() == {"width": 25, "height": 23, "alternate": False, "hook": ""}
+    assert fake.calls[-1][-1] == "-240"  # 60 lines at 100 columns = 240 at 25
+    assert capture_once(tmp_path, runner=fake, now=t0.replace(second=1), seen=seen) == []
+    fake.note = "1763197200 claude approval Notification"
+    assert len(capture_once(tmp_path, runner=fake, now=t0.replace(second=2), seen=seen)) == 1
+    assert scan(tmp_path, 0)[-1].meta()["hook"].endswith("approval Notification")
+
+
+def test_old_captures_without_a_sidecar_still_read(tmp_path):
+    from who_needs_me.redact import scan
+
+    write(tmp_path, "20261113T200000Z", "a", IDLE_DONE)
+    assert scan(tmp_path, 0)[0].meta() == {}
+    board = Board(tmp_path, tmp_path / "state", use_model=False, settle_seconds=0)
+    row = board.snapshot()["sessions"][0]
+    assert row["pane_width"] is None

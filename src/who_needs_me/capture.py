@@ -35,10 +35,15 @@ SSH_OPTS = [
     *("-o", "ControlPersist=120"),
 ]
 Runner = Callable[..., subprocess.CompletedProcess]
+# The last four fields are receipts tmux gives for free: the pane size (a resize re-wraps
+# everything), whether a full-screen program owns the pane, and the note a tool's own hook left
+# on the pane (``hook.py``). They go into ``<stem>.meta.json`` next to the capture.
 PANE_FORMAT = (
     "#{session_name}\t#{session_name}:#{window_index}.#{pane_index}"
     "\t#{pane_current_command}\t#{window_active}#{pane_active}"
+    "\t#{pane_width}\t#{pane_height}\t#{alternate_on}\t#{@wnm}"
 )
+WIDE = 100  # columns the default --lines was chosen for
 
 
 class ForbiddenTmuxCommand(RuntimeError):
@@ -59,12 +64,20 @@ def list_sessions(ssh: str | None = None, runner: Runner = subprocess.run) -> li
     out = tmux(["list-panes", "-a", "-F", PANE_FORMAT], ssh, runner)
     panes: dict[str, dict] = {}
     for line in out.splitlines():
-        parts = line.split("\t")
-        if len(parts) != 4:
+        parts = line.split("\t", 7)
+        if len(parts) < 4:
             continue
-        name, target, cmd, active = parts
+        name, target, cmd, active = parts[:4]
         if active == "11" or name not in panes:
             panes[name] = {"session": name, "target": target, "command": cmd}
+            if len(parts) == 8:
+                width, height, alt, note = parts[4:]
+                panes[name]["meta"] = {
+                    "width": int(width) if width.isdigit() else None,
+                    "height": int(height) if height.isdigit() else None,
+                    "alternate": alt == "1",
+                    "hook": note.strip(),
+                }
     return list(panes.values())
 
 
@@ -95,17 +108,23 @@ def capture_once(
         if only and p["session"] not in only:
             continue
         names.append(p["session"])
-        args = ["capture-pane", "-p", "-e", "-t", p["target"], "-S", f"-{lines}"]
+        meta = p.get("meta") or {}
+        # a narrow pane holds the same text in more lines
+        scale = -(-WIDE // meta["width"]) if meta.get("width") else 1
+        args = ["capture-pane", "-p", "-e", "-t", p["target"], "-S", f"-{lines * max(1, scale)}"]
         ansi = tmux(args, ssh, runner)
         if seen is not None:
             old = seen.get(p["session"])
-            same = old and old[0] == (p["command"], ansi)
-            if same and (when - old[1]).total_seconds() < keepalive:
+            now_is = (p["command"], ansi, meta.get("hook"), meta.get("alternate"))
+            if old and old[0] == now_is and (when - old[1]).total_seconds() < keepalive:
                 continue
-            seen[p["session"]] = ((p["command"], ansi), when)
+            seen[p["session"]] = (now_is, when)
         stem = f"{ts}_{safe_name(p['session'])}"
-        # .ansi first, .txt last: the reader treats a capture as present once .txt exists
-        for suffix, text in ((".ansi", ansi), (".txt", f"{p['command']}\n{strip_ansi(ansi)}")):
+        files = [(".ansi", ansi), (".txt", f"{p['command']}\n{strip_ansi(ansi)}")]
+        if meta:
+            files.insert(0, (".meta.json", json.dumps(meta, ensure_ascii=False)))
+        # .txt last: the reader treats a capture as present once .txt exists
+        for suffix, text in files:
             tmp = out_dir / f".{stem}{suffix}.tmp"
             tmp.write_text(text, encoding="utf-8")
             tmp.replace(out_dir / f"{stem}{suffix}")
