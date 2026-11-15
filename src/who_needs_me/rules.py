@@ -107,16 +107,35 @@ def split_dim(line: str) -> tuple[str, str]:
     return "".join(normal), "".join(dim_text)
 
 
+def _without_status(lines: list[str], keep_blank: bool) -> list[str]:
+    """Drop update notices, spinner lines and finished-turn lines.
+
+    In a narrow pane the finished-turn line wraps ("… · 2 shells still" / "running"). The
+    leftover is part of that volatile line, not something the session said, so lines after a
+    spinner or finished-turn line are dropped until the next block starts."""
+    out: list[str] = []
+    in_status = False
+    for line in lines:
+        if NOISE_RE.search(line):
+            continue
+        if SPINNER_RE.match(line) or DONE_RE.match(line):
+            in_status = True
+            continue
+        if not line.strip():
+            if keep_blank and not in_status:
+                out.append(line)
+            continue
+        t = line.lstrip()
+        if in_status and not (t.startswith("●") or PEER_MSG_RE.match(t) or _is_prompt(line)):
+            continue
+        in_status = False
+        out.append(line)
+    return out
+
+
 def _meaningful(lines: list[str]) -> list[str]:
-    """Body lines minus spinner/done/update-notice lines and blanks."""
-    return [
-        line
-        for line in lines
-        if line.strip()
-        and not SPINNER_RE.match(line)
-        and not DONE_RE.match(line)
-        and not NOISE_RE.search(line)
-    ]
+    """Body lines that carry content: no blanks, no status lines or their wrapped leftovers."""
+    return _without_status(lines, keep_blank=False)
 
 
 def last_message(body: list[str], max_lines: int = 40) -> str:
@@ -124,8 +143,7 @@ def last_message(body: list[str], max_lines: int = 40) -> str:
 
     Falls back to the last ``max_lines`` meaningful lines (shell screens, dialogs).
     """
-    lines = [line for line in body if not NOISE_RE.search(line)]
-    lines = [line for line in lines if not SPINNER_RE.match(line) and not DONE_RE.match(line)]
+    lines = _without_status(body, keep_blank=True)
     start = None
     for i in range(len(lines) - 1, -1, -1):
         s = lines[i].lstrip()

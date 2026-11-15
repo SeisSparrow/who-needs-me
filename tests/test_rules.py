@@ -369,3 +369,20 @@ def test_content_key_survives_a_resize_but_not_new_content():
     assert content_key(ticking) == content_key(wide)
     answered = claude_screen([*wrapped(40)[3:], *table, *end, "", "❯ Approved."])
     assert content_key(answered) != content_key(narrow)
+
+
+def test_a_wrapped_finished_turn_line_is_not_content():
+    from who_needs_me.rules import content_key, evaluate
+
+    msg = ["● The regression is running in the background.", "  It should end around 09:40."]
+    wide = claude_screen([*msg, "✻ Cogitated for 3m 43s · done 9:09 AM · 2 shells still running"])
+    # the same screen in a pane too narrow for the status line
+    narrow = claude_screen(
+        [*msg, "✻ Cogitated for 3m 43s · done 9:09 AM · 2 shells still", "  running"]
+    )
+    assert content_key(wide) == content_key(narrow)
+    assert evaluate(narrow).last_message == evaluate(wide).last_message
+    assert evaluate(narrow).facts["who_spoke_last"] == "assistant"
+    # a real new message after the status line still counts
+    more = claude_screen([*msg, "✻ Cogitated for 3m 43s · done 9:09 AM", "● One more thing."])
+    assert content_key(more) != content_key(wide)
