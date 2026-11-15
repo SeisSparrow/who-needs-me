@@ -98,6 +98,30 @@ class Board:
             ]
         return times
 
+    def feeds(self) -> list[dict]:
+        """One entry per capture loop writing into this folder: how long ago it last ran,
+        which sessions it saw, and its error if it failed. Empty for captures made by
+        something that writes no heartbeat (replay data, an older capture loop)."""
+        out = []
+        now = datetime.now(UTC)
+        for path in sorted(self.captures.glob(".heartbeat-*.json")):
+            try:
+                rec = json.loads(path.read_text(encoding="utf-8"))
+                seen = datetime.strptime(rec["ts"], TS_FMT).replace(tzinfo=UTC)
+            except (OSError, ValueError, KeyError):
+                continue
+            out.append(
+                {
+                    "source": redact(
+                        str(rec.get("source", "")), load_local_denylist(self.denylist)
+                    ),
+                    "age_s": round((now - seen).total_seconds(), 1),
+                    "sessions": rec.get("sessions", []),
+                    "error": rec.get("error", ""),
+                }
+            )
+        return out
+
     def _acked(self) -> set[tuple[str, str]]:
         if not self.acks_path.exists():
             return set()
@@ -141,6 +165,9 @@ class Board:
             answers = {latest[n].id: by_sha[sha] for n, sha in sha_of.items()}
 
         acked = self._acked()
+        feeds = [] if at else self.feeds()
+        # a session no capture loop lists any more has ended (or was renamed)
+        listed = {name for f in feeds if not f["error"] for name in f["sessions"]}
         rows = []
         for name, l0 in l0s.items():
             s = latest[name]
@@ -157,13 +184,14 @@ class Board:
                 "model_called": a is not None,
                 "latency_s": answers.get(s.id, {}).get("latency_s"),
                 "sticky": None,
+                "gone": bool(listed) and name not in listed,
             }
             if use_sticky:
                 self._apply_sticky(row, keys[name], acked)
             rows.append(row)
         if use_sticky and not at:
             self.sticky_path.write_text(json.dumps(self.sticky, indent=1))
-        rows.sort(key=lambda r: (ORDER.get(rank(r), 9), r["session"]))
+        rows.sort(key=lambda r: (r["gone"], ORDER.get(rank(r), 9), r["session"]))
         counts: dict[str, int] = defaultdict(int)
         for r in rows:
             counts[rank(r)] += 1
@@ -171,6 +199,7 @@ class Board:
             "generated_at": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
             "as_of": at or (max((s.ts for s in latest.values()), default="")),
             "live": at is None,
+            "feeds": [{k: f[k] for k in ("source", "age_s", "error")} for f in feeds],
             "model": self.use_model,
             "counts": dict(counts),
             "sessions": rows,
@@ -280,7 +309,8 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="who-needs-me dashboard")
     ap.add_argument("--captures", type=Path, default=Path("captures"))
     ap.add_argument("--state", type=Path, default=Path("state"))
-    ap.add_argument("--every", type=float, default=30)
+    ap.add_argument("--every", type=float, default=1, help="seconds between re-reads of the folder")
+    ap.add_argument("--settle", type=float, default=0.5, help="ignore files newer than this (s)")
     ap.add_argument("--host", default="127.0.0.1")
     ap.add_argument("--port", type=int, default=8765)
     ap.add_argument(
@@ -294,7 +324,9 @@ def main(argv: list[str] | None = None) -> int:
     )
     ap.add_argument("--no-model", action="store_true", help="rules only, no API calls")
     args = ap.parse_args(argv)
-    board = Board(args.captures, args.state, use_model=not args.no_model)
+    board = Board(
+        args.captures, args.state, use_model=not args.no_model, settle_seconds=args.settle
+    )
     cache: dict = {}
 
     def poll():

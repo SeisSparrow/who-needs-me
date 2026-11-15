@@ -112,6 +112,7 @@ let times = [], replay = false;
 let following = true;   // live mode: the slider is at its right end and the page follows new captures
 let sel = null;         // the moment being viewed when not following
 let viewLive = false;   // the snapshot on screen is the live one (so Dismiss makes sense)
+let hasFeeds = false;   // the capture loops report a heartbeat, so staleness is known exactly
 
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c =>
   ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -144,7 +145,8 @@ function card(r, asOf) {
   const reason = r.state === "needs_human" ? ` · ${esc(r.human_reason)}` : "";
   const tags = [
     `<span class="tag by-${r.decided_by}">decided by ${r.decided_by}</span>`,
-    behind > 60 ? `<span class="tag warn">no capture for ${span(behind)}</span>` : "",
+    r.gone ? `<span class="tag warn">session ended</span>` : "",
+    !hasFeeds && behind > 150 ? `<span class="tag warn">no capture for ${span(behind)}</span>` : "",
     r.sticky ? `<span class="tag">held since ${ts(r.sticky.since)}</span>` : "",
     r.current_state ? `<span class="tag">now: ${esc(LABEL[r.current_state])}</span>` : "",
     f.stale_minutes != null ? `<span class="tag">unchanged ${f.stale_minutes} min</span>` : "",
@@ -181,9 +183,17 @@ function render(snap) {
   viewLive = !!snap.live && !replay;
   let note = "";
   if (!replay && !snap.live) note = ` · <span class="warn">history: shown as judged at that moment</span>`;
-  if (viewLive && snap.as_of) {
+  const feeds = snap.feeds || [];
+  hasFeeds = feeds.length > 0;
+  if (viewLive && hasFeeds) {
+    const lag = (Date.now() - Date.parse(snap.generated_at)) / 1000;   // the board itself may have stopped
+    const bad = feeds.filter(f => f.error || f.age_s + lag > 20);
+    if (bad.length) note = ` · <span class="err">` + bad.map(f => f.error
+      ? `capture from ${esc(f.source)} failing: ${esc(f.error)}`
+      : `capture from ${esc(f.source)} stopped ${span(f.age_s + lag)} ago`).join("; ") + `</span>`;
+  } else if (viewLive && snap.as_of) {
     const age = (Date.now() - ms(snap.as_of)) / 1000;
-    if (age > 60) note = ` · <span class="err">no new capture for ${span(age)} — is the capture loop running?</span>`;
+    if (age > 150) note = ` · <span class="err">no new capture for ${span(age)} — is the capture loop running?</span>`;
   }
   document.getElementById("sub").innerHTML =
     `${snap.sessions.length} sessions · as of ${ts(snap.as_of)} · ` +
@@ -260,7 +270,7 @@ document.getElementById("golive").addEventListener("click", () => {
   if (!replay) setInterval(async () => {
     try { await refreshTimes(); } catch (e) { /* load() reports an unreachable board */ }
     if (following) load(); else label();
-  }, 5000);
+  }, 2000);
 })();
 </script>
 </body>

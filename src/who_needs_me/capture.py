@@ -13,6 +13,7 @@ Output per session and capture: ``<UTC ts>_<session>.ansi`` (with colors) and
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import shlex
 import subprocess
@@ -24,6 +25,15 @@ from pathlib import Path
 from who_needs_me.redact import strip_ansi
 
 ALLOWED_SUBCOMMANDS = frozenset({"list-panes", "capture-pane"})
+# One ssh connection is kept open and reused: a capture round is several tmux calls, and a new
+# connection for each one is what made the board lag. BatchMode: never prompt, fail instead.
+SSH_OPTS = [
+    *("-o", "BatchMode=yes"),
+    *("-o", "ConnectTimeout=8"),
+    *("-o", "ControlMaster=auto"),
+    *("-o", "ControlPath=~/.ssh/wnm-%C"),
+    *("-o", "ControlPersist=120"),
+]
 Runner = Callable[..., subprocess.CompletedProcess]
 PANE_FORMAT = (
     "#{session_name}\t#{session_name}:#{window_index}.#{pane_index}"
@@ -40,7 +50,7 @@ def tmux(args: list[str], ssh: str | None = None, runner: Runner = subprocess.ru
         raise ForbiddenTmuxCommand(f"refusing tmux {args[:1]}: read-only capture only")
     cmd = ["tmux", *args]
     if ssh:
-        cmd = ["ssh", ssh, shlex.join(cmd)]
+        cmd = ["ssh", *SSH_OPTS, ssh, shlex.join(cmd)]
     return runner(cmd, capture_output=True, text=True, check=True, timeout=20).stdout
 
 
@@ -69,15 +79,30 @@ def capture_once(
     only: set[str] | None = None,
     runner: Runner = subprocess.run,
     now: datetime | None = None,
+    seen: dict | None = None,
+    keepalive: float = 60,
 ) -> list[Path]:
-    ts = (now or datetime.now(UTC)).strftime("%Y%m%dT%H%M%SZ")
+    """Capture every session once. With ``seen`` (kept by the caller between rounds), a
+    screen that has not changed is written again only every ``keepalive`` seconds, so a
+    fast loop does not fill the folder with identical files; the heartbeat file says the
+    loop is alive in between."""
+    when = now or datetime.now(UTC)
+    ts = when.strftime("%Y%m%dT%H%M%SZ")
     out_dir.mkdir(parents=True, exist_ok=True)
     written = []
+    names = []
     for p in list_sessions(ssh, runner):
         if only and p["session"] not in only:
             continue
+        names.append(p["session"])
         args = ["capture-pane", "-p", "-e", "-t", p["target"], "-S", f"-{lines}"]
         ansi = tmux(args, ssh, runner)
+        if seen is not None:
+            old = seen.get(p["session"])
+            same = old and old[0] == (p["command"], ansi)
+            if same and (when - old[1]).total_seconds() < keepalive:
+                continue
+            seen[p["session"]] = ((p["command"], ansi), when)
         stem = f"{ts}_{safe_name(p['session'])}"
         # .ansi first, .txt last: the reader treats a capture as present once .txt exists
         for suffix, text in ((".ansi", ansi), (".txt", f"{p['command']}\n{strip_ansi(ansi)}")):
@@ -85,7 +110,21 @@ def capture_once(
             tmp.write_text(text, encoding="utf-8")
             tmp.replace(out_dir / f"{stem}{suffix}")
         written.append(out_dir / f"{stem}.txt")
+    if seen is not None:
+        heartbeat(out_dir, ssh, ts, names)
     return written
+
+
+def heartbeat(
+    out_dir: Path, ssh: str | None, ts: str, sessions: list[str], error: str = ""
+) -> None:
+    """Tell the board this loop is alive, which sessions exist, and why it failed if it did."""
+    out_dir.mkdir(parents=True, exist_ok=True)
+    rec = {"ts": ts, "source": ssh or "local", "sessions": sessions, "error": error}
+    path = out_dir / f".heartbeat-{safe_name(ssh or 'local')}.json"
+    tmp = path.with_suffix(".tmp")
+    tmp.write_text(json.dumps(rec), encoding="utf-8")
+    tmp.replace(path)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -95,13 +134,40 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--every", type=float, default=0, help="seconds between captures; 0 = once")
     ap.add_argument("--lines", type=int, default=60)
     ap.add_argument("--session", action="append", help="only these sessions (repeatable)")
+    ap.add_argument(
+        "--keepalive", type=float, default=60, help="rewrite an unchanged screen this often (s)"
+    )
     args = ap.parse_args(argv)
     only = set(args.session) if args.session else None
-    while True:
+    if not args.every:
         files = capture_once(args.out, args.ssh, args.lines, only)
         print(f"{datetime.now(UTC):%H:%M:%S} captured {len(files)} sessions")
-        if not args.every:
-            return 0
+        return 0
+    seen: dict = {}
+    last_error = None
+    while True:
+        try:
+            files = capture_once(
+                args.out, args.ssh, args.lines, only, seen=seen, keepalive=args.keepalive
+            )
+            if files or last_error:
+                print(
+                    f"{datetime.now(UTC):%H:%M:%S} wrote {len(files)} changed screens", flush=True
+                )
+            last_error = None
+        except (subprocess.SubprocessError, OSError) as e:
+            # keep going: a dropped network, or an ssh check that needs a person, must not
+            # end the loop; the board shows the reason from the heartbeat
+            detail = (getattr(e, "stderr", None) or str(e)).strip()
+            error = (
+                "ssh needs a login check"
+                if "additional check" in detail
+                else detail.splitlines()[-1][:160]
+            )
+            if error != last_error:
+                print(f"{datetime.now(UTC):%H:%M:%S} capture failed: {error}", flush=True)
+            last_error = error
+            heartbeat(args.out, args.ssh, datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ"), [], error)
         time.sleep(args.every)
 
 

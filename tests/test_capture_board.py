@@ -19,7 +19,7 @@ class FakeTmux:
 
     def __call__(self, cmd, **kw):
         self.calls.append(cmd)
-        argv = cmd if cmd[0] == "tmux" else cmd[2].split()
+        argv = cmd if cmd[0] == "tmux" else cmd[-1].split()
         if argv[1] == "list-panes":
             out = "".join(f"{s}\t{s}:0.0\tclaude\t11\n" for s in self.screens)
         else:
@@ -49,7 +49,8 @@ def test_capture_once_writes_classifier_format(tmp_path):
 def test_capture_over_ssh_only_reads(tmp_path):
     fake = FakeTmux({"a": "x\n"})
     capture_once(tmp_path, ssh="vm", runner=fake)
-    assert all(c[:2] == ["ssh", "vm"] for c in fake.calls)
+    assert all(c[0] == "ssh" and c[-2] == "vm" for c in fake.calls)
+    assert all("BatchMode=yes" in c and "ControlMaster=auto" in c for c in fake.calls)
     assert not any("send-keys" in " ".join(c) for c in fake.calls)
 
 
@@ -219,3 +220,57 @@ def test_hold_ends_when_a_person_replies_in_the_session(tmp_path, monkeypatch):
     )
     done = row()
     assert done["state"] == "idle_done" and done["sticky"] is None
+
+
+# ---- a fast capture loop: unchanged screens are skipped, a heartbeat says it is alive
+
+
+def test_unchanged_screens_are_skipped_and_heartbeat_is_written(tmp_path):
+    fake = FakeTmux({"a": "same\n", "b": "one\n"})
+    seen: dict = {}
+    t0 = datetime(2026, 11, 13, 20, 0, 0, tzinfo=UTC)
+    at = lambda s: t0.replace(second=s % 60, minute=s // 60)  # noqa: E731
+
+    assert len(capture_once(tmp_path, runner=fake, now=at(0), seen=seen)) == 2
+    fake.screens["b"] = "two\n"
+    assert [p.name for p in capture_once(tmp_path, runner=fake, now=at(2), seen=seen)] == [
+        "20261113T200002Z_b.txt"
+    ]  # only the screen that changed
+    assert capture_once(tmp_path, runner=fake, now=at(4), seen=seen) == []
+    # an unchanged screen is written again after the keepalive, so staleness stays measurable
+    assert len(capture_once(tmp_path, runner=fake, now=at(70), seen=seen, keepalive=60)) == 2
+
+    beat = json.loads((tmp_path / ".heartbeat-local.json").read_text())
+    assert beat["ts"] == "20261113T200110Z" and beat["sessions"] == ["a", "b"] and not beat["error"]
+
+
+def test_board_reports_feeds_and_sessions_that_ended(tmp_path):
+    cap = tmp_path / "cap"
+    cap.mkdir()
+    write(cap, "20261113T200000Z", "a", IDLE_DONE)
+    write(cap, "20261113T200000Z", "old", IDLE_DONE)
+    board = Board(
+        cap, tmp_path / "s", use_model=False, settle_seconds=0, denylist=tmp_path / "none"
+    )
+    assert board.snapshot()["feeds"] == []  # no heartbeat: nothing is claimed about freshness
+    assert not any(r["gone"] for r in board.snapshot()["sessions"])
+
+    now = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
+    (cap / ".heartbeat-local.json").write_text(
+        json.dumps({"ts": now, "source": "local", "sessions": ["a"], "error": ""})
+    )
+    snap = board.snapshot()
+    assert snap["feeds"][0]["age_s"] < 5 and snap["feeds"][0]["error"] == ""
+    assert {r["session"]: r["gone"] for r in snap["sessions"]} == {"a": False, "old": True}
+    assert snap["sessions"][-1]["session"] == "old"  # ended sessions sort last
+
+    # a failing loop reports why, and its (empty) session list does not mark anything as ended
+    (cap / ".heartbeat-local.json").write_text(
+        json.dumps(
+            {"ts": now, "source": "local", "sessions": [], "error": "ssh needs a login check"}
+        )
+    )
+    snap = board.snapshot()
+    assert snap["feeds"][0]["error"] == "ssh needs a login check"
+    assert not any(r["gone"] for r in snap["sessions"])
+    assert board.snapshot(at="20261113T200000Z", sticky=False)["feeds"] == []  # history: no feeds
