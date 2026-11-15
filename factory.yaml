@@ -9,12 +9,13 @@ layer0:
     trust_prompt: true       # "Yes, I trust this folder" dialog        -> needs_human: machine
     busy: true               # spinner "Word… (" or "esc to interrupt"  -> busy
     empty_session: true      # welcome banner, no conversation yet       -> idle_done (added after eval 1)
+    prompt_submitted: true   # a person or another session spoke last   -> busy (added 11-15, see README)
     tripwire: true           # keywords in the last message             -> needs_human: <reason>
     ghost_text: true         # dim (ESC[2m) suggestion in the input box -> stripped, flagged
     stale_background: true   # unchanged for N min + background task    -> flagged (fact only)
 
   # precedence when several decisive rules fire (first wins)
-  precedence: [dropped_to_shell, auth_error, trust_prompt, busy, empty_session, tripwire]
+  precedence: [dropped_to_shell, auth_error, trust_prompt, busy, empty_session, prompt_submitted, tripwire]
 
   shell_commands: [bash, zsh, sh, fish, dash, ksh, tcsh]
   stale_minutes_threshold: 30

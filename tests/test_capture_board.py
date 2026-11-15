@@ -174,3 +174,48 @@ def test_timeline_window_and_stale_minutes_from_the_index(tmp_path):
     assert board.snapshot()["sessions"][0]["facts"]["stale_minutes"] == 480
     past = board.snapshot(at="20261113T195000Z", sticky=False)
     assert past["sessions"][0]["facts"]["stale_minutes"] == 470
+
+
+def test_hold_ends_when_a_person_replies_in_the_session(tmp_path, monkeypatch):
+    monkeypatch.setenv("GEMINI_API_KEY", "k")
+    cap = tmp_path / "cap"
+    cap.mkdir()
+
+    def fake(url, headers, body, timeout):
+        wants = {"deploy": 0.95} if "deploy" in body["input"] else {}
+        choice = "awaiting_approval" if wants else "reporting_done"
+        return 200, {"answers": answers(choice, 0.9, **wants), "usage": {}}
+
+    ask = [
+        "● Ready. I will deploy to production once you approve.",
+        "",
+        "✻ Baked for 3s · done 7:02 PM",
+    ]
+    board = Board(
+        cap, tmp_path / "state", transport=fake, settle_seconds=0, denylist=tmp_path / "none"
+    )
+    row = lambda: next(r for r in board.snapshot()["sessions"] if r["session"] == "menu")  # noqa: E731
+
+    write(cap, "20261113T200000Z", "menu", claude_screen(ask))
+    assert row()["state"] == "needs_human"
+
+    # another session's message wakes it up: nobody has answered the request, so it stays held
+    write(cap, "20261113T200100Z", "menu", claude_screen([*ask, "", "› Message from @infra: fyi"]))
+    held = row()
+    assert held["state"] == "needs_human" and held["current_state"] == "busy"
+
+    # a person replies in the session: the hold ends without a Dismiss
+    replied = claude_screen([*ask, "", "❯ Approved. Deploy it."], status="  ⏵⏵ esc to interrupt")
+    write(cap, "20261113T200200Z", "menu", replied)
+    now = row()
+    assert now["state"] == "busy" and now["sticky"] is None and now["released_by_reply"]
+
+    # the session finishes and asks for nothing: it is not flagged again
+    write(
+        cap,
+        "20261113T200300Z",
+        "menu",
+        claude_screen([*ask, "", "❯ Approved. Deploy it.", "", *IDLE_DONE.split("\n")[3:8]]),
+    )
+    done = row()
+    assert done["state"] == "idle_done" and done["sticky"] is None

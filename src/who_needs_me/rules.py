@@ -36,6 +36,7 @@ DONE_RE = re.compile(r"^\s*[·✢✳✶✻✽*]\s+\S+ for .*·\s*done\b")
 NOISE_RE = re.compile(r"✔ Update installed|/restart to apply")
 TOOL_CALL_RE = re.compile(r"^●\s+[A-Z][A-Za-z]*\(")
 USER_PROMPT_RE = re.compile(r"^[>❯]\s\S")
+PEER_MSG_RE = re.compile(r"^›\s")  # a message delivered from another session, not typed by a person
 SHELL_PROMPT_RE = re.compile(r"^(?:\S+@\S+:\S*\s?[$#]|[$#%])(?:\s.*)?$")
 BACKGROUND_RE = re.compile(r"\b\d+\s+(?:shells?|background tasks?|bash)\b|\bbackground\b", re.I)
 AUTH_ERROR_RE = re.compile(
@@ -145,6 +146,56 @@ def last_message(body: list[str], max_lines: int = 40) -> str:
     return "\n".join(block[-max_lines:])
 
 
+def who_spoke_last(body: list[str]) -> tuple[str, str]:
+    """Who has the last word on the screen, and the text of the newest prompt a person typed.
+
+    Returns (who, prompt): who is "assistant", "user", "peer" or "none".
+
+    A person's reply to a request shows up as a prompt block below it; reading the request
+    again as if it were still open is the mistake this prevents. Read from the bottom:
+    a finished-turn line ("… · done 9:44 AM") or a ● line means the assistant spoke last, a
+    ❯ line means a person did, a › line means another session did. If the window holds
+    nothing but unmarked text with no finished-turn line under it, that text is a long
+    prompt that was just submitted (its ❯ line has scrolled off), not the assistant's.
+    Slash commands (/clear, /model) are not prompts to the agent.
+    """
+    lines = [x for x in body if x.strip() and not NOISE_RE.search(x) and not SPINNER_RE.match(x)]
+
+    def prompt_block(i: int) -> str:
+        out = [lines[i].lstrip()[1:].strip()]
+        for x in lines[i + 1 :]:
+            t = x.lstrip()
+            if t.startswith("●") or DONE_RE.match(x) or PEER_MSG_RE.match(t) or _is_prompt(x):
+                break
+            out.append(x.strip())
+        return "\n".join(out)
+
+    newest_prompt = ""
+    for i in range(len(lines) - 1, -1, -1):
+        if _is_prompt(lines[i]) and not lines[i].lstrip()[1:].strip().startswith("/"):
+            newest_prompt = prompt_block(i)
+            break
+    for i in range(len(lines) - 1, -1, -1):
+        x = lines[i]
+        t = x.lstrip()
+        if DONE_RE.match(x) or t.startswith("●"):
+            return "assistant", newest_prompt
+        if PEER_MSG_RE.match(t):
+            return "peer", newest_prompt
+        if _is_prompt(x):
+            if t[1:].strip().startswith("/"):
+                return "none", newest_prompt
+            return "user", newest_prompt
+    if lines and not any(BANNER_RE.search(x) for x in lines):
+        return "user", "\n".join(x.strip() for x in lines)
+    return "none", newest_prompt
+
+
+def _is_prompt(line: str) -> bool:
+    """A submitted prompt starts at the left edge; "> quote" inside a message is indented."""
+    return len(line) - len(line.lstrip()) <= 1 and bool(USER_PROMPT_RE.match(line.lstrip()))
+
+
 def content_key(screen: str) -> str:
     """Hash of the screen with volatile parts (spinner timers, input box, status) removed,
     so a session that only ticks its timer still counts as unchanged."""
@@ -234,6 +285,15 @@ def rule_busy(p: Parsed) -> Hit | None:
     line = _first(SPINNER_RE, [x for x in p.body if x.strip()][-4:])
     line = line or _first(re.compile(r"esc to interrupt"), p.status)
     return Hit("busy", "busy", "none", line) if line else None
+
+
+def rule_prompt_submitted(p: Parsed, who: str, prompt: str) -> Hit | None:
+    """Someone has just given the session input and it has not answered yet: it is working,
+    or about to. Whatever it asked before has been answered."""
+    if not p.has_box or who not in ("user", "peer"):
+        return None
+    first = next((x for x in prompt.split("\n") if x.strip()), "") if who == "user" else ""
+    return Hit("prompt_submitted", "busy", "none", f"❯ {first[:100]}" if first else "new input")
 
 
 def rule_empty_session(p: Parsed) -> Hit | None:
@@ -331,7 +391,9 @@ def evaluate(
     cfg = config or load_config()
     on = cfg["rules"]
     p = parse(screen)
-    msg = last_message(p.body, cfg["last_message_max_lines"])
+    who, prompt = who_spoke_last(p.body) if p.has_box else ("none", "")
+    # an answered request is no longer the session's last word
+    msg = "" if who in ("user", "peer") else last_message(p.body, cfg["last_message_max_lines"])
     background = bool(_first(BACKGROUND_RE, p.status))
 
     hits: list[Hit | None] = []
@@ -345,6 +407,8 @@ def evaluate(
         hits.append(rule_busy(p))
     if on.get("empty_session"):
         hits.append(rule_empty_session(p))
+    if on.get("prompt_submitted"):
+        hits.append(rule_prompt_submitted(p, who, prompt))
     if on.get("tripwire"):
         hits.append(rule_tripwire(msg, cfg))
     typed, ghost = "", ""
@@ -364,6 +428,8 @@ def evaluate(
         "ghost_text_ignored": bool(ghost),
         "user_typing": bool(typed),
         "last_error_line": errors[-1].strip() if errors else "",
+        "who_spoke_last": who,
+        "last_prompt_key": hashlib.sha256(prompt.encode()).hexdigest()[:12] if prompt else "",
     }
     last_line = next((x for x in reversed(msg.split("\n")) if x.strip()), "")
     return Layer0(facts, [h for h in hits if h], msg, last_line.strip(), cfg)

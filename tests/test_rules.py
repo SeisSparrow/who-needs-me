@@ -283,3 +283,59 @@ def test_rules_can_be_switched_off():
     cfg = load_config()
     off = {**cfg, "rules": {**cfg["rules"], "dropped_to_shell": False}}
     assert evaluate(IDLE_DONE, "bash", config=off).verdict() is None
+
+
+# ---- who spoke last: a request that has been answered is not open any more
+
+ASK = [
+    "● The patch is ready on the release branch.",
+    "  Going live needs one restart, and I will deploy once you approve.",
+    "",
+    "✻ Brewed for 12s · done 8:20 AM",
+]
+
+
+def test_request_then_a_persons_reply_is_busy_not_a_request():
+    from who_needs_me.rules import evaluate
+
+    waiting = evaluate(claude_screen(ASK))
+    assert waiting.facts["who_spoke_last"] == "assistant"
+    assert "once you approve" in waiting.last_message
+
+    answered = evaluate(claude_screen([*ASK, "", "❯ I approve. Deploy it, then report the SHA."]))
+    assert answered.facts["who_spoke_last"] == "user"
+    assert answered.last_message == ""  # the request is not read again as if still open
+    assert answered.verdict().rule == "prompt_submitted" and answered.verdict().state == "busy"
+    assert "tripwire" not in rules_of(answered)
+    assert answered.facts["last_prompt_key"] and not waiting.facts["last_prompt_key"]
+
+
+def test_a_long_prompt_whose_first_line_scrolled_off_is_not_the_assistants_message():
+    from who_needs_me.rules import evaluate
+
+    tail_of_prompt = [
+        "  the plan is written; report it to me and I will pass it to the user.",
+        "  Redeploying the fix: I am asking the user and waiting for his answer.",
+    ]
+    l0 = evaluate(claude_screen(tail_of_prompt))
+    assert l0.facts["who_spoke_last"] == "user" and l0.last_message == ""
+    assert l0.verdict().state == "busy"
+    # the same text under a finished-turn line is the assistant's own long message
+    own = evaluate(claude_screen([*tail_of_prompt, "", "✻ Cooked for 2m · done 8:24 AM"]))
+    assert (
+        own.facts["who_spoke_last"] == "assistant" and "waiting for his answer" in own.last_message
+    )
+
+
+def test_who_spoke_last_edge_cases():
+    from who_needs_me.rules import who_spoke_last
+
+    assert who_spoke_last(["● Done.", "✻ Baked for 3s · done 7:02 PM"])[0] == "assistant"
+    assert who_spoke_last(["● Done.", "› Message from @infra: your turn"])[0] == "peer"
+    assert who_spoke_last(["● Done.", "❯ /clear"])[0] == "none"  # a slash command is not a prompt
+    # a markdown quote inside a message is indented, so it is not a prompt
+    who, prompt = who_spoke_last(["● You wrote:", "  > deploy it", "  I will, once you approve."])
+    assert (who, prompt) == ("assistant", "")
+    # the newest prompt is reported even when the assistant has answered since
+    who, prompt = who_spoke_last(["❯ first", "● ok", "❯ second line one", "  line two", "● done"])
+    assert who == "assistant" and prompt == "second line one\nline two"

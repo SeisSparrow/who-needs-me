@@ -178,6 +178,14 @@ class Board:
 
     def _apply_sticky(self, row: dict, key: str, acked: set) -> None:
         name = row["session"]
+        prompt_key = row["facts"].get("last_prompt_key", "")
+        held = self.sticky.get(name)
+        # A person typed a new prompt into the session after the flag was raised: the request
+        # has been answered there, so the hold ends. Other activity (a background task waking
+        # the session, a message from another session) does not end it.
+        if held and prompt_key and prompt_key != held.get("prompt_key", ""):
+            self.sticky.pop(name)
+            row["released_by_reply"] = True
         if row["state"] == "needs_human" and (name, key) not in acked:
             cur = self.sticky.get(name)
             if not cur or cur["content_key"] != key:
@@ -188,6 +196,7 @@ class Board:
                     "evidence": row["evidence"],
                     "capture": row["capture"],
                     "tier": row.get("tier"),
+                    "prompt_key": prompt_key,
                 }
         held = self.sticky.get(name)
         if held and (name, held["content_key"]) in acked:
