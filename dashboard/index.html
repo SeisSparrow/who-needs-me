@@ -31,6 +31,10 @@
   .count b { font-variant-numeric: tabular-nums; }
   .replay { display: flex; align-items: center; gap: 10px; margin: 0 0 16px; flex-wrap: wrap; }
   .replay input { flex: 1; min-width: 0; }
+  button.live { font: inherit; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px;
+    border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; margin: 0; }
+  button.live.on { color: var(--red); border-color: var(--red); background: var(--red-bg); cursor: default; }
+  .warn { color: var(--amber); }
   .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
           margin: 0 0 10px; overflow: hidden; border-left: 5px solid var(--line); }
   .card.red { border-left-color: var(--red); }
@@ -91,9 +95,10 @@
   </header>
   <div class="counts" id="counts"></div>
   <div class="replay" id="replay" hidden>
-    <span class="sub">replay</span>
-    <input type="range" id="slider" min="0" max="0" value="0">
+    <span class="sub" id="rlabel">history</span>
+    <input type="range" id="slider" min="0" max="0" value="0" aria-label="time">
     <span class="sub" id="at"></span>
+    <button class="live" id="golive" hidden>● LIVE</button>
   </div>
   <div id="list"></div>
 </div>
@@ -104,10 +109,18 @@ const ORDER = ["red", "yellow", "dropped_to_shell", "waiting_reply", "idle_done"
 const kind = r => r.state === "needs_human" ? (r.tier || "red") : r.state;
 const open = new Set();
 let times = [], replay = false;
+let following = true;   // live mode: the slider is at its right end and the page follows new captures
+let sel = null;         // the moment being viewed when not following
+let viewLive = false;   // the snapshot on screen is the live one (so Dismiss makes sense)
 
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c =>
   ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const ts = t => t ? `${t.slice(9, 11)}:${t.slice(11, 13)} UTC` : "";
+const ms = t => Date.UTC(+t.slice(0, 4), +t.slice(4, 6) - 1, +t.slice(6, 8), +t.slice(9, 11), +t.slice(11, 13), +t.slice(13, 15));
+const span = sec => sec < 90 ? `${Math.round(sec)} s` : sec < 5400 ? `${Math.round(sec / 60)} min`
+  : `${Math.floor(sec / 3600)} h ${Math.round(sec % 3600 / 60)} min`;
+const local = t => new Date(ms(t)).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+const slider = () => document.getElementById("slider");
 
 function probRows(p) {
   if (!p) return "";
@@ -125,11 +138,13 @@ function probRows(p) {
      style="width:${(v * 100).toFixed(0)}%"></i></span><span>${v.toFixed(2)}</span>`).join("")}</div>`;
 }
 
-function card(r) {
+function card(r, asOf) {
   const f = r.facts || {};
+  const behind = asOf && r.captured_at ? (ms(asOf) - ms(r.captured_at)) / 1000 : 0;
   const reason = r.state === "needs_human" ? ` · ${esc(r.human_reason)}` : "";
   const tags = [
     `<span class="tag by-${r.decided_by}">decided by ${r.decided_by}</span>`,
+    behind > 60 ? `<span class="tag warn">no capture for ${span(behind)}</span>` : "",
     r.sticky ? `<span class="tag">held since ${ts(r.sticky.since)}</span>` : "",
     r.current_state ? `<span class="tag">now: ${esc(LABEL[r.current_state])}</span>` : "",
     f.stale_minutes != null ? `<span class="tag">unchanged ${f.stale_minutes} min</span>` : "",
@@ -153,7 +168,7 @@ function card(r) {
       ${r.probabilities ? `<h3>Decision model</h3>${probRows(r.probabilities)}` : ""}
       <h3>Last message (what the model read)</h3><pre>${esc(r.last_message || "(none)")}</pre>
       <h3>Receipts (computed by code)</h3><div class="facts">${factRows}</div>
-      ${r.sticky && !replay ? `<button data-ack="${esc(r.session)}">Dismiss — I've handled this</button>` : ""}
+      ${r.sticky && viewLive ? `<button data-ack="${esc(r.session)}">Dismiss — I've handled this</button>` : ""}
     </div>
   </div>`;
 }
@@ -163,17 +178,24 @@ function render(snap) {
   const head = `<span class="count"><b>${c.red || 0}</b> needs you · <b>${c.yellow || 0}</b> to check</span>`;
   document.getElementById("counts").innerHTML = head + ORDER.slice(2).filter(s => c[s]).map(s =>
     `<span class="count"><b>${c[s]}</b> ${LABEL[s]}</span>`).join("");
-  document.getElementById("sub").textContent =
+  viewLive = !!snap.live && !replay;
+  let note = "";
+  if (!replay && !snap.live) note = ` · <span class="warn">history: shown as judged at that moment</span>`;
+  if (viewLive && snap.as_of) {
+    const age = (Date.now() - ms(snap.as_of)) / 1000;
+    if (age > 60) note = ` · <span class="err">no new capture for ${span(age)} — is the capture loop running?</span>`;
+  }
+  document.getElementById("sub").innerHTML =
     `${snap.sessions.length} sessions · as of ${ts(snap.as_of)} · ` +
-    (snap.model ? "rules + Gemini Decision 1" : "rules only");
+    (snap.model ? "rules + Gemini Decision 1" : "rules only") + note;
   document.getElementById("list").innerHTML = snap.sessions.length
-    ? snap.sessions.map(card).join("") : `<div class="empty">No captures yet.</div>`;
+    ? snap.sessions.map(r => card(r, snap.as_of)).join("") : `<div class="empty">No captures yet.</div>`;
 }
 
 async function load() {
   try {
     let url = "/status.json";
-    if (replay && times.length) url += `?at=${times[+document.getElementById("slider").value]}`;
+    if ((replay || !following) && times.length) url += `?at=${times[+slider().value]}`;
     const r = await fetch(url);
     render(await r.json());
   } catch (e) {
@@ -194,20 +216,51 @@ document.getElementById("list").addEventListener("click", async e => {
   cardEl.classList.toggle("open");
 });
 
-(async () => {
+function label() {
+  const at = document.getElementById("at"), go = document.getElementById("golive");
+  document.getElementById("rlabel").textContent = replay ? "replay" : "history";
+  go.hidden = replay;
+  if (replay) { at.textContent = ts(times[+slider().value]); return; }
+  go.classList.toggle("on", following);
+  go.textContent = following ? "● LIVE" : "Go live ▸";
+  at.textContent = following || !sel ? "" : `${local(sel)} · ${span((Date.now() - ms(sel)) / 1000)} ago`;
+}
+
+// The slider covers every capture time. Its right end is live; anywhere else is a past moment.
+async function refreshTimes() {
   const t = await (await fetch("/timeline.json")).json();
   replay = t.replay; times = t.times;
-  if (replay && times.length) {
-    const sl = document.getElementById("slider");
-    document.getElementById("replay").hidden = false;
-    sl.max = times.length - 1; sl.value = times.length - 1;
-    const show = () => { document.getElementById("at").textContent = ts(times[sl.value]); };
-    sl.addEventListener("input", show);
-    sl.addEventListener("change", load);
-    show();
+  const sl = slider();
+  document.getElementById("replay").hidden = times.length < 2;
+  sl.max = Math.max(0, times.length - 1);
+  if (sel === null || (!replay && following)) {
+    sl.value = sl.max; sel = times[times.length - 1] || null;
+  } else {                       // keep pointing at the same moment as the timeline grows
+    const i = times.findIndex(x => x >= sel);
+    sl.value = i < 0 ? sl.max : i;
   }
-  load();
-  if (!replay) setInterval(load, 5000);
+  label();
+}
+
+slider().addEventListener("input", () => {
+  const sl = slider();
+  if (!replay) following = +sl.value >= +sl.max;
+  sel = times[+sl.value];
+  label();
+});
+slider().addEventListener("change", load);
+document.getElementById("golive").addEventListener("click", () => {
+  if (replay || following) return;
+  following = true; slider().value = slider().max; label(); load();
+});
+
+(async () => {
+  await refreshTimes();
+  await load();
+  if (!replay) setInterval(async () => {
+    try { await refreshTimes(); } catch (e) { /* load() reports an unreachable board */ }
+    if (following) load(); else label();
+  }, 5000);
 })();
 </script>
 </body>

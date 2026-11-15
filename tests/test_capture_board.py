@@ -110,3 +110,67 @@ def test_board_rules_only_and_replay(tmp_path):
     assert board.snapshot()["sessions"][0]["state"] == "dropped_to_shell"
     past = board.snapshot(at="20261113T200000Z", sticky=False)
     assert past["sessions"][0]["state"] == "idle_done"
+
+
+# ---- one board for live and history
+
+
+def test_model_is_asked_once_per_distinct_message(tmp_path, monkeypatch):
+    monkeypatch.setenv("GEMINI_API_KEY", "k")
+    cap = tmp_path / "cap"
+    cap.mkdir()
+    calls = []
+
+    def fake(url, headers, body, timeout):
+        calls.append(body["input"])
+        return 200, {"answers": answers("awaiting_approval", 0.9, deploy=0.95), "usage": {}}
+
+    ask = claude_screen(["● Ready. I will deploy to production once you approve."])
+    board = Board(
+        cap, tmp_path / "state", transport=fake, settle_seconds=0, denylist=tmp_path / "none"
+    )
+    # an idle session is captured again and again with the same screen
+    for ts in ("20261113T200000Z", "20261113T200005Z", "20261113T200010Z"):
+        write(cap, ts, "menu", ask)
+        row = board.snapshot()["sessions"][0]
+        assert (row["state"], row["human_reason"]) == ("needs_human", "deploy")
+    assert len(calls) == 1
+
+
+def test_history_is_available_next_to_live(tmp_path):
+    cap = tmp_path / "cap"
+    cap.mkdir()
+    board = Board(
+        cap, tmp_path / "s", use_model=False, settle_seconds=0, denylist=tmp_path / "none"
+    )
+    write(cap, "20261113T200000Z", "a", IDLE_DONE)
+    assert board.snapshot()["live"] is True
+    write(cap, "20261113T200200Z", "a", IDLE_DONE, cmd="bash")
+    write(cap, "20261113T200200Z", "b", IDLE_DONE)
+
+    live = board.snapshot()
+    assert {r["session"]: r["state"] for r in live["sessions"]} == {
+        "a": "dropped_to_shell",
+        "b": "idle_done",
+    }
+    past = board.snapshot(at="20261113T200100Z", sticky=False)  # between two captures
+    assert past["live"] is False and past["as_of"] == "20261113T200100Z"
+    assert [(r["session"], r["state"]) for r in past["sessions"]] == [("a", "idle_done")]
+    assert board.snapshot(at="20261113T195900Z", sticky=False)["sessions"] == []  # before any
+    assert not (tmp_path / "s" / "sticky.json").exists() or board.sticky == {}
+
+
+def test_timeline_window_and_stale_minutes_from_the_index(tmp_path):
+    cap = tmp_path / "cap"
+    cap.mkdir()
+    for ts in ("20261113T120000Z", "20261113T195000Z", "20261113T200000Z"):
+        write(cap, ts, "a", IDLE_DONE)
+    board = Board(
+        cap, tmp_path / "s", use_model=False, settle_seconds=0, denylist=tmp_path / "none"
+    )
+    assert len(board.timeline()) == 3
+    assert board.timeline(hours=1) == ["20261113T195000Z", "20261113T200000Z"]
+    # the same screen since 12:00: unchanged for 480 minutes, at 19:50 for 470
+    assert board.snapshot()["sessions"][0]["facts"]["stale_minutes"] == 480
+    past = board.snapshot(at="20261113T195000Z", sticky=False)
+    assert past["sessions"][0]["facts"]["stale_minutes"] == 470
