@@ -43,7 +43,7 @@ TOOL_CALL_RE = re.compile(r"^●\s+[A-Z][A-Za-z]*\(")
 # still running, the conversation compacted while idle. Nobody said them.
 NOTICE_RE = re.compile(
     r"^\s*●\s+(?:Compacted while idle|Task \".*|Background (?:task|command) )"
-    r"|^\s*⎿\s+Referenced file"
+    r"|^\s*⎿\s+(?:Referenced file|Read \S+ \(\d+ lines\))"
 )
 USER_PROMPT_RE = re.compile(r"^[>❯]\s\S")
 PEER_MSG_RE = re.compile(r"^›\s")  # a message delivered from another session, not typed by a person
