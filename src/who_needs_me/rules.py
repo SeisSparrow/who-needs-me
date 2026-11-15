@@ -196,10 +196,22 @@ def _is_prompt(line: str) -> bool:
     return len(line) - len(line.lstrip()) <= 1 and bool(USER_PROMPT_RE.match(line.lstrip()))
 
 
+# whitespace and box-drawing characters: both move when a pane is resized and its text re-wraps
+_WRAP_NOISE = re.compile(r"[\s\u2500-\u257f]+")
+KEY_TAIL_CHARS = 400
+
+
 def content_key(screen: str) -> str:
-    """Hash of the screen with volatile parts (spinner timers, input box, status) removed,
-    so a session that only ticks its timer still counts as unchanged."""
-    return hashlib.sha256("\n".join(_meaningful(parse(screen).body)).encode()).hexdigest()
+    """Identity of what the session is showing now: the end of the conversation, with volatile
+    parts (spinner timers, input box, status) removed, so a session that only ticks its timer
+    still counts as unchanged.
+
+    It must also survive the pane being resized (attaching from a different terminal re-wraps
+    every line and changes how much history is on screen). So line breaks, spacing and table
+    borders are dropped, and only the last ``KEY_TAIL_CHARS`` characters count: the end of the
+    conversation is on screen at any size, the top of the window is not."""
+    text = _WRAP_NOISE.sub("", "\n".join(_meaningful(parse(screen).body)))
+    return hashlib.sha256(text[-KEY_TAIL_CHARS:].encode()).hexdigest()
 
 
 def stale_minutes(series: list[tuple[str, str]]) -> int:

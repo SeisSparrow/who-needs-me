@@ -339,3 +339,33 @@ def test_who_spoke_last_edge_cases():
     # the newest prompt is reported even when the assistant has answered since
     who, prompt = who_spoke_last(["❯ first", "● ok", "❯ second line one", "  line two", "● done"])
     assert who == "assistant" and prompt == "second line one\nline two"
+
+
+def test_content_key_survives_a_resize_but_not_new_content():
+    from who_needs_me.rules import KEY_TAIL_CHARS, content_key
+
+    words = ("The migration is finished and verified against the old tables. " * 12).split()
+    assert len("".join(words)) > KEY_TAIL_CHARS  # the tail is all shared text
+
+    def wrapped(width: int) -> list[str]:
+        lines, cur = [], ""
+        for w in words:
+            if len(cur) + len(w) + 1 > width:
+                lines.append("  " + cur)
+                cur = w
+            else:
+                cur = f"{cur} {w}".strip()
+        return [*lines, "  " + cur]
+
+    table = ["  ┌─────────┬────────┐", "  │ Version │ Median │", "  └─────────┴────────┘"]
+    end = ["  I will deploy once you approve.", "✻ Brewed for 12s · done 8:20 AM"]
+    wide = claude_screen(
+        ["● Bash(pytest -q)", "  ⎿  40 passed", "● Report.", *wrapped(96), *table, *end]
+    )
+    # the same conversation in a narrower pane: re-wrapped, with less history above it
+    narrow = claude_screen([*wrapped(40)[3:], *table, *end])
+    assert content_key(wide) == content_key(narrow)
+    ticking = wide.replace("Brewed for 12s", "Brewed for 13s")  # a timer is not content
+    assert content_key(ticking) == content_key(wide)
+    answered = claude_screen([*wrapped(40)[3:], *table, *end, "", "❯ Approved."])
+    assert content_key(answered) != content_key(narrow)

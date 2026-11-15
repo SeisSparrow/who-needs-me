@@ -186,6 +186,7 @@ class Board:
                 "session": name,
                 "capture": s.id,
                 "captured_at": s.ts,
+                "content_key": keys[name][:12],
                 "pane_command": l0.facts["pane_command"],
                 **d.to_dict(),
                 "facts": l0.facts,
