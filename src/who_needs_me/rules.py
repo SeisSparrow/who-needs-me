@@ -516,8 +516,14 @@ def _receipts(tool: str, meta: dict, stale: int | None, on: dict) -> list[Hit]:
         by = f"{note['tool']} hook: {note['event']}"
         if note["kind"] == "approval":
             hits.append(Hit("hook_approval", "needs_human", "approval", by))
-        elif note["kind"] == "working" and (stale is None or stale < HOOK_WORKING_MAX_MINUTES):
-            # trusted only while the screen still moves: an interrupted turn fires no hook
+        elif (
+            note["kind"] == "working"
+            and (prof is None or prof.verified != "real")
+            and (stale is None or stale < HOOK_WORKING_MAX_MINUTES)
+        ):
+            # An interrupted turn fires no hook, so "working" can be out of date. It is used
+            # only for tools whose busy line has not been checked on a real screen, and only
+            # while the screen still moves.
             hits.append(Hit("hook_working", "busy", "none", by))
     return hits
 

@@ -58,6 +58,7 @@ EVENTS = {
     # blocked on a person
     "permissionrequest": "approval",
     "permissionasked": "approval",  # opencode
+    "permissionreplied": "working",  # opencode: the person answered
     "approvalrequested": "approval",
     # turn over
     "stop": "done",

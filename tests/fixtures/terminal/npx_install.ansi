@@ -1,0 +1,28 @@
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+dev@box:~/work$ npx cowsay-does-not-exist-wnm hello
+[1mnpm[0m [31merror[39m [94mcode[39m E404
+[1mnpm[0m [31merror[39m [94m404[39m Not Found - GET https://registry.npmjs.org/cowsay-does-not-exist-wnm - Not found
+[1mnpm[0m [31merror[39m [94m404[39m
+[1mnpm[0m [31merror[39m [94m404[39m  'cowsay-does-not-exist-wnm@*' is not in this registry.
+[1mnpm[0m [31merror[39m [94m404[39m
+[1mnpm[0m [31merror[39m [94m404[39m Note that you can also install from a
+[1mnpm[0m [31merror[39m [94m404[39m tarball, folder, http url, or git url.
+[1mnpm[0m [31merror[39m A complete log of this run can be found in: /Users/dev/.npm/_logs/2026-11-15T09_27_59_
+981Z-debug-0.log
+dev@box:~/work$
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,28 @@
+TMUX(1)                               General Commands Manual                              TMUX(1)
+
+[1mNAME[0m
+     [1mtmux[0m – terminal multiplexer
+
+[1mSYNOPSIS[0m
+     [1mtmux[0m [[1m-2CDhlNuVv[0m] [[1m-c[0m [4mshell-command[0m] [[1m-f[0m [4mfile[0m] [[1m-L[0m [4msocket-name[0m] [[1m-S[0m [4msocket-path[0m]
+          [[1m-T[0m [4mfeatures[0m] [[4mcommand[0m [[4mflags[0m]]
+
+[1mDESCRIPTION[0m
+     [1mtmux[0m is a terminal multiplexer: it enables a number of terminals to be created, accessed, and
+     controlled from a single screen.  [1mtmux[0m may be detached from a screen and continue running in
+     the background, then later reattached.
+
+     When [1mtmux[0m is started, it creates a new [4msession[0m with a single [4mwindow[0m and displays it on
+     screen.  A status line at the bottom of the screen shows information on the current session
+     and is used to enter interactive commands.
+
+     A session is a single collection of [4mpseudo[0m [4mterminals[0m under the management of [1mtmux[0m.  Each
+     session has one or more windows linked to it.  A window occupies the entire screen and may be
+     split into rectangular panes, each of which is a separate pseudo terminal (the pty(4) manual
+     page documents the technical details of pseudo terminals).  Any number of [1mtmux[0m instances may
+     connect to the same session, and any number of windows may be present in the same session.
+     Once all sessions are killed, [1mtmux[0m exits.
+
+     Each session is persistent and will survive accidental disconnection (such as ssh(1)
+     connection timeout) or intentional detaching (with the ‘C-b d’ key strokes).  [1mtmux[0m may be
+:

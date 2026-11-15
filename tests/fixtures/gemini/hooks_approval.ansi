@@ -1,0 +1,45 @@
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+dev@box:~/work$ . /Users/dev/wnm_demo_tmp/agents/home/key.sh; clear; gemini
+
+ [38;5;74m▝[38;5;110m▜[38;5;140m▄[38;5;139m [38;5;174m [39m   [1m[38;5;231mGemini CLI[0m[38;5;248m v0.68.0
+[39m [38;5;74m [38;5;110m [38;5;140m▝[38;5;139m▜[38;5;174m▄[39m
+ [38;5;74m [38;5;110m▗[38;5;140m▟[38;5;139m▀[38;5;174m [39m   [38;5;231mAuthenticated with gemini-api-key[38;5;248m /auth[39m
+ [38;5;74m▝[38;5;110m▀[38;5;140m  [38;5;139m [38;5;174m [39m
+
+
+[38;5;231mTips for getting started:[39m
+[38;5;231m1. Create [1mGEMINI.md[0m[38;5;231m files to customize your interactions[39m
+[38;5;231m2. [38;5;248m/help[38;5;231m for more information[39m
+[38;5;231m3. Ask coding questions, edit code or run commands[39m
+[38;5;231m4. Be specific for the best results[39m
+[48;5;240m
+ [38;5;183m> [38;5;231mRun this shell command and tell me its output in one line: touch /tmp/wnm_probe_file && ls -l[39m
+   [38;5;231m/tmp/wnm_probe_file[39m
+
+[38;5;183m[49m✦ [38;5;231mI will create a temporary probe file at [38;5;183m/tmp/wnm_probe_file[38;5;231m and list its details to check file creation.[39m
+
+[38;5;244m╭────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│[39m [1m[38;5;229m? Shell  [0m[38;5;231mtouch /tmp/wnm_probe_file && ls -l /tmp/wnm_probe_file[39m                                            [38;5;244m│
+│[39m [38;5;244m╭────────────────────────────────────────────────────────────────────────────────────────────────────────╮[39m [38;5;244m│
+│[39m [38;5;244m│[39m [38;5;152mtouch[38;5;231m /tmp/wnm_probe_file && [38;5;152mls[38;5;231m -l /tmp/wnm_probe_file[39m                                                 [38;5;244m│[39m [38;5;244m│
+│[39m [38;5;244m╰────────────────────────────────────────────────────────────────────────────────────────────────────────╯[39m [38;5;244m│
+│[39m Allow execution of [1m[38;5;229m[Shell][0m?                                                                                [38;5;244m│
+│[39m                                                                                                            [38;5;244m│
+│[39m [38;5;194m[48;5;28m●[39m [38;5;194m1.[39m [38;5;194mAllow once[39m               [49m                                                                             [38;5;244m│
+│[39m [38;5;231m [39m [38;5;231m2.[39m [38;5;231mAllow for this session[39m                                                                                [38;5;244m│
+│[39m [38;5;231m [39m [38;5;231m3.[39m [38;5;231mNo, suggest changes (esc)[39m                                                                             [38;5;244m│
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+
+
+
+
+
+
+
+
+
+

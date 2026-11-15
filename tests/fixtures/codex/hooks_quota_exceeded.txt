@@ -1,0 +1,41 @@
+codex
+
+  >_ OpenAI Codex (v0.169.0)
+     ~/wnm_demo_tmp/agents/who-needs-me
+
+
+› Say hello in one word.
+
+
+■ Quota exceeded. Check your plan and billing details.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+› Ask Codex to do anything
+
+  GPT-5.6-Sol medium · ~/wnm_demo_tmp/agents/who-needs-me
+  ← for agents · ? for shortcuts                                                    ⚠ 2 warnings · f2 to view

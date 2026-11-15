@@ -1,0 +1,29 @@
+bash
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+dev@box:~/work$ npx cowsay-does-not-exist-wnm hello
+npm error code E404
+npm error 404 Not Found - GET https://registry.npmjs.org/cowsay-does-not-exist-wnm - Not found
+npm error 404
+npm error 404  'cowsay-does-not-exist-wnm@*' is not in this registry.
+npm error 404
+npm error 404 Note that you can also install from a
+npm error 404 tarball, folder, http url, or git url.
+npm error A complete log of this run can be found in: /Users/dev/.npm/_logs/2026-11-15T09_27_59_
+981Z-debug-0.log
+dev@box:~/work$
+
+
+
+
+
+
+
+
+
+
+
+
+

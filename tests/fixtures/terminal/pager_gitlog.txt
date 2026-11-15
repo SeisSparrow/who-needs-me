@@ -1,0 +1,29 @@
+bash
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+dev@box:~/work$ cd repo && git log
+commit REDACTED (HEAD -> main)
+Author: t <t@example.com>
+Date:   Sun Nov 15 01:27:20 2026 -0800
+
+    init
+dev@box:~/work$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

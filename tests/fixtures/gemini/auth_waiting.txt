@@ -1,0 +1,75 @@
+node
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+dev@box:~/work$ gemini
+
+ ▝▜▄      ▗█▀▀▜▙▝█▛▀▀▌▜██▖▟██▘▜█▘▜██▖▝█▛▝█▛
+   ▝▜▄    █▌     █▙▟  ▐█▝█▛▐█ ▐█ ▐█▝█▖█▌ █▌
+  ▗▟▀     ▜▙ ▝█▛ █▌▝ ▖▐█   ▐█ ▐█ ▐█ ▝██▌ █▌
+ ▝▀        ▀▀▀▀▘▝▀▀▀▀▘▀▀▘  ▀▀▘▀▀▘▀▀▘ ▝▀▀▝▀▀
+
+ Gemini CLI v0.68.0
+
+
+
+Tips for getting started:
+1. /help for more information
+2. Ask coding questions, edit code or run commands
+3. Be specific for the best results
+
+ℹ Skipping project agents due to untrusted folder. To enable, ensure that the project root is trusted.
+
+ ╭──────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+ │                                                                                                          │
+ │ Do you trust the files in this folder?                                                                   │
+ │                                                                                                          │
+ │ Trusting a folder allows Gemini CLI to load its local configurations, including custom commands, hooks,  │
+ │ MCP servers, agent skills, and settings. These configurations could execute code on your behalf or       │
+ │ change the behavior of the CLI.                                                                          │
+ │                                                                                                          │
+ │                                                                                                          │
+ │ ● 1. Trust folder (who-needs-me)                                                                         │
+ │   2. Trust parent folder (agents)                                                                        │
+ │   3. Don't trust                                                                                         │
+ │                                                                                                          │
+ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+
+ Gemini CLI is restarting to apply the trust changes...
+
+ ▝▜▄      ▗█▀▀▜▙▝█▛▀▀▌▜██▖▟██▘▜█▘▜██▖▝█▛▝█▛
+   ▝▜▄    █▌     █▙▟  ▐█▝█▛▐█ ▐█ ▐█▝█▖█▌ █▌
+  ▗▟▀     ▜▙ ▝█▛ █▌▝ ▖▐█   ▐█ ▐█ ▐█ ▝██▌ █▌
+ ▝▀        ▀▀▀▀▘▝▀▀▀▀▘▀▀▘  ▀▀▘▀▀▘▀▀▘ ▝▀▀▝▀▀
+
+ Gemini CLI v0.68.0
+
+
+
+Tips for getting started:
+1. /help for more information
+2. Ask coding questions, edit code or run commands
+3. Be specific for the best results
+
+ℹ Attempting to open authentication page in your browser.
+  Otherwise navigate to:
+  https://accounts.google.com/o/oauth2/v2/auth?REDACTED
+
+ℹ Waiting for authentication...
+
+╭────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│                                                                                                            │
+│ ⠙ Waiting for authentication... (Press Esc or Ctrl+C to cancel)                                            │
+│                                                                                                            │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+
+
+
+
+
+
+
+

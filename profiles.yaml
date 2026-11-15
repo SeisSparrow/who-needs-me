@@ -243,7 +243,7 @@ profiles:
     title:
       approval: 'Waiting for (?:confirmation|approval|input)'
       busy: '(?:Working|Running shell command|Planning|Reconnecting)'
-    chrome: ['^\s*[│ ]*→ ']
+    dialog_tail: 15         # where the input box sits during a dialog is not known
     busy:
       - 'ctrl\+c to stop'
     approval:

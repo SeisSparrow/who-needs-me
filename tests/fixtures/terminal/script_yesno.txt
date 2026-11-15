@@ -1,0 +1,29 @@
+bash
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+dev@box:~/work$ bash -c 'echo "This will remove 3 unused packages."; read -p "Proceed (yes/no)? " x'
+This will remove 3 unused packages.
+Proceed (yes/no)?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

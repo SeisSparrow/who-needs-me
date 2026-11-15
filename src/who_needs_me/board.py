@@ -29,6 +29,7 @@ from pathlib import Path
 
 from who_needs_me.decide import build_input, http_transport, input_sha, load_layer1, run_batch
 from who_needs_me.policy import decide, load_policy, needs_model
+from who_needs_me.profiles import load_profiles
 from who_needs_me.redact import harvest_identifiers, load_local_denylist, redact, scan
 from who_needs_me.rules import TS_FMT, content_key, evaluate, load_config, stale_minutes
 
@@ -36,6 +37,12 @@ PAGE = Path(__file__).resolve().parents[2] / "dashboard" / "index.html"
 AT_RE = re.compile(r"^\d{8}T\d{6}Z$")
 _ORDER = ("red", "yellow", "dropped_to_shell", "waiting_reply", "idle_done", "busy")
 ORDER = {k: i for i, k in enumerate(_ORDER)}
+
+
+def tool_label(tool: str | None, pane_command: str) -> str:
+    """What runs in the pane, for the board: the agent's name, or the program."""
+    prof = load_profiles().get(tool or "")
+    return prof.label if prof else pane_command
 
 
 def rank(row: dict) -> str:
@@ -192,6 +199,7 @@ class Board:
                 "pane_command": l0.facts["pane_command"],
                 "pane_width": s.meta().get("width"),
                 "tool": l0.facts.get("tool"),
+                "tool_label": tool_label(l0.facts.get("tool"), l0.facts["pane_command"]),
                 **d.to_dict(),
                 "facts": l0.facts,
                 "last_message": l0.last_message,

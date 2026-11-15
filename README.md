@@ -16,9 +16,11 @@ a human has to look, plus the measurement loop that keeps that step honest.
 tmux screen (with colors)
    │
  layer 0  code — receipts, not the screen's own story          src/who_needs_me/rules.py
+   │  last line is a password or [y/n] question, or a pager/editor is open → needs_human: input
    │  pane runs bash, not claude            → dropped_to_shell
    │  "/login" or "API Error" in last lines → needs_human: machine
    │  "Yes, I trust this folder" dialog     → needs_human: machine
+   │  the tool's own "may I?" dialog        → needs_human: approval
    │  spinner "Word… (" / "esc to interrupt"→ busy
    │  welcome banner, no conversation yet   → idle_done
    │  dim ESC[2m text in the input box      → stripped, ghost_text_ignored
@@ -37,7 +39,9 @@ tmux screen (with colors)
 ```
 
 Every threshold, rule switch, keyword and question text lives in
-[`factory.yaml`](factory.yaml). The classifier only reads that file.
+[`factory.yaml`](factory.yaml), and what each agent tool prints lives in
+[`profiles.yaml`](profiles.yaml). The classifier only reads those two files. The diagram
+shows Claude Code's rules; see [Other agents and plain terminals](#other-agents-and-plain-terminals).
 
 Each decision records `decided_by` (rule or model) and an `evidence` line that **code**
 picks from the screen. The model never quotes text. The model only sees the trimmed last
@@ -337,7 +341,7 @@ optionally `literal<TAB>replacement`.
   machines overwrite each other, and the board does not show which machine a session is on.
   Until that is fixed, give sessions a machine prefix (`vm2-infra`).
 - Machines are not discovered automatically; each is added once with one capture command.
-- The rules are written for the Claude Code terminal interface. See "Other agents" below for what happens with Codex and Gemini CLI.
+- Other agent tools (Codex, Gemini CLI, Qwen Code, opencode, Grok Build, Cursor CLI, Kiro CLI, Trae Agent) are read with their own profiles. See "Other agents and plain terminals" below for how far each one was checked.
 - Tested with everything running on a laptop. Running the tool on the VM itself is the
   intended always-on setup and is not tested yet.
 
@@ -351,45 +355,98 @@ optionally `literal<TAB>replacement`.
 | `ssh` asks for a password | Set up an SSH key or Tailscale SSH for that host first. |
 | Every row is decided by rule | `GEMINI_API_KEY` is not set, or the board was started with `--no-model`. |
 
-## Other agents: Codex and Gemini CLI
+## Other agents and plain terminals
 
-Tested on 2026-11-13 after the build, with Claude Code, Codex and Gemini CLI running side
-by side in local tmux sessions. No code was changed for this; it documents what the
-current version does. Short version: **the capture, the decision model and the board are
-tool-agnostic; the rule layer is written for Claude Code and misreads the other two.**
+Added on 2026-11-15, after the hackathon build. The first version only understood Claude
+Code's screen: a test on 2026-11-13 showed that Codex and Gemini CLI sessions appeared on the
+board but were misread (their busy line was not recognised, and the prompt the user typed
+was taken for the agent's message). Layer 0 now has three more sources, and the decision
+model and the policy are unchanged.
 
-| Stage | Claude Code | Codex | Gemini CLI |
-|---|---|---|---|
-| Session discovered, shown on the board | yes | yes | yes |
-| Just started, empty prompt | idle (correct) | "waiting for reply" (should be idle) | "waiting for reply" (should be idle) |
-| Startup dialog that needs a person | trust prompt: needs you, red (correct) | sign-in choice, browser sign-in, folder approval: all escalated (correct) | not seen |
-| Working on a task | busy (correct) | **not recognized**: `Working (6s • Esc to interrupt)` does not match the rule | not tested |
-| Finished, asks to deploy | needs you: deploy, red (correct) | not tested | not tested |
-| API error on screen | login error: needs you (correct) | escalated, but for the wrong reason (see below) | escalated, but for the wrong reason |
-| Exited to the shell | dropped to shell (correct) | dropped to shell (correct) | dropped to shell (correct) |
+**1. A profile per tool** ([`profiles.yaml`](profiles.yaml), read by `profiles.py`): what the
+tool prints when it is busy, when it asks for permission, when it wants a login or a folder
+to be trusted, and how a submitted prompt looks. The tool is picked from the process name
+tmux reports; when that is only `node` or `python`, from what is on screen.
 
-What this showed:
+| Tool | Checked on | What "checked" means |
+|---|---|---|
+| Claude Code 2.1 | real screens | 10 screens, including its permission dialog and "Not logged in" |
+| Gemini CLI 0.68 | real screens | 19 screens: busy, both approval dialogs, login, trust, finished, quit |
+| Codex 0.169 | partly | 7 real screens (trust, empty, busy, quota error); approval dialogs and the finished-turn line come from its source |
+| Qwen Code 0.27 | source only | English interface only; it follows `LANG` |
+| opencode 1.19 | source only | 2.x changes the finished-turn line |
+| Grok Build 1.0 | source only | |
+| Cursor CLI 2026.11 | source only | how the conversation is drawn was not found in its bundle |
+| Kiro CLI | source only | the current (V3) strings come from third-party notes, not from Amazon |
+| Trae Agent | source only | no approval prompts and no hooks exist; last commit 2026-02 |
 
-- **Dropping to the shell works for all three**, because it uses the command tmux reports
-  for the pane, not the screen. (tmux reports `node` for Codex and Gemini CLI, and a version
-  string for Claude Code on macOS; none of these is a shell.)
-- **Busy detection is Claude Code only.** Codex prints its own spinner line and the rule
-  does not match it.
-- **The echoed prompt is read as the session's message.** Codex and Gemini CLI show the
-  text you typed on the screen. The last-message extraction is built around Claude Code's
-  layout, so it picked up the typed task ("... I will do it once you approve") and flagged
-  the session for that, while the real state was an API error.
-- **Their error messages are not recognized.** Only Claude Code's login error has a rule.
-- **Not tested: a Codex or Gemini session that is actually answering.** On the test
-  machine both CLIs were too old for their current models (Codex 0.34.0, Gemini CLI 0.1.13)
-  and every request failed. If they were installed with npm, update them with
-  `npm install -g @openai/codex@latest @google/gemini-cli@latest`.
-- **Also found with Claude Code:** when a session asks for approval and then, without an
-  answer, asks a plain question, the earlier request is still on the screen and the row
-  stays yellow for deploy.
+"Source only" means the strings were copied from the tool's code or documentation and a
+test checks that the profile matches them
+([`tests/test_profiles_from_docs.py`](tests/test_profiles_from_docs.py)). It does not mean
+the tool really prints them today. Send a capture and it becomes a fixture.
 
-Supporting another agent means giving it its own small rule set: its busy marker, its
-input box, its error strings, and how to skip the echoed prompt. Nothing else changes.
+A tool's own permission dialog is reported as `needs_human: approval`, red.
+
+**2. A terminal waiting for a person, whatever runs in it** (`terminal.py`): the last line
+on screen asks for a password, passphrase or username (sudo, ssh, git, ssh-keygen), asks a
+yes/no question (`[Y/n]`, `(yes/no)`, ssh's unknown-host question, npx's "Ok to proceed?"),
+or a pager or editor is open. Reported as `needs_human: input`: red for a question, yellow
+for a pager or editor. A script stopped at `[y/N]` runs inside `bash`, so this check comes
+before "dropped to shell". A program that is neither an agent nor waiting is `busy` while
+its output moves.
+
+**3. What the tool reports itself.** Two receipts that do not depend on reading the screen:
+
+- *Terminal title.* Codex, Gemini CLI, Qwen Code and Grok Build write "Action Required"
+  into the terminal title while they wait for an approval. tmux knows the title, so it
+  arrives with the same read-only `list-panes` call. Seen on a real Gemini CLI session
+  (`✦ Working…` → `✋ Action Required` → `◇ Ready`).
+- *Hooks.* [`hook.py`](src/who_needs_me/hook.py) is one file with no dependencies. The
+  tool's hook system calls it ("prompt submitted", "permission needed", "turn over") and
+  it leaves a note on the tmux pane, which the capture also gets from `list-panes`.
+  Nothing is sent anywhere and the capture still only reads.
+
+```bash
+uv run python -m who_needs_me.hooks                 # which tools, which file, how far checked
+uv run python -m who_needs_me.hooks claude          # print the configuration
+uv run python -m who_needs_me.hooks claude --write  # merge it into ~/.claude/settings.json
+                                                    # (the old file is kept as a .bak copy)
+# on another machine: copy hook.py there, then
+python3 -m who_needs_me.hooks claude --script ~/.who-needs-me/hook.py --write
+```
+
+| Tool | "needs approval" event | Run here? |
+|---|---|---|
+| Claude Code | `PermissionRequest` (at once), `Notification` (after ~6 s) | yes: note on the pane within 5 s |
+| Gemini CLI | `Notification` | yes: working, approval, done, session end |
+| Codex | `PermissionRequest` | partly: the events before the model call arrived; the account had no quota |
+| Qwen Code, Grok Build, opencode | yes | no: written from the documentation |
+| Cursor CLI, Kiro CLI | none: hooks only say "working" and "done" | no |
+| Trae Agent | no hooks at all | - |
+
+How a note is used: "approval" raises `needs_human: approval` unless the screen shows the
+tool working (after you allow a command, the note still says "approval" until the command
+ends). "working" counts only for tools whose busy line was not checked on a real screen,
+and only while the screen still changes: an interrupted turn fires no hook, and a stale
+"working" would hide an idle session.
+
+**What was measured, and what was not**
+
+- The 305 stored Claude Code screens are read exactly as before: same deciding rule, same
+  last message, same facts.
+- 53 real screens captured on 2026-11-15 (10 Claude Code, 19 Gemini CLI, 7 Codex, 17
+  terminal programs) are in [`tests/fixtures`](tests/fixtures), user name and tokens
+  removed, each with the reading a person would give. The rules before this change read
+  17 of the 53 correctly (7/10 Claude Code, 6/19 Gemini CLI, 1/7 Codex, 3/17 terminal: every
+  Gemini screen was taken for a trust prompt, and a script stopped at `[Y/n]` for an idle
+  shell); now all 53 are.
+- **That is a regression test, not an accuracy figure.** The rules were written while
+  looking at those screens. There is no held-out set for the new tools.
+- `eval.md` is still about Claude Code only. How well the decision model reads the last
+  message of another tool has not been measured.
+
+Also found on the way: Claude Code draws its bullet as `●` on Linux and `⏺` on macOS, and
+tmux names its process after its version on macOS (`2.1.325`); both are handled now.
 
 ## Data and privacy
 

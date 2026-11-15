@@ -1,0 +1,41 @@
+2.1.325
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+dev@box:~/work$ claude --permission-mode default
+ ▐▛███▛█   Claude Code v2.1.325
+▝▜██████▀  Opus 5.5 with medium effort · Claude Pro
+ ▝▝   ▝▝   ~/wnm_demo_tmp/agents/claude_probe
+
+
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+❯ Try "how do I log an error?"
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  ⏸ manual mode on · ? for shortcuts · ← for agents                                       ◐ medium · /effort
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

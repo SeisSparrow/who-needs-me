@@ -1,0 +1,64 @@
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+dev@box:~/work$ . /Users/dev/wnm_demo_tmp/agents/home/key.sh; clear; gemini
+
+ [38;5;74m▝[38;5;110m▜[38;5;140m▄[38;5;139m [38;5;174m [39m   [1m[38;5;231mGemini CLI[0m[38;5;248m v0.68.0
+[39m [38;5;74m [38;5;110m [38;5;140m▝[38;5;139m▜[38;5;174m▄[39m
+ [38;5;74m [38;5;110m▗[38;5;140m▟[38;5;139m▀[38;5;174m [39m   [38;5;231mAuthenticated with gemini-api-key[38;5;248m /auth[39m
+ [38;5;74m▝[38;5;110m▀[38;5;140m  [38;5;139m [38;5;174m [39m
+
+
+[38;5;231mTips for getting started:[39m
+[38;5;231m1. Create [1mGEMINI.md[0m[38;5;231m files to customize your interactions[39m
+[38;5;231m2. [38;5;248m/help[38;5;231m for more information[39m
+[38;5;231m3. Ask coding questions, edit code or run commands[39m
+[38;5;231m4. Be specific for the best results[39m
+
+[38;5;229mℹ Skipping project agents due to untrusted folder. To enable, ensure that the project root is trusted.[39m
+
+ [38;5;229m╭──────────────────────────────────────────────────────────────────────────────────────────────────────────╮[39m
+ [38;5;229m│[39m                                                                                                          [38;5;229m│[39m
+ [38;5;229m│[39m [1m[38;5;231mDo you trust the files in this folder?[0m                                                                   [38;5;229m│[39m
+ [38;5;229m│[39m                                                                                                          [38;5;229m│[39m
+ [38;5;229m│[39m [38;5;231mTrusting a folder allows Gemini CLI to load its local configurations, including custom commands, hooks,[39m  [38;5;229m│[39m
+ [38;5;229m│[39m [38;5;231mMCP servers, agent skills, and settings. These configurations could execute code on your behalf or[39m       [38;5;229m│[39m
+ [38;5;229m│[39m [38;5;231mchange the behavior of the CLI.[39m                                                                          [38;5;229m│[39m
+ [38;5;229m│[39m                                                                                                          [38;5;229m│[39m
+ [38;5;229m│[39m                                                                                                          [38;5;229m│[39m
+ [38;5;229m│[39m [38;5;194m[48;5;28m●[39m [38;5;248m1.[39m [38;5;194mTrust folder (who-needs-me)[39m [49m                                                                        [38;5;229m│[39m
+ [38;5;229m│[39m [38;5;231m [39m [38;5;248m2.[39m [38;5;231mTrust parent folder (agents)[39m                                                                        [38;5;229m│[39m
+ [38;5;229m│[39m [38;5;231m [39m [38;5;248m3.[39m [38;5;231mDon't trust[39m                                                                                         [38;5;229m│[39m
+ [38;5;229m│[39m                                                                                                          [38;5;229m│[39m
+ [38;5;229m╰──────────────────────────────────────────────────────────────────────────────────────────────────────────╯[39m
+
+
+ [38;5;229mGemini CLI is restarting to apply the trust changes...[39m
+
+ [38;5;74m▝[38;5;110m▜[38;5;140m▄[38;5;139m [38;5;174m [39m   [1m[38;5;231mGemini CLI[0m[38;5;248m v0.68.0
+[39m [38;5;74m [38;5;110m [38;5;140m▝[38;5;139m▜[38;5;174m▄[39m
+ [38;5;74m [38;5;110m▗[38;5;140m▟[38;5;139m▀[38;5;174m [39m   [38;5;231mAuthenticated with gemini-api-key[38;5;248m /auth[39m
+ [38;5;74m▝[38;5;110m▀[38;5;140m  [38;5;139m [38;5;174m [39m
+
+
+[38;5;231mTips for getting started:[39m
+[38;5;231m1. Create [1mGEMINI.md[0m[38;5;231m files to customize your interactions[39m
+[38;5;231m2. [38;5;248m/help[38;5;231m for more information[39m
+[38;5;231m3. Ask coding questions, edit code or run commands[39m
+[38;5;231m4. Be specific for the best results[39m
+
+[38;5;229m⚠ [39m [38;5;229mWarning: True color (24-bit) support not detected. Using a terminal with true color enabled will result in[39m
+   [38;5;229ma better visual experience.[39m
+
+
+
+                                                                                              [38;5;248m? for shortcuts[39m
+[2m[38;5;244m──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[0m [38;5;248mShift+Tab to accept edits[39m
+[48;5;240m
+ [38;5;183m> [7m[39m [0m[38;5;248m[48;5;240m Type your message or @path/to/file[39m
+
+[49m [38;5;248mworkspace (/directory)[39m                                  [38;5;248mbranch[39m                     [38;5;248msandbox[39m            [38;5;248m/model[39m
+ [38;5;231m/Users/dev/wnm_demo_tmp/agents/who-needs-me[39m         [38;5;231mfeat/live-history[39m          [38;5;217mno sandbox[39m           [38;5;231mAuto[39m
+

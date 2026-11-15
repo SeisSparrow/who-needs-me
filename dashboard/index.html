@@ -161,7 +161,7 @@ function card(r, asOf) {
   return `<div class="card ${k} ${open.has(r.session) ? "open" : ""}" data-s="${esc(r.session)}">
     <div class="row">
       <div><span class="name">${esc(r.session)}</span>
-        <div class="meta">${esc(r.pane_command)} · captured ${ts(r.captured_at)}</div></div>
+        <div class="meta">${esc(r.tool_label || r.pane_command)} · captured ${ts(r.captured_at)}</div></div>
       <div><span class="chip ${k}">${esc(LABEL[k] || r.state)}${reason}</span></div>
       ${r.evidence ? `<div class="evidence">${esc(r.evidence)}</div>` : ""}
       <div class="tags">${tags}</div>

@@ -1,0 +1,41 @@
+codex
+
+  >_ OpenAI Codex (v0.169.0)
+     ~/wnm_demo_tmp/agents/who-needs-me
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+› Read src/who_needs_me/capture.py and tell me in three sentences what it does. Then run the command: touch /
+  tmp/wnm_probe_file
+
+  GPT-5.6-Sol medium · ~/wnm_demo_tmp/agents/who-needs-me

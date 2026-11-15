@@ -1,0 +1,28 @@
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+dev@box:~/work$ ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=ask -o PubkeyAuthentica
+tion=no git@github.com
+The authenticity of host 'github.com (172.194.155.208)' can't be established.
+ED25519 key fingerprint is: SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
