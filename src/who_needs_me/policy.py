@@ -75,7 +75,8 @@ def decide(l0: Layer0, answers: dict | None, policy: dict | None = None) -> Deci
     }
     rule = _decisive_rule(l0)
     if rule is not None:
-        tier = "red" if rule.state == "needs_human" else None  # login/API error, trust prompt
+        # login/API error, trust prompt, a dialog: red unless the rule itself says "check"
+        tier = (rule.tier or "red") if rule.state == "needs_human" else None
         return Decision(rule.state, rule.reason, "rule", rule.evidence, None, tier=tier, **common)
 
     trip = next((h for h in l0.hits if h.rule == "tripwire"), None)

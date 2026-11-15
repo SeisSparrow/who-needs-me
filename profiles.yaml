@@ -1,0 +1,318 @@
+# What each terminal coding agent looks like on screen. One entry per tool.
+#
+# Everything is a regular expression matched against one plain line of the pane (colours
+# removed). The rules that use them are in src/who_needs_me/profiles.py; Claude Code keeps its
+# own, older rules in rules.py and is listed here only so it can be told apart.
+#
+# verified says how far to trust an entry:
+#   real    every string was seen on a real screen (tests/fixtures/<tool>/, captured 2026-11-15)
+#   partly  some states were seen on a real screen, the rest come from the tool's source
+#   source  taken from the tool's source code or documentation; never seen on a real screen here
+#
+# Fields
+#   commands  pane_current_command values that mean this tool (tmux reports the process name)
+#   markers   lines that identify the tool when the command is only "node" or "python"
+#   title     what the tool writes into the terminal title (tmux #{pane_title}), a live receipt
+#   chrome    first line of the input area; from its last match down is input box and footer
+#   busy      working right now (looked for in the last lines of the screen)
+#   approval  the tool's own "may I?" dialog -> needs_human: approval
+#   auth      login / sign-in dialog          -> needs_human: machine
+#   trust     "trust this folder?" dialog      -> needs_human: machine
+#   error     quota, expired login, etc. in the last lines of the conversation -> needs_human: machine
+#   user      a prompt the user submitted, as shown in the conversation
+#   continuation  the lines a long prompt wraps onto (default: indented deeper than the prompt)
+#   assistant first line of something the agent said
+#   done      the line a finished turn leaves behind
+#   noise     lines that are neither side's words (hints, counters)
+#   done_required  true if every turn ends with the "done" line (then: no such line = busy)
+#   dialog_tail    how many last lines a dialog is looked for in (default 30)
+# A dialog (approval, auth, trust) only counts while it is the last thing on screen.
+
+profiles:
+  claude:
+    label: Claude Code
+    verified: real
+    commands: [claude]
+    command_patterns: ['^\d+\.\d+\.\d+$']   # on macOS the process is named after its version
+    markers:
+      - 'Claude Code v\d'
+      - '^\s*[●⏺] \S'
+      - '^\s*(?:⏵⏵|⏸) \S+ mode'
+      - '^[·✢✳✶✻✽*] \S+ for \d'
+      - 'Esc to cancel · Tab to amend'
+
+  gemini:
+    label: Gemini CLI
+    verified: real          # v0.68.0
+    commands: []            # runs as node
+    markers:
+      - 'Gemini CLI v\d'
+      - '^ workspace \(/directory\)'
+      - '^✦ \S'
+      - '\(esc to cancel, \d'
+    title:
+      approval: 'Action Required'
+      busy: 'Working'
+    chrome: ['^─{20,}\s*$']
+    busy:
+      - '\(esc to cancel, (?:\d+[hm] ?)*\d+s\)'
+    approval:
+      - 'Allow execution of '
+      - 'Apply this change\?'
+      - 'Do you want to proceed\?'
+      - '^[│ ]*● 1\. Allow once'
+    auth:
+      - 'How would you like to authenticate'
+      - 'Waiting for authentication'
+      - 'Failed to sign in'
+      - 'No authentication method selected'
+    trust:
+      - 'Do you trust the files in this folder\?'
+    error:
+      - '\[API Error: '
+      - 'Please (?:re-?authenticate|set an Auth method)'
+      - 'quota (?:exceeded|limit)'
+    user: '^ > \S'
+    continuation: '^   \S'
+    assistant: '^✦ \S'
+    noise:
+      - '\? for shortcuts\s*$'
+      - '^ℹ '
+      - '^⚠ '
+
+  codex:
+    label: Codex CLI
+    verified: partly        # v0.169.0. real: trust, empty session, quota error. source: the rest
+    commands: [codex]
+    markers:
+      - 'OpenAI Codex \(v'
+      - '^› Ask Codex to do anything'
+      - '• esc to interrupt\)'
+    title:
+      approval: 'Action Required'
+    chrome: ['^› (?!\d+\. )']   # the input line; "› 1. Yes" is a dialog's cursor
+    busy:
+      - '\((?:\d+h )?(?:\d+m )?\d+s • \S+ to interrupt\)'
+      - '^[•◦]? ?Reviewing (?:\d+ )?approval requests?'
+    approval:
+      - 'Would you like to (?:run the following command|make the following edits|grant these permissions|send input to)'
+      - 'Do you want to approve network access to'
+      - 'needs your approval\.\s*$'
+      - 'Press enter to confirm or esc to cancel'
+      - 'Approval needed in '
+      - 'Hooks need review'
+      - 'Yes, implement this plan'
+    auth:
+      - 'Sign in with ChatGPT'
+      - 'Finish signing in via your browser'
+      - 'Paste or type your API key'
+      - 'Usage limit reached'
+    trust:
+      - 'Trust this folder\?'
+    error:
+      - '^■ Quota exceeded'
+      - 'You.ve hit your usage limit'
+      - 'Please log out and sign in again'
+      - '^■ rate limit exceeded'
+      - 'budget reached'
+      - 'Selected model is at capacity'
+    user: '^› \S'
+    continuation: '^  \S'
+    assistant: '^• \S'
+    done: '^\s*Worked for .+ • '
+    noise:
+      - '^\s*(?:←|\?) for (?:agents|shortcuts)'
+
+  qwen:
+    label: Qwen Code
+    verified: source        # v0.27.4, English interface only (it follows LANG)
+    commands: [qwen]
+    markers:
+      - '>_ Qwen Code'
+      - '^◆'
+      - '· esc to cancel\)'
+      - '\d% (?:context )?used\s*$'
+      - 'Qwen OAuth'
+    title:
+      approval: '^✳ '
+      busy: '^◐ '
+    chrome: ['^─{20,}\s*$']
+    busy:
+      - '\((?:\d+[hm] ?)*\d+s(?: · [↓↑] ?\S+ tokens)?(?: · \S+ t/s)? · esc to cancel\)'
+      - '^\(Esc to cancel\)\s*$'
+    approval:
+      - 'Waiting for user confirmation'
+      - 'Apply this change\?'
+      - "Allow execution of"
+      - 'Do you want to proceed\?'
+      - 'Yes, allow once'
+    auth:
+      - 'Connect a Provider'
+      - 'Waiting for auth\.\.\.'
+      - 'Authentication timed out'
+    trust:
+      - 'Do you trust this folder\?'
+    error:
+      - '\[API Error: '
+      - 'Qwen OAuth (?:credentials expired|quota exceeded)'
+      - 'Session expired or is unauthorized'
+      - 'Rate limit exceeded'
+    user: '^\s?> \S'
+    assistant: '^◆'
+    noise:
+      - '\? for shortcuts'
+
+  opencode:
+    label: opencode
+    verified: source        # v1.19.5; v2 drops the ▣ in the finished-turn line
+    commands: [opencode, opencode2]
+    markers:
+      - 'ctrl\+p\s+commands'
+      - '\besc (?:again to )?interrupt\b'
+      - '△ Permission required'
+      - '^\s*▣  \S'
+    title:
+      marker: '^(?:OpenCode$|OC \| )'
+    busy:
+      - '\besc (?:again to )?interrupt\b'
+      - '\[retrying (?:in |attempt)'
+    approval:
+      - '△ (?:Permission required|Always allow|Reject permission)'
+      - '\(select all that apply\)'
+      - 'Type your own answer'
+    auth:
+      - 'Connect a provider'
+      - 'Select auth method'
+      - 'Waiting for authorization'
+    error:
+      - 'Free usage exceeded'
+      - 'usage limit reached'
+      - 'OAuth authorization failed'
+      - 'Failed to initialize provider'
+    user: '^\s*┃  \S'
+    done: '^\s*(?:▣  )?\S[^·]* · \S.* · (?:\d+(?:\.\d+)?(?:ms|s|m|h|d) ?)+(?: · interrupted)?\s*$'
+    noise:
+      - 'ctrl\+p\s+commands'
+      - '^\s*~ \S+.*…\s*$'
+
+  grok:
+    label: Grok Build
+    verified: source        # 1.0.77; source mirror dated 2026-09-29
+    commands: [grok, xai-grok-pager]
+    markers:
+      - 'Grok Build'
+      - '^\s*Build anything\s*$'
+      - 'send a message to interrupt'
+    title:
+      marker: '(?:^| - )grok$'
+      approval: 'Action Required'
+      busy: '^(?:Thinking|Responding|Running|Compacting)\b'
+    busy:
+      - '^\s*[⠋⠙⠹⠸⠼⠴⠦⠧] \S'
+      - '\b(?:Thinking|Responding|Compacting|Cancelling|Verifying|Starting session)…'
+      - 'commands? still running · send a message to interrupt'
+    approval:
+      - '^\s*Allow (?:`[^`]+`|Execute|Edit|Delete|\S+)(?: to \S+)?(?: \(on your machine\))?\?\s*$'
+      - "Yes, and don't ask again for bash commands"
+      - 'No, reject \(type to add feedback\)'
+      - 'Waiting on answers for '
+    auth:
+      - 'A browser window will open for authentication'
+      - 'Approve in your browser to finish signing in'
+      - 'Waiting for login to complete'
+      - 'Sign in to Grok'
+      - 'Grok Build is not yet available for this account'
+    trust:
+      - 'Grok Build may run or modify contents in this directory'
+    error:
+      - 'Not signed in\. Run `grok login`'
+      - 'You.ve hit the rate limit for your plan'
+      - 'You hit your free usage limit'
+      - 'out of credits or over your spending limit'
+    done: '^\s*(?:Worked for \d\S*|Turn (?:completed|cancelled|blocked)\b.*)\s*$'
+
+  cursor:
+    label: Cursor CLI
+    verified: source        # 2026.11.13; conversation layout not found in the source
+    commands: [cursor-agent]   # "agent" is ambiguous: Grok Build installs one too
+    markers:
+      - 'Plan, search, build anything'
+      - 'Add a follow-up'
+      - 'Cursor Agent'
+      - 'ctrl\+c to stop'
+    title:
+      approval: 'Waiting for (?:confirmation|approval|input)'
+      busy: '(?:Working|Running shell command|Planning|Reconnecting)'
+    chrome: ['^\s*[│ ]*→ ']
+    busy:
+      - 'ctrl\+c to stop'
+    approval:
+      - '^\s*[│ ]*(?:Run this command(?: outside the sandbox)?|Write to this file|Proceed with this edit|Delete this file|Read this file|Run this MCP tool|Allow this web (?:search|fetch))\?'
+      - 'Add Shell\(.*\) to allowlist\?'
+      - 'Your password is secure and will not be visible to the AI model'
+    auth:
+      - 'Press any key to (?:log|sign) in'
+      - "click this link to log in"
+      - 'Sign in required'
+    trust:
+      - 'Workspace Trust Required'
+      - 'Cursor Agent can execute code and access files in this directory'
+    error:
+      - 'Authentication required to use Cursor Agent'
+      - 'Your stored authentication is invalid'
+      - 'Not logged in'
+      - 'Connection lost\. Failed to reconnect'
+
+  kiro:
+    label: Kiro CLI
+    verified: source        # V2/V3 strings are third-party observations; classic is from source
+    commands: [kiro-cli, kiro-cli-chat, kiro, q, qchat]
+    markers:
+      - '[Aa]sk a question,? or describe a task'
+      - '▸\s*Credits:'
+      - "Use 't' to trust \\(always allow\\) this tool"
+      - 'Kiro is (?:working|running)'
+    dialog_tail: 12         # its approval bar sits above the input box, so no "chrome" here
+    busy:
+      - 'Thinking\.\.\.'
+      - 'Kiro is working'
+      - 'Initializing(?:\.\.\.| · )'
+      - 'mcp servers initialized'
+    approval:
+      - "Allow this action\\? Use 't' to trust"
+      - 'requires approval\s*$'
+      - 'esc to close · ↑↓ to navigate · ↵ to select'
+      - 'Press \(↑↓\) to navigate \(⏎\) to select scope'
+      - 'Trust, always allow in this session'
+    auth:
+      - 'Your login session has expired'
+      - 'Use with Builder ID'
+    trust:
+      - 'Trust this workspace\?'
+      - 'Kiro is running in trust all tools mode'
+      - 'Continue with V3'
+    error:
+      - 'Authentication Error'
+      - 'Request quota exceeded'
+      - 'Monthly request limit reached'
+    assistant: '^(?:• |> )\S'
+    done: '▸\s*Credits:'
+
+  trae:
+    label: Trae Agent
+    verified: source        # main @ 2026-02-05; it has no approval prompts and no hooks
+    commands: [trae-cli, trae]
+    markers:
+      - 'Trae Agent CLI'
+      - 'Enter your task\.\.\.'
+      - 'Trajectory saved to:'
+      - '^Executing task: '
+    busy:
+      - '^\s*[│ ]*Current Task\b'
+    error:
+      - 'Error: Config file not found'
+      - 'API call failed: .* Will sleep for'
+      - 'Error executing task:'
+    user: '^(?:Task: |Executing task: )\S'
+    done: '(?:Trajectory saved to:|Task completed successfully!)'
+    done_required: true     # no spinner: a task is running until one of these lines appears

@@ -191,6 +191,7 @@ class Board:
                 "content_key": keys[name][:12],
                 "pane_command": l0.facts["pane_command"],
                 "pane_width": s.meta().get("width"),
+                "tool": l0.facts.get("tool"),
                 **d.to_dict(),
                 "facts": l0.facts,
                 "last_message": l0.last_message,

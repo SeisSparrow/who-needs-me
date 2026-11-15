@@ -313,7 +313,7 @@ def test_capture_records_what_tmux_reports_about_the_pane(tmp_path):
     t0 = datetime(2026, 11, 15, 9, 0, 0, tzinfo=UTC)
     capture_once(tmp_path, runner=fake, now=t0, seen=seen)
     (s,) = scan(tmp_path, 0)
-    assert s.meta() == {"width": 25, "height": 23, "alternate": False, "hook": ""}
+    assert s.meta() == {"width": 25, "height": 23, "alternate": False, "hook": "", "title": ""}
     assert fake.calls[-1][-1] == "-240"  # 60 lines at 100 columns = 240 at 25
     assert capture_once(tmp_path, runner=fake, now=t0.replace(second=1), seen=seen) == []
     fake.note = "1763197200 claude approval Notification"

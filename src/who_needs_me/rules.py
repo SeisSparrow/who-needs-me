@@ -53,6 +53,12 @@ TRUST_RE = re.compile(
     r"|Is this a project you created or one you\s+trust"
 )
 BANNER_RE = re.compile(r"Claude Code v\d")
+# the permission / question dialog: its question, and the key hints under its options
+DIALOG_ASK_RE = re.compile(r"^\s*(?:Do you want to|Would you like to) .+\?\s*$")
+DIALOG_RULE_RE = re.compile(r"^\s*╌{10,}\s*$")
+DIALOG_FOOT_RE = re.compile(
+    r"Esc to cancel · Tab to amend|Enter to select · .* to navigate|^\s*❯ 1\. Yes\b"
+)
 TS_FMT = "%Y%m%dT%H%M%SZ"
 
 
@@ -74,7 +80,8 @@ class Parsed:
 
 def parse(screen: str) -> Parsed:
     raw = screen.rstrip("\n").split("\n")
-    plain = [strip_ansi(line) for line in raw]
+    # Claude Code draws its bullet as ● on Linux and ⏺ on macOS
+    plain = [strip_ansi(line).replace("⏺", "●") for line in raw]
     borders = [i for i, line in enumerate(plain) if BORDER_RE.match(line)]
     # the input box is the last pair of borders whose first inner line starts with ❯
     for lo, hi in reversed(list(zip(borders, borders[1:], strict=False))):
@@ -262,6 +269,7 @@ class Hit:
     state: str | None  # None = informational, does not decide the state
     reason: str
     evidence: str
+    tier: str | None = None  # needs_human only: "red" or "yellow"; None = red
 
 
 @dataclass
@@ -309,8 +317,28 @@ def rule_dropped_to_shell(pane_command: str | None, p: Parsed, cfg: dict) -> Hit
 
 
 def rule_auth_error(p: Parsed) -> Hit | None:
+    # in the conversation, or in the status line under the input box ("Not logged in · Run /login")
     line = _first(AUTH_ERROR_RE, _meaningful(p.body)[-8:])
+    if not line:
+        found = next((m for m in (AUTH_ERROR_RE.search(x) for x in p.status) if m), None)
+        line = found.string[found.start() :].strip() if found else None
     return Hit("auth_error", "needs_human", "machine", line) if line else None
+
+
+def rule_approval_dialog(p: Parsed) -> Hit | None:
+    """Claude Code's own "may I run this?" dialog. It replaces the input box, so it only
+    counts when there is no input box. (Sessions in auto mode never show it.)"""
+    if p.has_box:
+        return None
+    tail = _meaningful(p.body)[-14:]
+    if not _first(DIALOG_FOOT_RE, tail):
+        return None
+    line = _first(DIALOG_ASK_RE, tail) or _first(DIALOG_FOOT_RE, tail)
+    # the command or file it asks about is shown between two dashed rules
+    rules_at = [i for i, x in enumerate(tail) if DIALOG_RULE_RE.match(x)]
+    if len(rules_at) >= 2 and rules_at[1] > rules_at[0] + 1:
+        line = f"{line} {tail[rules_at[0] + 1].strip()[:120]}"
+    return Hit("approval_dialog", "needs_human", "approval", line)
 
 
 def rule_trust_prompt(p: Parsed) -> Hit | None:
@@ -438,9 +466,125 @@ def evaluate(
     """Run all enabled layer-0 rules on one screen (ANSI text, pane command line removed).
 
     ``meta`` holds what tmux reported with the capture (``Screen.meta()``): pane width,
-    alternate screen, hook note. All of it is optional."""
+    alternate screen, terminal title, hook note. All of it is optional.
+
+    Which rules run depends on what owns the pane: Claude Code (the rules in this file),
+    another agent (``profiles.py``), or a plain program or shell (``terminal.py`` first)."""
+    from who_needs_me import profiles as pf
+    from who_needs_me import terminal
+
     cfg = config or load_config()
     meta = meta or {}
+    on = cfg["rules"]
+    plain = [strip_ansi(x) for x in screen.rstrip("\n").split("\n")]
+    tool = pf.detect(pane_command, plain, cfg["shell_commands"], meta.get("title") or "")
+    first: list[Hit] = []
+    if tool in ("shell", "terminal"):
+        wait = terminal.blocked(plain, pane_command, meta.get("alternate"))
+        if wait and on.get("blocked_input", True):
+            first.append(Hit("blocked_input", "needs_human", "input", wait.summary, wait.tier))
+        elif (
+            tool == "terminal"
+            and on.get("foreground_program", True)
+            and (stale is None or stale < cfg.get("foreground_quiet_minutes", 10))
+        ):
+            # a program is in the foreground and its output still moves: it is working
+            first.append(Hit("foreground_program", "busy", "none", f"running {pane_command}"))
+    if tool in ("claude", "shell", "terminal"):
+        l0 = _evaluate_claude(screen, pane_command, stale, cfg, meta)
+    else:
+        l0 = _evaluate_profile(pf.load_profiles()[tool], plain, pane_command, stale, cfg, meta)
+    l0.hits = first + l0.hits + _receipts(tool, meta, stale, on)
+    l0.facts["tool"] = tool
+    return l0
+
+
+def _receipts(tool: str, meta: dict, stale: int | None, on: dict) -> list[Hit]:
+    """What the tool itself reported: its terminal title and the note its hooks left."""
+    from who_needs_me import profiles as pf
+
+    hits = []
+    prof = pf.load_profiles().get(tool)
+    title = meta.get("title") or ""
+    if prof and title and on.get("title", True):
+        if "approval" in prof.title and prof.title["approval"].search(title):
+            hits.append(Hit("title_approval", "needs_human", "approval", f"title: {title[:80]}"))
+        elif "busy" in prof.title and prof.title["busy"].search(title):
+            hits.append(Hit("title_busy", "busy", "none", f"title: {title[:80]}"))
+    note = hook_note(meta.get("hook") or "")
+    if note and on.get("hooks", True) and tool not in ("shell", "terminal"):
+        by = f"{note['tool']} hook: {note['event']}"
+        if note["kind"] == "approval":
+            hits.append(Hit("hook_approval", "needs_human", "approval", by))
+        elif note["kind"] == "working" and (stale is None or stale < HOOK_WORKING_MAX_MINUTES):
+            # trusted only while the screen still moves: an interrupted turn fires no hook
+            hits.append(Hit("hook_working", "busy", "none", by))
+    return hits
+
+
+HOOK_WORKING_MAX_MINUTES = 5
+
+
+def hook_note(text: str) -> dict | None:
+    """Parse the pane note written by ``hook.py``: "<unix time> <tool> <kind> <event>"."""
+    parts = text.split(" ", 3)
+    if len(parts) != 4 or not parts[0].isdigit():
+        return None
+    return {"at": int(parts[0]), "tool": parts[1], "kind": parts[2], "event": parts[3]}
+
+
+def _facts(pane_command, stale, who, prompt, errors, **extra) -> dict:
+    return {
+        "pane_command": pane_command or "unknown",
+        "input_box": extra.get("input_box", False),
+        "background_task": "running" if extra.get("background") else "none",
+        "screen_unchanged": stale_bucket(stale),
+        "stale_minutes": stale,
+        "ghost_text_ignored": bool(extra.get("ghost")),
+        "user_typing": bool(extra.get("typed")),
+        "last_error_line": errors[-1].strip() if errors else "",
+        "who_spoke_last": who,
+        "last_prompt_key": hashlib.sha256(prompt.encode()).hexdigest()[:12] if prompt else "",
+    }
+
+
+def _evaluate_profile(prof, plain, pane_command, stale, cfg, meta) -> Layer0:
+    """Another agent's screen, read with its profile; same hits and facts as Claude Code's."""
+    from who_needs_me import profiles as pf
+
+    on = cfg["rules"]
+    r = pf.read(prof, plain, cfg["last_message_max_lines"])
+    hits: list[Hit | None] = []
+    if r.dialog:
+        kind, line = r.dialog
+        if kind == "approval" and on.get("approval_dialog", True):
+            hits.append(Hit("approval_dialog", "needs_human", "approval", line))
+        elif kind == "auth" and on.get("auth_error"):
+            hits.append(Hit("auth_error", "needs_human", "machine", line))
+        elif kind == "trust" and on.get("trust_prompt"):
+            hits.append(Hit("trust_prompt", "needs_human", "machine", line))
+    if r.error and on.get("auth_error"):
+        hits.append(Hit("auth_error", "needs_human", "machine", r.error))
+    if r.busy and on.get("busy"):
+        hits.append(Hit("busy", "busy", "none", r.busy))
+    if r.empty and on.get("empty_session"):
+        hits.append(Hit("empty_session", "idle_done", "none", f"{prof.label}: no conversation"))
+    if r.who == "user" and on.get("prompt_submitted"):
+        first = next((x for x in r.prompt.split("\n") if x.strip()), "")
+        hits.append(Hit("prompt_submitted", "busy", "none", first[:100] or "new input"))
+    msg = "" if r.who == "user" else r.message
+    if on.get("tripwire"):
+        hits.append(rule_tripwire(msg, cfg, meta.get("width")))
+    errors = [x for x in msg.split("\n")[-8:] if re.search(r"(?i)\berror\b|failed", x)]
+    facts = _facts(pane_command, stale, r.who, r.prompt, errors, input_box=not r.dialog)
+    last_line = next((x for x in reversed(msg.split("\n")) if x.strip()), "")
+    return Layer0(facts, [h for h in hits if h], msg, last_line.strip(), cfg)
+
+
+def _evaluate_claude(
+    screen: str, pane_command: str | None, stale: int | None, cfg: dict, meta: dict
+) -> Layer0:
+    """Claude Code's screen (also the fallback for a shell or an unknown program)."""
     on = cfg["rules"]
     p = parse(screen)
     who, prompt = who_spoke_last(p.body) if p.has_box else ("none", "")
@@ -455,6 +599,8 @@ def evaluate(
         hits.append(rule_auth_error(p))
     if on.get("trust_prompt"):
         hits.append(rule_trust_prompt(p))
+    if on.get("approval_dialog", True):
+        hits.append(rule_approval_dialog(p))
     if on.get("busy"):
         hits.append(rule_busy(p))
     if on.get("empty_session"):
@@ -471,17 +617,16 @@ def evaluate(
         hits.append(rule_stale_background(stale, background, cfg))
 
     errors = [x for x in _meaningful(p.body)[-8:] if re.search(r"(?i)\berror\b|failed", x)]
-    facts = {
-        "pane_command": pane_command or "unknown",
-        "input_box": p.has_box,
-        "background_task": "running" if background else "none",
-        "screen_unchanged": stale_bucket(stale),
-        "stale_minutes": stale,
-        "ghost_text_ignored": bool(ghost),
-        "user_typing": bool(typed),
-        "last_error_line": errors[-1].strip() if errors else "",
-        "who_spoke_last": who,
-        "last_prompt_key": hashlib.sha256(prompt.encode()).hexdigest()[:12] if prompt else "",
-    }
+    facts = _facts(
+        pane_command,
+        stale,
+        who,
+        prompt,
+        errors,
+        input_box=p.has_box,
+        background=background,
+        ghost=ghost,
+        typed=typed,
+    )
     last_line = next((x for x in reversed(msg.split("\n")) if x.strip()), "")
     return Layer0(facts, [h for h in hits if h], msg, last_line.strip(), cfg)

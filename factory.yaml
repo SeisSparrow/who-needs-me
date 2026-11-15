@@ -10,12 +10,26 @@ layer0:
     busy: true               # spinner "Word… (" or "esc to interrupt"  -> busy
     empty_session: true      # welcome banner, no conversation yet       -> idle_done (added after eval 1)
     prompt_submitted: true   # a person or another session spoke last   -> busy (added 11-15, see README)
+    # added 11-15 with support for other tools (profiles.yaml) and plain terminals:
+    blocked_input: true      # password / [y/n] / pager / editor on screen -> needs_human: input
+    approval_dialog: true    # the tool's own "may I?" dialog             -> needs_human: approval
+    foreground_program: true # a non-agent program whose output moves     -> busy
+    title: true              # the tool's terminal title                  -> needs_human: approval / busy
+    hooks: true              # the note left by the tool's hooks (hook.py) -> needs_human: approval / busy
     tripwire: true           # keywords in the last message             -> needs_human: <reason>
     ghost_text: true         # dim (ESC[2m) suggestion in the input box -> stripped, flagged
     stale_background: true   # unchanged for N min + background task    -> flagged (fact only)
 
   # precedence when several decisive rules fire (first wins)
-  precedence: [dropped_to_shell, auth_error, trust_prompt, busy, empty_session, prompt_submitted, tripwire]
+  # blocked_input comes before dropped_to_shell: a script stopped at "[y/N]" runs in a shell.
+  # busy comes before hook_approval: after the user allows a command, the hook note still says
+  # "approval" until the command ends, and the spinner is the newer fact.
+  precedence: [blocked_input, dropped_to_shell, auth_error, trust_prompt, approval_dialog,
+               title_approval, busy, title_busy, hook_approval, hook_working, foreground_program,
+               empty_session, prompt_submitted, tripwire]
+
+  # a non-agent program that has printed nothing for this long is no longer assumed to be working
+  foreground_quiet_minutes: 10
 
   shell_commands: [bash, zsh, sh, fish, dash, ksh, tcsh]
   stale_minutes_threshold: 30

@@ -35,13 +35,14 @@ SSH_OPTS = [
     *("-o", "ControlPersist=120"),
 ]
 Runner = Callable[..., subprocess.CompletedProcess]
-# The last four fields are receipts tmux gives for free: the pane size (a resize re-wraps
-# everything), whether a full-screen program owns the pane, and the note a tool's own hook left
-# on the pane (``hook.py``). They go into ``<stem>.meta.json`` next to the capture.
+# The last five fields are receipts tmux gives for free: the pane size (a resize re-wraps
+# everything), whether a full-screen program owns the pane, the note a tool's own hook left on
+# the pane (``hook.py``), and the terminal title (several agents write their state into it).
+# They go into ``<stem>.meta.json`` next to the capture.
 PANE_FORMAT = (
     "#{session_name}\t#{session_name}:#{window_index}.#{pane_index}"
     "\t#{pane_current_command}\t#{window_active}#{pane_active}"
-    "\t#{pane_width}\t#{pane_height}\t#{alternate_on}\t#{@wnm}"
+    "\t#{pane_width}\t#{pane_height}\t#{alternate_on}\t#{@wnm}\t#{pane_title}"
 )
 WIDE = 100  # columns the default --lines was chosen for
 
@@ -64,19 +65,20 @@ def list_sessions(ssh: str | None = None, runner: Runner = subprocess.run) -> li
     out = tmux(["list-panes", "-a", "-F", PANE_FORMAT], ssh, runner)
     panes: dict[str, dict] = {}
     for line in out.splitlines():
-        parts = line.split("\t", 7)
+        parts = line.split("\t", 8)
         if len(parts) < 4:
             continue
         name, target, cmd, active = parts[:4]
         if active == "11" or name not in panes:
             panes[name] = {"session": name, "target": target, "command": cmd}
-            if len(parts) == 8:
-                width, height, alt, note = parts[4:]
+            if len(parts) >= 8:
+                width, height, alt, note = parts[4:8]
                 panes[name]["meta"] = {
                     "width": int(width) if width.isdigit() else None,
                     "height": int(height) if height.isdigit() else None,
                     "alternate": alt == "1",
                     "hook": note.strip(),
+                    "title": parts[8].strip() if len(parts) > 8 else "",
                 }
     return list(panes.values())
 
@@ -115,6 +117,7 @@ def capture_once(
         ansi = tmux(args, ssh, runner)
         if seen is not None:
             old = seen.get(p["session"])
+            # the title is left out: several tools animate a spinner in it
             now_is = (p["command"], ansi, meta.get("hook"), meta.get("alternate"))
             if old and old[0] == now_is and (when - old[1]).total_seconds() < keepalive:
                 continue
