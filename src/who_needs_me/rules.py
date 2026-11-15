@@ -216,7 +216,9 @@ def _is_prompt(line: str) -> bool:
 
 # whitespace and box-drawing characters: both move when a pane is resized and its text re-wraps
 _WRAP_NOISE = re.compile(r"[\s\u2500-\u257f]+")
-KEY_TAIL_CHARS = 400
+# a 52x23 pane shows about 340 characters of conversation, and what is above the window is
+# gone after a resize, so the tail has to be shorter than the smallest pane in real use
+KEY_TAIL_CHARS = 200
 
 
 def content_key(screen: str) -> str:
