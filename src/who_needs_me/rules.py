@@ -39,6 +39,9 @@ DONE_RE = re.compile(r"^\s*[·✢✳✶✻✽*]\s+\S+ for .*·\s*done\b|^[·✢�
 # footer notices above the input box; in a narrow pane they are cut short ("new tas… · ✔ Update …")
 NOISE_RE = re.compile(r"✔ Update|/restart to apply|^\s*new t\S*… ·|^\s*new task\?")
 TOOL_CALL_RE = re.compile(r"^●\s+[A-Z][A-Za-z]*\(")
+# notices Claude Code prints by itself with the same bullet as a message: a background task
+# still running, the conversation compacted while idle. Nobody said them.
+NOTICE_RE = re.compile(r"^\s*●\s+(?:Compacted while idle|Task \".*|Background (?:task|command) )")
 USER_PROMPT_RE = re.compile(r"^[>❯]\s\S")
 PEER_MSG_RE = re.compile(r"^›\s")  # a message delivered from another session, not typed by a person
 SHELL_PROMPT_RE = re.compile(r"^(?:\S+@\S+:\S*\s?[$#]|[$#%])(?:\s.*)?$")
@@ -129,7 +132,7 @@ def _without_status(lines: list[str], keep_blank: bool) -> list[str]:
     for line in lines:
         if NOISE_RE.search(line):
             continue
-        if SPINNER_RE.match(line) or DONE_RE.match(line):
+        if SPINNER_RE.match(line) or DONE_RE.match(line) or NOTICE_RE.match(line):
             in_status = True
             continue
         if not line.strip():

@@ -449,3 +449,30 @@ def test_keyword_tail_follows_the_pane_width():
     assert "tripwire" in rules_of(evaluate(wide))
     assert "tripwire" not in rules_of(evaluate(narrow))  # width unknown: 4 lines, as before
     assert rules_of(evaluate(narrow, meta={"width": 25}))["tripwire"].reason == "deploy"
+
+
+def test_notices_from_the_tool_are_not_the_sessions_message():
+    """After a while Claude Code compacts an idle conversation and says so with a bullet,
+    below the finished turn. The session's last message is still the one above."""
+    from who_needs_me.rules import content_key, evaluate
+
+    msg = ["● The dry run is at 10:33.", "  I will post its result before starting the VM."]
+    done = "✻ Crunched for 21s · done 9:20 AM · 2 shells still running"
+    before = claude_screen([*msg, "", done])
+    after = claude_screen(
+        [
+            *msg,
+            "",
+            done,
+            "  ⎿  Referenced file",
+            "     ../_docs/_plan/notes.md",
+            '● Task "Wait until 10:30 UTC for session A pre-checks" still',
+            "  running in background",
+            "● Compacted while idle, before the prompt cache expired",
+            '  · turn off with "idleCompaction": false in',
+            "  settings.json",
+        ]
+    )
+    assert content_key(after) == content_key(before)
+    assert evaluate(after).last_message == evaluate(before).last_message
+    assert evaluate(after).facts["who_spoke_last"] == "assistant"
