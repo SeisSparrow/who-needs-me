@@ -41,7 +41,10 @@ NOISE_RE = re.compile(r"✔ Update|/restart to apply|^\s*new t\S*… ·|^\s*new 
 TOOL_CALL_RE = re.compile(r"^●\s+[A-Z][A-Za-z]*\(")
 # notices Claude Code prints by itself with the same bullet as a message: a background task
 # still running, the conversation compacted while idle. Nobody said them.
-NOTICE_RE = re.compile(r"^\s*●\s+(?:Compacted while idle|Task \".*|Background (?:task|command) )")
+NOTICE_RE = re.compile(
+    r"^\s*●\s+(?:Compacted while idle|Task \".*|Background (?:task|command) )"
+    r"|^\s*⎿\s+Referenced file"
+)
 USER_PROMPT_RE = re.compile(r"^[>❯]\s\S")
 PEER_MSG_RE = re.compile(r"^›\s")  # a message delivered from another session, not typed by a person
 SHELL_PROMPT_RE = re.compile(r"^(?:\S+@\S+:\S*\s?[$#]|[$#%])(?:\s.*)?$")
@@ -618,6 +621,11 @@ def _evaluate_claude(
         hits.append(rule_prompt_submitted(p, who, prompt))
     if on.get("tripwire"):
         hits.append(rule_tripwire(msg, cfg, meta.get("width")))
+    if p.has_box and who == "assistant" and not msg.strip():
+        # After an idle compaction and a resize only Claude Code's own notices are left on
+        # screen. There is nothing to judge, and saying so is better than judging the notices.
+        why = "nothing the session said is on screen (conversation compacted)"
+        hits.append(Hit("nothing_to_read", "needs_human", "low_confidence", why, "yellow"))
     typed, ghost = "", ""
     if on.get("ghost_text"):
         ghost_hit, typed, ghost = rule_ghost_text(p)

@@ -476,3 +476,32 @@ def test_notices_from_the_tool_are_not_the_sessions_message():
     assert content_key(after) == content_key(before)
     assert evaluate(after).last_message == evaluate(before).last_message
     assert evaluate(after).facts["who_spoke_last"] == "assistant"
+
+
+def test_only_notices_on_screen_is_said_plainly():
+    """Compacted while idle, then the pane was resized: the conversation is gone from the
+    screen and only the tool's notices remain. The file list must not be read as a message."""
+    from who_needs_me.policy import decide
+    from who_needs_me.rules import evaluate
+
+    screen = claude_screen(
+        [
+            "  ⎿  Referenced file ../_infra-image/gpu/tests/test_image_t1.sh",
+            "  ⎿  Referenced file ../_docs/_plan/notes_infra_makeup_",
+            "     sessions_2026-11-15.md",
+            '● Task "Wait until 10:30 UTC for session A pre-checks" still running in background',
+            "● Compacted while idle, before the prompt cache",
+            '  expired · turn off with "idleCompaction":',
+            "  false in settings.json",
+        ]
+    )
+    l0 = evaluate(screen, "claude")
+    assert l0.last_message == ""
+    d = decide(l0, None)
+    assert (d.state, d.human_reason, d.tier, d.decided_by) == (
+        "needs_human",
+        "low_confidence",
+        "yellow",
+        "rule",
+    )
+    assert "compacted" in d.evidence
