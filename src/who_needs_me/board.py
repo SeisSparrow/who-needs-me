@@ -76,7 +76,16 @@ class Board:
     # ---------------------------------------------------------------- data
 
     def _refresh_index(self) -> None:
-        for s in scan(self.captures, self.settle):
+        found = scan(self.captures, self.settle)
+        # captures removed from the folder (cleanup, rotation) leave the index too
+        missing = self._seen - {s.id for s in found}
+        if missing:
+            self._seen -= missing
+            for name in list(self._index):
+                self._index[name] = [e for e in self._index[name] if e[2].id not in missing]
+                if not self._index[name]:
+                    del self._index[name]
+        for s in found:
             if s.id in self._seen or not s.ts or s.source != "live":
                 continue
             self._seen.add(s.id)

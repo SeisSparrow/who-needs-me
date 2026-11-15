@@ -274,3 +274,19 @@ def test_board_reports_feeds_and_sessions_that_ended(tmp_path):
     assert snap["feeds"][0]["error"] == "ssh needs a login check"
     assert not any(r["gone"] for r in snap["sessions"])
     assert board.snapshot(at="20261113T200000Z", sticky=False)["feeds"] == []  # history: no feeds
+
+
+def test_captures_deleted_from_the_folder_leave_the_board(tmp_path):
+    cap = tmp_path / "cap"
+    cap.mkdir()
+    write(cap, "20261113T200000Z", "a", IDLE_DONE)
+    write(cap, "20261113T200000Z", "tmp", IDLE_DONE)
+    write(cap, "20261113T200100Z", "tmp", IDLE_DONE)
+    board = Board(
+        cap, tmp_path / "s", use_model=False, settle_seconds=0, denylist=tmp_path / "none"
+    )
+    assert {r["session"] for r in board.snapshot()["sessions"]} == {"a", "tmp"}
+    for f in cap.glob("*_tmp.*"):
+        f.unlink()
+    assert {r["session"] for r in board.snapshot()["sessions"]} == {"a"}  # and no crash
+    assert board.timeline() == ["20261113T200000Z"]
