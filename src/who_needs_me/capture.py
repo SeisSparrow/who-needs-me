@@ -180,7 +180,12 @@ def main(argv: list[str] | None = None) -> int:
         except (subprocess.SubprocessError, OSError) as e:
             # keep going: a dropped network, or an ssh check that needs a person, must not
             # end the loop; the board shows the reason from the heartbeat
-            detail = (getattr(e, "stderr", None) or str(e)).strip()
+            detail = getattr(e, "stderr", None) or str(e)
+            if isinstance(detail, bytes):
+                # a timed-out command hands back what it had read so far as bytes, even when
+                # it was started in text mode
+                detail = detail.decode("utf-8", "replace")
+            detail = detail.strip() or type(e).__name__
             error = (
                 "ssh needs a login check"
                 if "additional check" in detail
